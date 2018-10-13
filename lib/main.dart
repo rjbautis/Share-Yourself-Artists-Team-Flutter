@@ -17,12 +17,13 @@ class MyApp extends StatelessWidget {
         // "hot reload" (press "r" in the console where you ran "flutter run",
         // or press Run > Flutter Hot Reload in IntelliJ). Notice that the
         // counter didn't reset back to zero; the application is not restarted.
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.blueGrey,
       ),
-      home: new MyHomePage(title: 'Flutter Demo Home Page'),
+      home: new MyHomePage(title: 'SYA CRUD App'),
     );
   }
 }
+
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key key, this.title}) : super(key: key);
@@ -44,6 +45,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  var list = [10];
 
   void _incrementCounter() {
     setState(() {
@@ -87,23 +89,53 @@ class _MyHomePageState extends State<MyHomePage> {
           // center the children vertically; the main axis here is the vertical
           // axis because Columns are vertical (the cross axis would be
           // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
-            new Text(
-              'You have pushed the button this many times:',
+
+            new MaterialButton(
+              child: const Text('Add'),
+              color: Colors.red,
+              textColor: Colors.white,
+              elevation: 4.0,
+              onPressed: _incrementCounter,
+              minWidth: 200.0,
+              height: 50.0,//Need to add onPressed event in order to make button active
             ),
-            new Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.display1,
+            new MaterialButton(
+              child: const Text('Update'),
+              color: Colors.purple,
+              textColor: Colors.white,
+              elevation: 4.0,
+              onPressed: _incrementCounter,
+              minWidth: 200.0,
+              height: 50.0,//Need to add onPressed event in order to make button active
+            ),
+            new MaterialButton(
+              child: const Text('Delete'),
+              color: Colors.green,
+              textColor: Colors.white,
+              elevation: 4.0,
+              onPressed: _incrementCounter,
+              minWidth: 200.0,
+              height: 50.0,//Need to add onPressed event in order to make button active
+            ),
+            new MaterialButton(
+              child: const Text('Fetch'),
+              color: Colors.blue,
+              textColor: Colors.white,
+              elevation: 4.0,
+              onPressed: _incrementCounter,
+              minWidth: 200.0,
+              height: 50.0,//Need to add onPressed event in order to make button active
             ),
           ],
         ),
       ),
-      floatingActionButton: new FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: new Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+//      floatingActionButton: new FloatingActionButton(
+//        onPressed: _incrementCounter,
+//        tooltip: 'Increment',
+//        child: new Icon(Icons.add),
+//      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }
