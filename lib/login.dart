@@ -10,24 +10,50 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
 
+    String _name;
+    String _email;
+    String _password;
+
+    final formKey = GlobalKey<FormState>();
+
     _onPressed() {
       print("hi");
     }
+
+    _validate() {
+      var form = formKey.currentState;
+
+      if (form.validate()) {
+        form.save();
+      }
+
+      print("${form.validate()}");
+      print("$_name");
+      print("$_email");
+      print("$_password");
+
+    }
+
 
     Widget loginSocialMedia = Container(
       padding: const EdgeInsets.all(30.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: <Widget>[
-//          new Text("Login with"),
           new IconButton(
             iconSize: 50.0,
-            icon: new Icon(FontAwesomeIcons.facebook),
+            icon: new Icon(
+              FontAwesomeIcons.facebook,
+              color: Color.fromRGBO(59, 89, 152, 1.0)
+            ),
             onPressed: _onPressed
           ),
           new IconButton(
             iconSize: 50.0,
-            icon: new Icon(FontAwesomeIcons.google),
+            icon: new Icon(
+              FontAwesomeIcons.google,
+              color: Color.fromRGBO(72, 133, 237, 1.0)
+            ),
             onPressed: _onPressed
           )
         ],
@@ -40,13 +66,17 @@ class _LoginPageState extends State<LoginPage> {
       ),
       keyboardType: TextInputType.text,
       maxLines: 1,
+      onSaved: (input) => _name = input
     );
 
-    Widget usernameOrEmail = TextFormField(
+    Widget email = TextFormField(
       decoration: new InputDecoration(
-        labelText: "Username or Email"
+        labelText: "Email"
       ),
       keyboardType: TextInputType.emailAddress,
+      validator: (input) =>
+          !input.contains('@') ? "Please enter a valid email adrress." : null,
+      onSaved: (input) => _email = input,
     );
 
     Widget password = TextFormField(
@@ -55,6 +85,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
       keyboardType: TextInputType.text,
       obscureText: true,
+      onSaved: (input) => _password = input,
     );
 
     Widget loginButtons = Container(
@@ -64,14 +95,13 @@ class _LoginPageState extends State<LoginPage> {
 //        mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           new MaterialButton(
-            color: Theme.of(context).accentColor,
+            color: Colors.black,
             onPressed: _onPressed,
-            child: new Text("Sign Up"),
+            child: new Text("Sign Up", style: new TextStyle(color: Colors.white)),
           ),
           new MaterialButton (
-
-            color: Theme.of(context).buttonColor,
-            onPressed: _onPressed,
+            color: Colors.white,
+            onPressed: _validate,
             child: new Text('Sign In'),
           )
         ],
@@ -110,15 +140,18 @@ class _LoginPageState extends State<LoginPage> {
               child: new Text(
                 "Get Your Art Seen Today - guaranteed a response",
                 textAlign: TextAlign.center,
-                style: const TextStyle(fontSize: 25.0),
+                style: const TextStyle(
+                  fontSize: 25.0,
+                  color: Color.fromRGBO(255, 160, 0, 1.0)),
               ),
             ),
             loginSocialMedia,
             Form (
+              key: formKey,       // Remember the state of the filled-in form
               child: Column(
                 children: <Widget>[
                   name,
-                  usernameOrEmail,
+                  email,
                   password,
                 ],
               ),
