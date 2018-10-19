@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'signup.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -7,27 +8,35 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  SignUpPage _signup;
+
+  @override
+  void initState() {
+    // Need to override SignUpPage
+    // Reference: https://stackoverflow.com/questions/50295726/widget-rebuild-after-textfield-selection-flutter
+    _signup = SignUpPage();
+  }
+
   @override
   Widget build(BuildContext context) {
-
     String _name;
     String _email;
     String _password;
-
-    final formKey = GlobalKey<FormState>();
+    final GlobalKey<FormState> form= new GlobalKey<FormState>();
 
     _onPressed() {
       print("hi");
     }
 
     _validate() {
-      var form = formKey.currentState;
+      var loginForm = form.currentState;
 
-      if (form.validate()) {
-        form.save();
+      if (loginForm.validate()) {
+        loginForm.save();
       }
 
-      print("${form.validate()}");
+      print("Inside login");
+      print("${loginForm.validate()}");
       print("$_name");
       print("$_email");
       print("$_password");
@@ -96,7 +105,11 @@ class _LoginPageState extends State<LoginPage> {
         children: <Widget>[
           new MaterialButton(
             color: Colors.black,
-            onPressed: _onPressed,
+            onPressed: () {
+              Navigator.of(context).push(new MaterialPageRoute(
+                  builder: (context) => _signup),
+              );
+            },
             child: new Text("Sign Up", style: new TextStyle(color: Colors.white)),
           ),
           new MaterialButton (
@@ -138,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             Center (
               child: new Text(
-                "Get Your Art Seen Today - guaranteed a response",
+                "Get Your Art Seen Today - guaranteed a response.",
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   fontSize: 25.0,
@@ -147,7 +160,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             loginSocialMedia,
             Form (
-              key: formKey,       // Remember the state of the filled-in form
+              key: form,       // Remember the state of the filled-in form
               child: Column(
                 children: <Widget>[
                   name,
