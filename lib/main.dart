@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'login.dart';
+import 'signup.dart';
 
 void main() => runApp(new MyApp());
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+  final routes = {
+    '/login': (context) => new LoginPage(),
+//    '/signup': (context) => new SignUpPage()
+  };
+
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
@@ -20,7 +26,8 @@ class MyApp extends StatelessWidget {
         // counter didn't reset back to zero; the application is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: new LoginPage(),    // NECESSARY: specify loginPage
+      home: new LoginPage(),
+      routes: routes,
     );
   }
 }
@@ -65,11 +72,14 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
+
+    print(widget.title);
+
     return new Scaffold(
       appBar: new AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: new Text(widget.title),
+        title: new Text("yes"),
       ),
       body: new Center(
         // Center is a layout widget. It takes a single child and positions it
