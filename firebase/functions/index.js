@@ -17,7 +17,7 @@ var db = admin.firestore();
 exports.testFunction = functions.https.onRequest((request, response) => {
     var data = {
         name: request.body.name,
-        age: request.name.age
+        age: request.body.age
 	};
     
 	var setDoc = db.collection('users').add(data);
