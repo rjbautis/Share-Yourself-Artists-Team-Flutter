@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'signup.dart';
 
 class LoginPage extends StatefulWidget {
@@ -14,7 +13,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     // Need to override SignUpPage
-    // Reference: https://stackoverflow.com/questions/50295726/widget-rebuild-after-textfield-selection-flutter
     _signup = SignUpPage();
   }
 

@@ -113,7 +113,6 @@ class _SignUpPageState extends State<SignUpPage> {
 
     return new Scaffold(
       resizeToAvoidBottomPadding: false,
-
       body: Container(
         padding: const EdgeInsets.all(20.0),
         child: Column(
