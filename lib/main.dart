@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'login.dart';
+import 'feedbackpage.dart';
 
 void main() => runApp(new MyApp());
 
   class MyApp extends StatelessWidget {
   final routes = {
     '/login': (context) => new LoginPage(),
+    '/feedback': (context) => new FeedbackPage(),
   };
 
   @override

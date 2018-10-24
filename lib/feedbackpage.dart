@@ -3,13 +3,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-class FeedbackList extends StatefulWidget {
+class FeedbackPage extends StatefulWidget {
 
   @override
-  _FeedbackListState createState() => new _FeedbackListState();
+  _FeedbackPageState createState() => new _FeedbackPageState();
 }
 
-class _FeedbackListState extends State<FeedbackList> {
+class _FeedbackPageState extends State<FeedbackPage> {
   FocusNode _textFieldNode = new FocusNode();
   TextEditingController _controller = new TextEditingController();
   String comment;
@@ -103,7 +103,7 @@ class _FeedbackListState extends State<FeedbackList> {
                           disabledBorder: new OutlineInputBorder(
                               borderSide: new BorderSide(color: Colors.transparent)
                           ),
-                          hintText: 'Submit feedback.'
+                          hintText: 'Leave some feedback...'
                       ),
                     ),
                   ),
@@ -114,7 +114,7 @@ class _FeedbackListState extends State<FeedbackList> {
                     child: new OutlineButton(
                       splashColor: _submitEnabled ? Colors.deepOrangeAccent : Colors.grey,
                       textColor: _submitEnabled ? Colors.deepOrangeAccent : Colors.grey,
-                      child: new Text('Edit Info'),
+                      child: new Text('Submit Feedback'),
                       onPressed: _submitComment,
                       borderSide: new BorderSide(
                         color: _submitEnabled ? Colors.deepOrangeAccent : Colors.grey,
