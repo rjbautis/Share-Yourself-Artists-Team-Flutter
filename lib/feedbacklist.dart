@@ -3,13 +3,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-class Feedback extends StatefulWidget {
+class FeedbackList extends StatefulWidget {
 
   @override
-  _FeedbackState createState() => new _FeedbackState();
+  _FeedbackListState createState() => new _FeedbackListState();
 }
 
-class _FeedbackState extends State<Feedback> {
+class _FeedbackListState extends State<FeedbackList> {
   FocusNode _textFieldNode = new FocusNode();
   TextEditingController _controller = new TextEditingController();
   String comment;
