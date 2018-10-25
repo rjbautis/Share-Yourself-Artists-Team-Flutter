@@ -64,10 +64,13 @@ class _FeedbackPageState extends State<FeedbackPage> {
     _textFieldNode.addListener(onEditComplete);
 
     return new Scaffold(
+      appBar: AppBar(
+        title: Text('Submit Feedback'),
+      ),
       body: new Center(
         child: new ListView(
             children: <Widget>[
-              new Padding(padding: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 30.0)),
+              new Padding(padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 30.0)),
               new Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -79,7 +82,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                       fit: BoxFit.fitWidth,
                     ),
                   ),
-                  new Padding(padding: EdgeInsets.all(5.0)),
+                  new Padding(padding: EdgeInsets.fromLTRB(5.0, 0.0, 5.0, 5.0)),
                   new Container(
                       alignment: FractionalOffset(.15, .85),
                       child: new Text(
@@ -121,7 +124,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                       ),
                     ),
                   ),
-                  new Padding(padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 20.0)),
+                  new Padding(padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 10.0)),
                 ],
               ),
             ]
