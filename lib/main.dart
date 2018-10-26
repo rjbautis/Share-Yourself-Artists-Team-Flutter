@@ -1,5 +1,5 @@
 import 'dart:async';
-//import 'dart:io';
+import 'dart:io';
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
@@ -43,13 +43,11 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Future<Null> _create() async { //<> means return type, Null = void
-    http.Response response = await http.get(
-        Uri.encodeFull("https://jsonplaceholder.typicode.com/posts"), //This JSON file is an array
-        headers: {"Accept": "application/json"});
-    List data = json.decode(response.body);
-    print(data[2]['userId'].toString());
-    setState(() {
-      _display = data[2]['userId'].toString();
+    var url = "https://us-central1-sya-dummy.cloudfunctions.net/testFunction";
+    http.post(url, body: {"name": "Franz", "age": "10"})
+        .then((response) {
+      debugPrint("Response status: ${response.statusCode}");
+      debugPrint("Response body: ${response.body}");
     });
   }
 
