@@ -17,7 +17,7 @@ var db = admin.firestore();
 exports.testFunction = functions.https.onRequest((request, response) => {
     var data = {
         name: request.body.name,
-        age: request.body.age
+        age: parseInt(request.body.age)
 	};
     
 	var setDoc = db.collection('users').add(data);
@@ -49,6 +49,12 @@ exports.getUserData = functions.https.onRequest ((request, response) => {
     }
 
     });
+});
+
+exports.deleteUserData = functions.https.onRequest ((request, response) => {
+	var deleteDoc = db.collection('users').doc(request.body.id).delete();
+	response.json({result: `User ${request.body.id} deleted.`})
+	return;
 });
 
 
