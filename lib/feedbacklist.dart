@@ -4,127 +4,138 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class FeedbackList extends StatefulWidget {
-
   @override
   _FeedbackListState createState() => new _FeedbackListState();
 }
 
 class _FeedbackListState extends State<FeedbackList> {
-  FocusNode _textFieldNode = new FocusNode();
-  TextEditingController _controller = new TextEditingController();
-  String comment;
-  String _imageUrl = 'https://vignette.wikia.nocookie.net/citrus/images/6/60/No_Image_Available.png/revision/latest/scale-to-width-down/480?cb=20170129011325';
-  bool _submitEnabled = false;
+  String _imageUrl =
+      'https://vignette.wikia.nocookie.net/citrus/images/6/60/No_Image_Available.png/revision/latest/scale-to-width-down/480?cb=20170129011325';
+  double _screenWidth;
+  var _names = ['Le Chat', "Die Katze", 'The Cat', 'El Gato'];
 
-  @override
-  void initState() {
-    setState(() {
-      _fetchImage();
-    });
-  }
+  //@override
+  //void initState() {
+
+  //}
 
   Future<Null> _fetchImage() async {
     http.Response response = await http.get(
-        Uri.encodeFull('https://us-central1-sya-dummy.cloudfunctions.net/getChat'),
+        Uri.encodeFull(
+            'https://us-central1-sya-dummy.cloudfunctions.net/getChat'),
         headers: {"Accept": "application/json"});
     Map<String, dynamic> data = json.decode(response.body);
     setState(() {
       try {
         _imageUrl = data['url'].toString();
-      } catch (e){
-        _imageUrl = 'https://vignette.wikia.nocookie.net/citrus/images/6/60/No_Image_Available.png/revision/latest/scale-to-width-down/480?cb=20170129011325';
+      } catch (e) {
+        _imageUrl =
+            'https://vignette.wikia.nocookie.net/citrus/images/6/60/No_Image_Available.png/revision/latest/scale-to-width-down/480?cb=20170129011325';
       }
     });
   }
 
-  void _submitComment() {
-    setState(() {
-      // Things to submit
-      // Comment, UserID, Date
-      // submit the comment in the textbox
-      if (comment == null || comment == "")
-      {
-        // display error message
-
-      }
-      print(comment);
-    });
+  Widget _buildCard(BuildContext ctxt, int index) {
+    return new Card(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(top: _screenWidth*.1),
+          ),
+          Image.network(
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1024px-Cat03.jpg',
+            width: MediaQuery.of(context).size.width * .75,
+          ),
+          ListTile(
+            title: Text(
+              _names[index],
+              textAlign: TextAlign.center,
+            ),
+            subtitle:
+                Text('Artist Name/Other Info', textAlign: TextAlign.center),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Icon(
+                Icons.attach_money,
+                color: Colors.green,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    vertical: 0.0, horizontal: _screenWidth * .3),
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.reply,
+                  color: Colors.orange,
+                ),
+                tooltip: 'Respond',
+                onPressed: () {
+                  _navigateFeedback();
+                },
+              )
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
-  void onEditComplete() {
-    comment = _controller.text;
-    comment.isEmpty ? _submitEnabled = false : _submitEnabled = true;
-    // bool hasFocus = _textFieldNode.hasFocus;
+  void _navigateFeedback() {
+    // will eventually take artists ID to fetch the right info
+    Navigator.pushNamed(context, "/feedback");
   }
 
   @override
   Widget build(BuildContext context) {
+    final title = 'Submitted Artwork';
+    _screenWidth = MediaQuery.of(context).size.width;
 
-    _controller.addListener(onEditComplete);
-    _textFieldNode.addListener(onEditComplete);
+    new ListTileTheme(
+      textColor: Colors.deepPurple,
+    );
 
-    return new Scaffold(
-      body: new Center(
-        child: new ListView(
-            children: <Widget>[
-              new Padding(padding: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 30.0)),
-              new Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  new Container(
-                    height: MediaQuery.of(context).size.width*.75,
-                    child: new Image.network(
-                      _imageUrl,
-                      //'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1024px-Cat03.jpg',
-                      fit: BoxFit.fitWidth,
-                    ),
-                  ),
-                  new Padding(padding: EdgeInsets.all(5.0)),
-                  new Container(
-                      alignment: FractionalOffset(.15, .85),
-                      child: new Text(
-                        'Le Chat',
-                        textAlign: TextAlign.left,
-                        textScaleFactor: 1.5,
-                        //style: TextStyle(fontStyle: FontStyle.italic),
-                      )
-                  ),
-                  new Container(
-                    width: MediaQuery.of(context).size.width*.75,
-                    child: new TextField(
-                      controller: _controller,
-                      focusNode: _textFieldNode,
-                      maxLines: 8,
-                      textInputAction: TextInputAction.done,
-                      decoration: InputDecoration(
-                          enabledBorder: new OutlineInputBorder(
-                              borderSide: new BorderSide(color: Colors.transparent)
-                          ),
-                          disabledBorder: new OutlineInputBorder(
-                              borderSide: new BorderSide(color: Colors.transparent)
-                          ),
-                          hintText: 'Submit feedback.'
-                      ),
-                    ),
-                  ),
-                  new Padding(padding: EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0)),
-                  new Container(
-                    width: MediaQuery.of(context).size.width*.75,
-                    height: MediaQuery.of(context).size.width*.08,
-                    child: new OutlineButton(
-                      splashColor: _submitEnabled ? Colors.deepOrangeAccent : Colors.grey,
-                      textColor: _submitEnabled ? Colors.deepOrangeAccent : Colors.grey,
-                      child: new Text('Edit Info'),
-                      onPressed: _submitComment,
-                      borderSide: new BorderSide(
-                        color: _submitEnabled ? Colors.deepOrangeAccent : Colors.grey,
-                      ),
-                    ),
-                  ),
-                  new Padding(padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 20.0)),
-                ],
+    return MaterialApp(
+      home: DefaultTabController(
+        length: 2,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text(title),
+            bottom: TabBar(tabs: [
+              Tab(
+                child: new Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    new Text('New'),
+                    new Padding(
+                        padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0)),
+                    new Icon(Icons.error_outline),
+                  ],
+                ),
               ),
-            ]
+              Tab(
+                child: new Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    new Text('Replied'),
+                    new Padding(
+                        padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0)),
+                    new Icon(Icons.done_all),
+                  ],
+                ),
+              ),
+            ]),
+          ),
+          body: TabBarView(children: [
+            new ListView.builder(
+              itemBuilder: (BuildContext ctxt, int index) =>
+                  _buildCard(ctxt, index),
+              itemCount: _names.length,
+            ),
+            new Icon(Icons.done_all),
+          ]),
         ),
       ),
     );
