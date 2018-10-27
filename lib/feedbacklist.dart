@@ -11,6 +11,7 @@ class FeedbackList extends StatefulWidget {
 class _FeedbackListState extends State<FeedbackList> {
   String _imageUrl =
       'https://vignette.wikia.nocookie.net/citrus/images/6/60/No_Image_Available.png/revision/latest/scale-to-width-down/480?cb=20170129011325';
+  double _screenWidth;
 
   //@override
   //void initState() {
@@ -33,18 +34,63 @@ class _FeedbackListState extends State<FeedbackList> {
     });
   }
 
+  Widget _buildCard(BuildContext ctxt, int index) {
+    return new Card(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(top: _screenWidth*.1),
+          ),
+          Image.network(
+            'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1024px-Cat03.jpg',
+            width: MediaQuery.of(context).size.width * .75,
+          ),
+          ListTile(
+            title: Text(
+              'Le Chat',
+              textAlign: TextAlign.center,
+            ),
+            subtitle:
+                Text('Artist Name/Other Info', textAlign: TextAlign.center),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Icon(
+                Icons.attach_money,
+                color: Colors.green,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    vertical: 0.0, horizontal: _screenWidth * .3),
+              ),
+              IconButton(
+                icon: Icon(
+                  Icons.reply,
+                  color: Colors.orange,
+                ),
+                tooltip: 'Respond',
+                onPressed: () {
+                  _navigateFeedback();
+                },
+              )
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   void _navigateFeedback() {
     // will eventually take artists ID to fetch the right info
     Navigator.pushNamed(context, "/feedback");
   }
 
-  void _showOptions() {
-    // show an alert dialog to show options for this list element
-  }
-
   @override
   Widget build(BuildContext context) {
     final title = 'Submitted Artwork';
+    _screenWidth = MediaQuery.of(context).size.width;
 
     new ListTileTheme(
       textColor: Colors.deepPurple,
@@ -82,46 +128,11 @@ class _FeedbackListState extends State<FeedbackList> {
             ]),
           ),
           body: TabBarView(children: [
-            new ListView(children: <Widget>[
-              Card(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Image.network(
-                      'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1024px-Cat03.jpg',
-                      width: MediaQuery.of(context).size.width * .75,
-                    ),
-                    ListTile(
-                      title: Text(
-                        'Le Chat',
-                        textAlign: TextAlign.center,
-                      ),
-                      subtitle:
-                          Text('Artist Name', textAlign: TextAlign.center),
-                    ),
-                    Icon(
-                      Icons.attach_money,
-                      color: Colors.green,
-                    ),
-                    ButtonTheme.bar(
-                      child: ButtonBar(
-                        children: <Widget>[
-                          IconButton(
-                            icon: Icon(
-                              Icons.reply,
-                              color: Colors.orange,
-                            ),
-                            onPressed: () {
-                              _navigateFeedback();
-                            },
-                          )
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ]),
+            new ListView.builder(
+              itemBuilder: (BuildContext ctxt, int index) =>
+                  _buildCard(ctxt, index),
+              itemCount: 3,
+            ),
             new Icon(Icons.done_all),
           ]),
         ),
