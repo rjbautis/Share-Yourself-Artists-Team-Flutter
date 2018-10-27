@@ -15,6 +15,8 @@ class _FeedbackPageState extends State<FeedbackPage> {
   String comment;
   String _imageUrl = 'https://vignette.wikia.nocookie.net/citrus/images/6/60/No_Image_Available.png/revision/latest/scale-to-width-down/480?cb=20170129011325';
   bool _submitEnabled = false;
+  bool _accepted = false;
+  int _radioValue = -1;
 
   @override
   void initState() {
@@ -37,6 +39,16 @@ class _FeedbackPageState extends State<FeedbackPage> {
     });
   }
 
+  void _handleResponse(int response) {
+    setState(() {
+      _radioValue = response;
+      if (response == 1)
+        _accepted = true;
+      else
+        _accepted = false;
+    });
+  }
+
   void _submitComment() {
     setState(() {
       // Things to submit
@@ -47,6 +59,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
         // display error message
 
       }
+      print(_accepted);
       print(comment);
     });
   }
@@ -82,15 +95,15 @@ class _FeedbackPageState extends State<FeedbackPage> {
                       fit: BoxFit.fitWidth,
                     ),
                   ),
-                  new Padding(padding: EdgeInsets.fromLTRB(5.0, 0.0, 5.0, 5.0)),
                   new Container(
-                      alignment: FractionalOffset(.15, .85),
-                      child: new Text(
-                        'Le Chat',
-                        textAlign: TextAlign.left,
-                        textScaleFactor: 1.5,
-                        //style: TextStyle(fontStyle: FontStyle.italic),
-                      )
+                    padding: EdgeInsets.fromLTRB(5.0, 0.0, 5.0, 5.0),
+                    alignment: FractionalOffset(.15, .85),
+                    child: new Text(
+                      'Le Chat',
+                      textAlign: TextAlign.left,
+                      textScaleFactor: 1.5,
+                      //style: TextStyle(fontStyle: FontStyle.italic),
+                    )
                   ),
                   new Container(
                     width: MediaQuery.of(context).size.width*.75,
@@ -106,9 +119,35 @@ class _FeedbackPageState extends State<FeedbackPage> {
                           disabledBorder: new OutlineInputBorder(
                               borderSide: new BorderSide(color: Colors.transparent)
                           ),
-                          hintText: 'Leave some feedback...'
+                          hintText: 'Your Response*'
                       ),
                     ),
+                  ),
+                  new Column(
+                    children: <Widget>[
+                      new Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Radio(
+                              value: 1,
+                              groupValue: _radioValue,
+                              onChanged: _handleResponse
+                          ),
+                          Text('Accept'),
+                        ],
+                      ),
+                      new Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Radio(
+                              value: -1,
+                              groupValue: _radioValue,
+                              onChanged: _handleResponse
+                          ),
+                          Text('Decline'),
+                        ],
+                      ),
+                    ],
                   ),
                   new Padding(padding: EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0)),
                   new Container(
@@ -117,7 +156,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                     child: new OutlineButton(
                       splashColor: _submitEnabled ? Colors.deepOrangeAccent : Colors.grey,
                       textColor: _submitEnabled ? Colors.deepOrangeAccent : Colors.grey,
-                      child: new Text('Submit Feedback'),
+                      child: new Text('Submit Response'),
                       onPressed: _submitComment,
                       borderSide: new BorderSide(
                         color: _submitEnabled ? Colors.deepOrangeAccent : Colors.grey,
