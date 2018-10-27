@@ -1,4 +1,4 @@
-To host a local version of the Express API:
+To host a develop Firebase functions:
 
-cd into the functions directory. In the command line, enter "node app.js"
-From here, you can send HTTP requests through another terminal window. See app.js for details.
+See Firebase functions setup here: https://firebase.google.com/docs/functions/
+Edit the index.html file in the functions directory and use 'firebase deploy' to deploy the functions to the database.
