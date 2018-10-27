@@ -12,6 +12,7 @@ class _FeedbackListState extends State<FeedbackList> {
   String _imageUrl =
       'https://vignette.wikia.nocookie.net/citrus/images/6/60/No_Image_Available.png/revision/latest/scale-to-width-down/480?cb=20170129011325';
   double _screenWidth;
+  var _names = ['Le Chat', "Die Katze", 'The Cat', 'El Gato'];
 
   //@override
   //void initState() {
@@ -48,7 +49,7 @@ class _FeedbackListState extends State<FeedbackList> {
           ),
           ListTile(
             title: Text(
-              'Le Chat',
+              _names[index],
               textAlign: TextAlign.center,
             ),
             subtitle:
@@ -131,7 +132,7 @@ class _FeedbackListState extends State<FeedbackList> {
             new ListView.builder(
               itemBuilder: (BuildContext ctxt, int index) =>
                   _buildCard(ctxt, index),
-              itemCount: 3,
+              itemCount: _names.length,
             ),
             new Icon(Icons.done_all),
           ]),
