@@ -1,3 +1,5 @@
+// Sign up
+
 import 'package:flutter/material.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -32,14 +34,14 @@ class _SignUpPageState extends State<SignUpPage> {
     }
 
     Widget name = TextFormField(
-      decoration: new InputDecoration(
-          labelText: "Name"
-      ),
-      keyboardType: TextInputType.text,
-      maxLines: 1,
-      validator: (input) => input.isEmpty ? "Name is required." : null,
+        decoration: new InputDecoration(
+            labelText: "Name"
+        ),
+        keyboardType: TextInputType.text,
+        maxLines: 1,
+        validator: (input) => input.isEmpty ? "Name is required." : null,
 
-      onSaved: (input) => _name = input
+        onSaved: (input) => _name = input
     );
 
     Widget email = TextFormField(

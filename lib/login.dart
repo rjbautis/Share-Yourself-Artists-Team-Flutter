@@ -1,8 +1,16 @@
+import 'signup.dart';
+import 'role.dart';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'signup.dart';
 
 class LoginPage extends StatefulWidget {
+
+  // Custom callback function for signing in
+  final void Function(Role) handleSignIn;
+
+  LoginPage({Key key, this.handleSignIn}) : super (key: key);
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -12,6 +20,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
+    super.initState();
     // Need to override SignUpPage
     _signup = SignUpPage();
   }
@@ -44,46 +53,49 @@ class _LoginPageState extends State<LoginPage> {
 
 
     Widget loginSocialMedia = Container(
-      padding: const EdgeInsets.all(30.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          new IconButton(
-            iconSize: 50.0,
-            icon: new Icon(
-              FontAwesomeIcons.facebook,
-              color: Color.fromRGBO(59, 89, 152, 1.0)
+        padding: const EdgeInsets.all(30.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: <Widget>[
+            new IconButton(
+                iconSize: 50.0,
+                icon: new Icon(
+                    FontAwesomeIcons.facebook,
+                    color: Color.fromRGBO(59, 89, 152, 1.0)
+                ),
+                onPressed: () => _onPressed
             ),
-            onPressed: _onPressed
-          ),
-          new IconButton(
-            iconSize: 50.0,
-            icon: new Icon(
-              FontAwesomeIcons.google,
-              color: Color.fromRGBO(72, 133, 237, 1.0)
-            ),
-            onPressed: _onPressed
-          )
-        ],
-      )
+            new IconButton(
+                iconSize: 50.0,
+                icon: new Icon(
+                    FontAwesomeIcons.google,
+                    color: Color.fromRGBO(72, 133, 237, 1.0)
+                ),
+                onPressed: () {
+                  widget.handleSignIn(Role.BUSINESS);
+                }
+            )
+          ],
+        )
     );
 
     Widget name = TextFormField(
-      decoration: new InputDecoration(
-        labelText: "Name"
-      ),
-      keyboardType: TextInputType.text,
-      maxLines: 1,
-      onSaved: (input) => _name = input
+        decoration: new InputDecoration(
+            labelText: "Name"
+        ),
+        keyboardType: TextInputType.text,
+        textInputAction: TextInputAction.done,
+        maxLines: 1,
+        onSaved: (input) => _name = input
     );
 
     Widget email = TextFormField(
       decoration: new InputDecoration(
-        labelText: "Email"
+          labelText: "Email"
       ),
       keyboardType: TextInputType.emailAddress,
       validator: (input) =>
-          !input.contains('@') ? "Please enter a valid email adrress." : null,
+      !input.contains('@') ? "Please enter a valid email adrress." : null,
       onSaved: (input) => _email = input,
     );
 
@@ -121,20 +133,21 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     Widget forgotSection = Container(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          new InkWell(
-            child: new Text("Forgot Username"),
-            onTap: _onPressed,
-          ),
-          new InkWell(
-            child: new Text("Forgot Password"),
-            onTap: _onPressed,
-          )
-        ],
-      )
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            new InkWell(
+              child: new Text("Forgot Username"),
+              onTap: _onPressed,
+            ),
+            new InkWell(
+              child: new Text("Forgot Password"),
+              onTap: _onPressed,
+            )
+          ],
+        )
     );
+
 
     return new Scaffold(
       resizeToAvoidBottomPadding: false,
@@ -153,8 +166,8 @@ class _LoginPageState extends State<LoginPage> {
                 "Get Your Art Seen Today - guaranteed a response.",
                 textAlign: TextAlign.center,
                 style: const TextStyle(
-                  fontSize: 25.0,
-                  color: Color.fromRGBO(255, 160, 0, 1.0)),
+                    fontSize: 25.0,
+                    color: Color.fromRGBO(255, 160, 0, 1.0)),
               ),
             ),
             loginSocialMedia,
