@@ -150,41 +150,45 @@ class _LoginPageState extends State<LoginPage> {
 
 
     return new Scaffold(
-      resizeToAvoidBottomPadding: false,
+//      resizeToAvoidBottomPadding: false,
       backgroundColor: Colors.white,
       body: Container(
-        padding: const EdgeInsets.all(25.0),
-        child: Column (
-//          mainAxisAlignment: MainAxisAlignment.center,
+        padding: const EdgeInsets.fromLTRB(25.0, 0.0, 25.0, 0.0),
+        child: ListView(
           children: <Widget>[
-            Container(
-              child: Image.asset('images/logo.png'),
-              padding: const EdgeInsets.all(20.0),
+            Column (
+//          mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  child: Image.asset('images/logo.png'),
+                  padding: const EdgeInsets.all(20.0),
+                ),
+                Center (
+                  child: new Text(
+                    "Get Your Art Seen Today - guaranteed a response.",
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                        fontSize: 25.0,
+                        color: Color.fromRGBO(255, 160, 0, 1.0)),
+                  ),
+                ),
+                loginSocialMedia,
+                Form (
+                  key: form,       // Remember the state of the filled-in form
+                  child: Column(
+                    children: <Widget>[
+                      name,
+                      email,
+                      password,
+                    ],
+                  ),
+                ),
+                loginButtons,
+                forgotSection,
+              ],
             ),
-            Center (
-              child: new Text(
-                "Get Your Art Seen Today - guaranteed a response.",
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                    fontSize: 25.0,
-                    color: Color.fromRGBO(255, 160, 0, 1.0)),
-              ),
-            ),
-            loginSocialMedia,
-            Form (
-              key: form,       // Remember the state of the filled-in form
-              child: Column(
-                children: <Widget>[
-                  name,
-                  email,
-                  password,
-                ],
-              ),
-            ),
-            loginButtons,
-            forgotSection,
           ],
-        ),
+        )
       ),
     );
   }
