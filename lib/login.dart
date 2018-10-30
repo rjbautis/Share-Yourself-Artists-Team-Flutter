@@ -133,6 +133,7 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     Widget forgotSection = Container(
+        padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 25.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
