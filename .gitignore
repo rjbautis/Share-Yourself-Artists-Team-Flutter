@@ -28,6 +28,9 @@
 .pub/
 build/
 
+# Firebase
+**/firebase/functions/node_modules
+
 # Android related
 **/android/**/gradle-wrapper.jar
 **/android/.gradle
