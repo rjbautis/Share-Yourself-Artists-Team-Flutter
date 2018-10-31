@@ -1,15 +1,15 @@
 import 'signup.dart';
-import 'role.dart';
+import 'authentication.dart';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class LoginPage extends StatefulWidget {
+  final Authentication authentication;
+  // Custom callback function for after successful sign in
+  final void Function(String) handleSuccess;
 
-  // Custom callback function for signing in
-  final void Function(Role) handleSignIn;
-
-  LoginPage({Key key, this.handleSignIn}) : super (key: key);
+  LoginPage({Key key, @required this.authentication, this.handleSuccess}) : super (key: key);
 
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -27,30 +27,24 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
-    String _name;
     String _email;
     String _password;
-    final GlobalKey<FormState> form= new GlobalKey<FormState>();
+    final GlobalKey<FormState> _form = new GlobalKey<FormState>();
+    final GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey<ScaffoldState>();
 
     _onPressed() {
       print("hi");
     }
 
-    _validate() {
-      var loginForm = form.currentState;
+    bool _validate() {
+      var loginForm = _form.currentState;
 
       if (loginForm.validate()) {
         loginForm.save();
+        return true;
       }
-
-      print("Inside login");
-      print("${loginForm.validate()}");
-      print("$_name");
-      print("$_email");
-      print("$_password");
-
+      return false;
     }
-
 
     Widget loginSocialMedia = Container(
         padding: const EdgeInsets.all(30.0),
@@ -66,27 +60,18 @@ class _LoginPageState extends State<LoginPage> {
                 onPressed: () => _onPressed
             ),
             new IconButton(
-                iconSize: 50.0,
-                icon: new Icon(
-                    FontAwesomeIcons.google,
-                    color: Color.fromRGBO(72, 133, 237, 1.0)
-                ),
-                onPressed: () {
-                  widget.handleSignIn(Role.BUSINESS);
-                }
+              iconSize: 50.0,
+              icon: new Icon(
+                  FontAwesomeIcons.google,
+                  color: Color.fromRGBO(72, 133, 237, 1.0)
+              ),
+              onPressed: () async {
+                  String uid = await widget.authentication.signInWithGoogleAndFireBase();
+                  widget.handleSuccess(uid);
+              }
             )
           ],
         )
-    );
-
-    Widget name = TextFormField(
-        decoration: new InputDecoration(
-            labelText: "Name"
-        ),
-        keyboardType: TextInputType.text,
-        textInputAction: TextInputAction.done,
-        maxLines: 1,
-        onSaved: (input) => _name = input
     );
 
     Widget email = TextFormField(
@@ -94,8 +79,16 @@ class _LoginPageState extends State<LoginPage> {
           labelText: "Email"
       ),
       keyboardType: TextInputType.emailAddress,
-      validator: (input) =>
-      !input.contains('@') ? "Please enter a valid email adrress." : null,
+      textCapitalization: TextCapitalization.none,
+      validator: (input) {
+        if (input.isEmpty) {
+          return "Email address is required.";
+        }
+        if (!input.contains('@')) {
+          return "Please enter a valid email address.";
+        }
+        return null;
+      },
       onSaved: (input) => _email = input,
     );
 
@@ -105,6 +98,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
       keyboardType: TextInputType.text,
       obscureText: true,
+      validator: (input) => input.isEmpty ? "Password is required." : null,
       onSaved: (input) => _password = input,
     );
 
@@ -125,8 +119,25 @@ class _LoginPageState extends State<LoginPage> {
           ),
           new MaterialButton (
             color: Colors.white,
-            onPressed: _validate,
             child: new Text('Sign In'),
+            onPressed: () async {
+              if (_validate()) {
+                print("the email is $_email and password is $_password");
+                String uid = await widget.authentication.signInWithEmailAndPassword(_email, _password);
+                if (uid != "") {
+                  widget.handleSuccess(uid);
+                } else {
+                  _scaffoldState.currentState.showSnackBar(
+                    SnackBar(
+                      content: new Text('The password is invalid or the user does not have a password. '
+                                        'Or you may have not confirmed your email yet. If you need further '
+                                        'assistance, please send us an email.'),
+                      duration: Duration(seconds: 4),
+                    )
+                  );
+                }
+              }
+            },
           )
         ],
       ),
@@ -151,6 +162,7 @@ class _LoginPageState extends State<LoginPage> {
 
 
     return new Scaffold(
+      key: _scaffoldState,
 //      resizeToAvoidBottomPadding: false,
       backgroundColor: Colors.white,
       body: Container(
@@ -175,10 +187,9 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 loginSocialMedia,
                 Form (
-                  key: form,       // Remember the state of the filled-in form
+                  key: _form,       // Remember the state of the filled-in form
                   child: Column(
                     children: <Widget>[
-                      name,
                       email,
                       password,
                     ],

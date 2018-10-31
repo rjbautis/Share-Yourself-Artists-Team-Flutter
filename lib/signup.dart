@@ -49,6 +49,7 @@ class _SignUpPageState extends State<SignUpPage> {
           labelText: "Email"
       ),
       keyboardType: TextInputType.emailAddress,
+      textCapitalization: TextCapitalization.none,
       validator: (input) {
         if (input.isEmpty) {
           return "Email address is required.";
