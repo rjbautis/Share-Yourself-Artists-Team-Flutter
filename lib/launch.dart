@@ -1,85 +1,67 @@
 import 'login.dart';
 import 'role.dart';
 import 'home.dart';
+import 'authentication.dart';
 
 import 'package:flutter/material.dart';
-import 'dart:async';
-import 'package:google_sign_in/google_sign_in.dart';
-
-GoogleSignIn googleSignIn = GoogleSignIn(
-  scopes: [
-    'email',
-  ],
-);
 
 class LaunchPage extends StatefulWidget {
-  Role role;
+  final Authentication authentication;
 
-  LaunchPage({this.role});
+  LaunchPage({@required this.authentication});
 
   @override
   _LaunchPageState createState() => _LaunchPageState();
 }
 
 class _LaunchPageState extends State<LaunchPage> {
-  GoogleSignInAccount _user;
   Role _userRole;
 
   @override
   void initState() {
     super.initState();
-    googleSignIn.onCurrentUserChanged.listen((GoogleSignInAccount account) {
-      print("inside account ${account.toString()}");
 
-      // TODO: _userRole is always null if the user quits the app (even if _user isn't null anymore).
-      // Need to think of a way to store the previous _userRole/widget.role in memory (if possible)
-      print("value of _userRole is ${_userRole}");
-      setState(() {
-        _user = account;
-        widget.role = _userRole;
-      });
+    // On init, check if the user had already signed in or not
+    widget.authentication.alreadySignedIn().then((isSignedIn) {
+      if (isSignedIn) {
+        setState(() {
+          _userRole = Role.BUSINESS;    // TODO:// pass in the user's role from database query
+        });
+      }
     });
-    googleSignIn.signInSilently();
   }
 
-  Future<void> _handleSignIn(Role role) async {
-    try {
-     // Important! Don't use keyword await for signIn() --> causes error
-      googleSignIn.signIn();
-
-      setState(() {
-        _userRole = role;
-      });
-    } catch (error) {
-      print(error);
-    }
-  }
-
-  Future<void> _handleSignOut() async {
-    print("Signed out");
-
-    await googleSignIn.disconnect();
-
-    // Set State of widget by changing Role to NOTSIGNEDIN for login page
+  // If Sign in was successful, change userRole
+  void _handleSuccess(String uid) {
+    print("Success! Signed in");
     setState(() {
-      _userRole = Role.NOTSIGNEDIN;
+      _userRole = Role.BUSINESS;    // TODO: Rather than hardcoding, need to work with Firebase database plugin
+    });
+  }
+
+
+  void _handleSignOut() {
+    // Set state of widget by changing Role back to null for login page
+    setState(() {
+      _userRole = null;
     });
   }
 
 
   @override
   Widget build(BuildContext context) {
-    print("The role inside build is ${widget.role}");
+    print("The role inside build is ${_userRole}");
 
-    if (_user != null) {
-      if (widget.role == Role.BUSINESS) {
-        return new HomePage(handleSignOut: _handleSignOut);
-      } else {
-        print("Test");
-        return new HomePage(handleSignOut: _handleSignOut,);
+    // If the user has an associated role, then display the appropriate page
+    if (_userRole != null) {
+      if (_userRole == Role.BUSINESS) {
+        return new HomePage(authentication: widget.authentication, handleSignOut: _handleSignOut);
+      } else if (_userRole == Role.ARTIST){
+        return new HomePage(authentication: widget.authentication, handleSignOut: _handleSignOut);
       }
+    // Otherwise, display login page
     } else {
-      return new LoginPage(handleSignIn: _handleSignIn,);
+      return new LoginPage(authentication: widget.authentication, handleSuccess: _handleSuccess);
     }
   }
 }

@@ -1,7 +1,6 @@
-// Role specify role of the artists
+// Specify a user's role
 
 enum Role {
-  NOTSIGNEDIN,
   ARTIST,
   BUSINESS
 }
