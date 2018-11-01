@@ -2,6 +2,7 @@ import 'login.dart';
 import 'role.dart';
 import 'home.dart';
 import 'authentication.dart';
+import 'artist-upload-image.dart';
 
 import 'package:flutter/material.dart';
 
@@ -61,7 +62,8 @@ class _LaunchPageState extends State<LaunchPage> {
       }
     // Otherwise, display login page
     } else {
-      return new LoginPage(authentication: widget.authentication, handleSuccess: _handleSuccess);
+      //return new LoginPage(authentication: widget.authentication, handleSuccess: _handleSuccess);
+      return new ArtistUploadImage();
     }
   }
 }
