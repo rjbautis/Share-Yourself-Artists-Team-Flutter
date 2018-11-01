@@ -1,6 +1,7 @@
 import 'login.dart';
 import 'role.dart';
 import 'home.dart';
+import 'artist-upload-image.dart';
 
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -79,7 +80,7 @@ class _LaunchPageState extends State<LaunchPage> {
         return new HomePage(handleSignOut: _handleSignOut,);
       }
     } else {
-      return new LoginPage(handleSignIn: _handleSignIn,);
+      //return new ArtistUploadImage();
     }
   }
 }
