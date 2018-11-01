@@ -1,5 +1,5 @@
 import 'launch.dart';
-import 'role.dart';
+import 'authentication.dart';
 
 import 'package:flutter/material.dart';
 
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: new ThemeData(
         primarySwatch: Colors.orange,
       ),
-      home: new LaunchPage(role: Role.NOTSIGNEDIN),
+      home: new LaunchPage(authentication: new Authentication()),   // Pass in new Authentication object
     );
   }
 }
