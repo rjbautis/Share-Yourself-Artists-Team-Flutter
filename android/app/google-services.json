@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "534686216995",
-    "firebase_url": "https://sya-dummy.firebaseio.com",
-    "project_id": "sya-dummy",
-    "storage_bucket": "sya-dummy.appspot.com"
+    "project_number": "490982978690",
+    "firebase_url": "https://sya-app.firebaseio.com",
+    "project_id": "sya-app",
+    "storage_bucket": "sya-app.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:534686216995:android:9cef4305a6723fb2",
+        "mobilesdk_app_id": "1:490982978690:android:9cef4305a6723fb2",
         "android_client_info": {
           "package_name": "com.shareyourselfartists.flutter"
         }
       },
       "oauth_client": [
         {
-          "client_id": "534686216995-vo1lh30mlskmjnej315aufan7hjhfdkf.apps.googleusercontent.com",
+          "client_id": "490982978690-qsmvkh2ftn31miem8g26e901dqt7nvre.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCosj0t9VOWfvzI_dRwIP6RS3oXeWEe9oI"
+          "current_key": "AIzaSyDXjbohmkjkFm1_G4ztNO-DPB1bqyIk9g4"
         }
       ],
       "services": {

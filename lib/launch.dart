@@ -62,8 +62,7 @@ class _LaunchPageState extends State<LaunchPage> {
       }
     // Otherwise, display login page
     } else {
-      //return new LoginPage(authentication: widget.authentication, handleSuccess: _handleSuccess);
-      return new ArtistUploadImage();
+      return new LoginPage(authentication: widget.authentication, handleSuccess: _handleSuccess);
     }
   }
 }
