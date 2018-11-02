@@ -1,3 +1,4 @@
+import 'feedbackpage.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
@@ -41,38 +42,38 @@ class _FeedbackListState extends State<FeedbackList> {
 
   Widget _buildNewCard(BuildContext ctxt, int index) {
     Map<String, dynamic> artwork = _newArts[index];
-    String IMAGE = artwork["url"];
-    String TITLE = artwork["title"];
-    String ARTIST = artwork["artist"];
-    bool REPLIED = artwork["replied"];
-    bool PAID = artwork["paid"];
-    String ID = artwork["id"];
+    String artImage = artwork["url"];
+    String artTitle = artwork["title"];
+    String artArtist = artwork["artist"];
+    bool artReplied = artwork["replied"];
+    bool artPaid = artwork["paid"];
+    String artUserID = artwork["id"];
 
     return new Card(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.only(top: _screenWidth*.1),
+            padding: EdgeInsets.only(top: _screenWidth * .1),
           ),
           Image.network(
-            IMAGE,
+            artImage,
             width: MediaQuery.of(context).size.width * .75,
           ),
           ListTile(
             title: Text(
-              TITLE,
+              artTitle,
               textAlign: TextAlign.center,
             ),
             subtitle:
-                Text(ARTIST + " " + ID, textAlign: TextAlign.center),
+                Text(artArtist + " " + artUserID, textAlign: TextAlign.center),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Icon(
                 Icons.attach_money,
-                color: PAID ? Colors.green : Colors.grey,
+                color: artPaid ? Colors.green : Colors.grey,
               ),
               Padding(
                 padding: EdgeInsets.symmetric(
@@ -81,11 +82,11 @@ class _FeedbackListState extends State<FeedbackList> {
               IconButton(
                 icon: Icon(
                   Icons.reply,
-                  color: REPLIED ? Colors.grey : Colors.orange,
+                  color: artReplied ? Colors.grey : Colors.orange,
                 ),
                 tooltip: 'Respond',
                 onPressed: () {
-                  _navigateFeedback();
+                  _navigateFeedback(index);
                 },
               )
             ],
@@ -97,46 +98,45 @@ class _FeedbackListState extends State<FeedbackList> {
 
   Widget _buildRepliedCard(BuildContext ctxt, int index) {
     Map<String, dynamic> artwork = _repliedArts[index];
-    String IMAGE = artwork["url"];
-    String TITLE = artwork["title"];
-    String ARTIST = artwork["artist"];
-    bool REPLIED = artwork["replied"];
-    bool PAID = artwork["paid"];
-    String ID = artwork["id"];
+    String artImage = artwork["url"];
+    String artTitle = artwork["title"];
+    String artArtist = artwork["artist"];
+    bool artPaid = artwork["paid"];
+    String artUserID = artwork["id"];
 
     return new Card(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.only(top: _screenWidth*.1),
+            padding: EdgeInsets.only(top: _screenWidth * .1),
           ),
           Image.network(
-            IMAGE,
+            artImage,
             width: MediaQuery.of(context).size.width * .75,
           ),
           ListTile(
             title: Text(
-              TITLE,
+              artTitle,
               textAlign: TextAlign.center,
             ),
             subtitle:
-            Text(ARTIST + " " + ID, textAlign: TextAlign.center),
+                Text(artArtist + " " + artUserID, textAlign: TextAlign.center),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Icon(
                 Icons.attach_money,
-                color: PAID ? Colors.green : Colors.grey,
+                color: artPaid ? Colors.green : Colors.grey,
               ),
               Padding(
                 padding: EdgeInsets.symmetric(
                     vertical: 0.0, horizontal: _screenWidth * .3),
               ),
               Icon(
-                  Icons.not_interested,
-                  color: Colors.red,
+                Icons.not_interested,
+                color: Colors.red,
               ),
             ],
           ),
@@ -148,9 +148,16 @@ class _FeedbackListState extends State<FeedbackList> {
     );
   }
 
-  void _navigateFeedback() {
+  void _navigateFeedback(int index) {
     // create new FeedbackPage
-    _getArtworks();
+    print(index);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => FeedbackPage(
+                artInfo: _newArts[index],
+              )),
+    );
   }
 
   @override
@@ -163,31 +170,40 @@ class _FeedbackListState extends State<FeedbackList> {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
-            title: Text(title),
-            bottom: TabBar(tabs: [
-              Tab(
-                child: new Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    new Text('New'),
-                    new Padding(
-                        padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0)),
-                    new Icon(Icons.inbox),
-                  ],
-                ),
+            backgroundColor: Colors.orangeAccent,
+            title: Text(
+              title,
+              style: TextStyle(
+                color: Colors.black,
               ),
-              Tab(
-                child: new Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    new Text('Replied'),
-                    new Padding(
-                        padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0)),
-                    new Icon(Icons.done_all),
-                  ],
-                ),
-              ),
-            ]),
+            ),
+            bottom: TabBar(
+                indicatorColor: Colors.black,
+                labelColor: Colors.black,
+                tabs: [
+                  Tab(
+                    child: new Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        new Text('New'),
+                        new Padding(
+                            padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0)),
+                        new Icon(Icons.inbox),
+                      ],
+                    ),
+                  ),
+                  Tab(
+                    child: new Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        new Text('Replied'),
+                        new Padding(
+                            padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0)),
+                        new Icon(Icons.done_all),
+                      ],
+                    ),
+                  ),
+                ]),
           ),
           body: TabBarView(children: [
             new ListView.builder(
