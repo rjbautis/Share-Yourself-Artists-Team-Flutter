@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'dart:async';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 
 class FeedbackPage extends StatefulWidget {
+  final Map<String, dynamic> artInfo;
+
+  FeedbackPage({@required this.artInfo});
 
   @override
   _FeedbackPageState createState() => new _FeedbackPageState();
@@ -13,29 +13,27 @@ class _FeedbackPageState extends State<FeedbackPage> {
   FocusNode _textFieldNode = new FocusNode();
   TextEditingController _controller = new TextEditingController();
   String comment;
-  String _imageUrl = 'https://vignette.wikia.nocookie.net/citrus/images/6/60/No_Image_Available.png/revision/latest/scale-to-width-down/480?cb=20170129011325';
   bool _submitEnabled = false;
   bool _accepted = false;
   int _radioValue = -1;
 
+  String artImage;
+  String artTitle;
+  String artArtist;
+  bool artReplied;
+  bool artPaid;
+  String artUserID;
+
   @override
   void initState() {
+    super.initState();
     setState(() {
-      _fetchImage();
-    });
-  }
-
-  Future<Null> _fetchImage() async {
-    http.Response response = await http.get(
-        Uri.encodeFull('https://us-central1-sya-dummy.cloudfunctions.net/getChat'),
-        headers: {"Accept": "application/json"});
-    Map<String, dynamic> data = json.decode(response.body);
-    setState(() {
-      try {
-        _imageUrl = data['url'].toString();
-      } catch (e){
-        _imageUrl = 'https://vignette.wikia.nocookie.net/citrus/images/6/60/No_Image_Available.png/revision/latest/scale-to-width-down/480?cb=20170129011325';
-      }
+      artImage = widget.artInfo["url"];
+      artTitle = widget.artInfo["title"];
+      artArtist = widget.artInfo["artist"];
+      artReplied = widget.artInfo["replied"];
+      artPaid = widget.artInfo["paid"];
+      artUserID = widget.artInfo["id"];
     });
   }
 
@@ -79,6 +77,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
     return new Scaffold(
       appBar: AppBar(
         title: Text('Submit Feedback'),
+        backgroundColor: Colors.orangeAccent,
       ),
       body: new Center(
         child: new ListView(
@@ -90,7 +89,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                   new Container(
                     height: MediaQuery.of(context).size.width*.75,
                     child: new Image.network(
-                      _imageUrl,
+                      artImage,
                       //'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1024px-Cat03.jpg',
                       fit: BoxFit.fitWidth,
                     ),
@@ -99,7 +98,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                     padding: EdgeInsets.fromLTRB(5.0, 0.0, 5.0, 5.0),
                     alignment: FractionalOffset(.15, .85),
                     child: new Text(
-                      'Le Chat',
+                      artTitle + " by " + artArtist,
                       textAlign: TextAlign.left,
                       textScaleFactor: 1.5,
                       //style: TextStyle(fontStyle: FontStyle.italic),
