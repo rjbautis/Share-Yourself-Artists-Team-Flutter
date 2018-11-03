@@ -18,6 +18,24 @@ class _HomePageState extends State<HomePage> {
     return new Scaffold(
       resizeToAvoidBottomPadding: false,
       backgroundColor: Colors.white,
+      appBar: new AppBar(
+        title: new Text("hi"),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            ListTile(
+              title: Text('Log Out'),
+              onTap: () async {
+                await widget.authentication.signOut();
+                widget.handleSignOut();
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
       body: Container(
         padding: const EdgeInsets.all(25.0),
         child: Column (

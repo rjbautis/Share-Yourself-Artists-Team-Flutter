@@ -2,6 +2,7 @@ import 'login.dart';
 import 'role.dart';
 import 'home.dart';
 import 'authentication.dart';
+import 'feedbacklist.dart';
 import 'artist-upload-image.dart';
 
 import 'package:flutter/material.dart';
@@ -33,10 +34,14 @@ class _LaunchPageState extends State<LaunchPage> {
   }
 
   // If Sign in was successful, change userRole
-  void _handleSuccess(String uid) {
-    print("Success! Signed in");
+  void _handleSuccess(String uid) async {
+    String role;
+    print("Successful authentication. Now trying to verify user in Firestore.");
+
+    role = await widget.authentication.verifyUserDocument(uid);
+
     setState(() {
-      _userRole = Role.BUSINESS;    // TODO: Rather than hardcoding, need to work with Firebase database plugin
+      _userRole = role == 'business' ? Role.BUSINESS : Role.ARTIST;
     });
   }
 
@@ -56,9 +61,10 @@ class _LaunchPageState extends State<LaunchPage> {
     // If the user has an associated role, then display the appropriate page
     if (_userRole != null) {
       if (_userRole == Role.BUSINESS) {
-        return new HomePage(authentication: widget.authentication, handleSignOut: _handleSignOut);
+        return new FeedbackList(authentication: widget.authentication, handleSignOut: _handleSignOut);
       } else if (_userRole == Role.ARTIST){
-        return new HomePage(authentication: widget.authentication, handleSignOut: _handleSignOut);
+        return new ArtistUploadImage(authentication: widget.authentication, handleSignOut: _handleSignOut);
+
       }
     // Otherwise, display login page
     } else {

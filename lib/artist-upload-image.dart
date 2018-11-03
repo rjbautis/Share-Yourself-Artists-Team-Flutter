@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:io';
+import 'authentication.dart';
+
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
 class ArtistUploadImage extends StatefulWidget {
+  final Authentication authentication;
+  final VoidCallback handleSignOut;
+
+  ArtistUploadImage({@required this.authentication, this.handleSignOut});
+
   @override
   _ArtistUploadImageState createState() => _ArtistUploadImageState();
 }
@@ -81,6 +88,30 @@ class _ArtistUploadImageState extends State<ArtistUploadImage> {
 
     return new Scaffold(
       resizeToAvoidBottomPadding: false,
+      appBar: AppBar(title: new Text('Artist')),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            UserAccountsDrawerHeader(
+              accountName: new Text('Business'),
+              accountEmail: new Text('gmail.com'),
+              currentAccountPicture: new CircleAvatar(
+                backgroundColor: Colors.white,
+                child: new Text('T'),
+              ),
+            ),
+            ListTile(
+              title: new Text('Log Out'),
+              onTap: () async {
+                await widget.authentication.signOut();
+                widget.handleSignOut();
+//                    Navigator.pop(context);
+              },
+            ),
+          ],
+        ),
+      ),
       body: Container(
         padding: const EdgeInsets.all(20.0),
         child: Column(
