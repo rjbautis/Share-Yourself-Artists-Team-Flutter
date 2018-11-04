@@ -1,10 +1,17 @@
+import 'authentication.dart';
 import 'feedbackpage.dart';
-import 'package:flutter/material.dart';
+
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class FeedbackList extends StatefulWidget {
+  final Authentication authentication;
+  final VoidCallback handleSignOut;
+
+  FeedbackList({@required this.authentication, this.handleSignOut});
+
   @override
   _FeedbackListState createState() => new _FeedbackListState();
 }
@@ -204,6 +211,29 @@ class _FeedbackListState extends State<FeedbackList> {
                     ),
                   ),
                 ]),
+          ),
+          drawer: Drawer(
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                UserAccountsDrawerHeader(
+                    accountName: new Text('Business'),
+                    accountEmail: new Text('gmail.com'),
+                    currentAccountPicture: new CircleAvatar(
+                      backgroundColor: Colors.white,
+                      child: new Text('T'),
+                    ),
+                ),
+                ListTile(
+                  title: new Text('Log Out'),
+                  onTap: () async {
+                    await widget.authentication.signOut();
+                    widget.handleSignOut();
+//                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
           ),
           body: TabBarView(children: [
             new ListView.builder(
