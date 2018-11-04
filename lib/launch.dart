@@ -1,11 +1,12 @@
 import 'login.dart';
 import 'role.dart';
-import 'home.dart';
 import 'authentication.dart';
 import 'feedbacklist.dart';
 import 'artist-upload-image.dart';
 
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LaunchPage extends StatefulWidget {
   final Authentication authentication;
@@ -26,11 +27,29 @@ class _LaunchPageState extends State<LaunchPage> {
     // On init, check if the user had already signed in or not
     widget.authentication.alreadySignedIn().then((isSignedIn) {
       if (isSignedIn) {
-        setState(() {
-          _userRole = Role.BUSINESS;    // TODO:// pass in the user's role from database query
+
+        loadPreferences().then((String role) {
+          if (role != '') {
+            setState(() {
+              _userRole = role == 'business' ? Role.BUSINESS : Role.ARTIST;
+            });
+          }
         });
       }
     });
+  }
+
+  Future<void> savePreferences(String role) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    await sharedPreferences.setString('role', role);
+  }
+
+  Future<String> loadPreferences() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    print('the role saved from disk is ' + sharedPreferences.getString('role'));
+
+    return sharedPreferences.getString('role');
   }
 
   // If Sign in was successful, change userRole
@@ -40,13 +59,18 @@ class _LaunchPageState extends State<LaunchPage> {
 
     role = await widget.authentication.verifyUserDocument(uid);
 
+    await savePreferences(role);
+
     setState(() {
       _userRole = role == 'business' ? Role.BUSINESS : Role.ARTIST;
     });
   }
 
 
-  void _handleSignOut() {
+  void _handleSignOut() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    await sharedPreferences.setString('role', '');
+
     // Set state of widget by changing Role back to null for login page
     setState(() {
       _userRole = null;

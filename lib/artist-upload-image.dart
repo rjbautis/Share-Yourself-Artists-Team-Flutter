@@ -94,7 +94,7 @@ class _ArtistUploadImageState extends State<ArtistUploadImage> {
           padding: EdgeInsets.zero,
           children: <Widget>[
             UserAccountsDrawerHeader(
-              accountName: new Text('Business'),
+              accountName: new Text('Artist'),
               accountEmail: new Text('gmail.com'),
               currentAccountPicture: new CircleAvatar(
                 backgroundColor: Colors.white,
@@ -104,9 +104,10 @@ class _ArtistUploadImageState extends State<ArtistUploadImage> {
             ListTile(
               title: new Text('Log Out'),
               onTap: () async {
+                Navigator.pop(context);  // Need to pop context (specifically for this page)
+
                 await widget.authentication.signOut();
                 widget.handleSignOut();
-//                    Navigator.pop(context);
               },
             ),
           ],
@@ -169,6 +170,4 @@ class _ArtistUploadImageState extends State<ArtistUploadImage> {
       ),
     );
   }
-
-
-  }
+}
