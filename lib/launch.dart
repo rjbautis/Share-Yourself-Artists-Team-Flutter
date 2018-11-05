@@ -1,11 +1,11 @@
-import 'login.dart';
-import 'role.dart';
-import 'authentication.dart';
-import 'feedbacklist.dart';
-import 'artist-upload-image.dart';
-
 import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:share_yourself_artists_team_flutter/artist/artist-upload-image.dart';
+import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
+import 'package:share_yourself_artists_team_flutter/authentication/login.dart';
+import 'package:share_yourself_artists_team_flutter/authentication/role.dart';
+import 'package:share_yourself_artists_team_flutter/business/feedbacklist.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LaunchPage extends StatefulWidget {
@@ -27,7 +27,6 @@ class _LaunchPageState extends State<LaunchPage> {
     // On init, check if the user had already signed in or not
     widget.authentication.alreadySignedIn().then((isSignedIn) {
       if (isSignedIn) {
-
         loadPreferences().then((String role) {
           if (role != '') {
             setState(() {
@@ -47,7 +46,7 @@ class _LaunchPageState extends State<LaunchPage> {
   Future<String> loadPreferences() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
-    print('the role saved from disk is ' + sharedPreferences.getString('role'));
+    print('The role saved from disk is ' + sharedPreferences.getString('role'));
 
     return sharedPreferences.getString('role');
   }
@@ -66,7 +65,6 @@ class _LaunchPageState extends State<LaunchPage> {
     });
   }
 
-
   void _handleSignOut() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     await sharedPreferences.setString('role', '');
@@ -77,7 +75,6 @@ class _LaunchPageState extends State<LaunchPage> {
     });
   }
 
-
   @override
   Widget build(BuildContext context) {
     print("The role inside build is ${_userRole}");
@@ -85,14 +82,18 @@ class _LaunchPageState extends State<LaunchPage> {
     // If the user has an associated role, then display the appropriate page
     if (_userRole != null) {
       if (_userRole == Role.BUSINESS) {
-        return new FeedbackList(authentication: widget.authentication, handleSignOut: _handleSignOut);
-      } else if (_userRole == Role.ARTIST){
-        return new ArtistUploadImage(authentication: widget.authentication, handleSignOut: _handleSignOut);
-
+        return new FeedbackList(
+            authentication: widget.authentication,
+            handleSignOut: _handleSignOut);
+      } else if (_userRole == Role.ARTIST) {
+        return new ArtistUploadImage(
+            authentication: widget.authentication,
+            handleSignOut: _handleSignOut);
       }
-    // Otherwise, display login page
     } else {
-      return new LoginPage(authentication: widget.authentication, handleSuccess: _handleSuccess);
+      // Otherwise, display login page
+      return new LoginPage(
+          authentication: widget.authentication, handleSuccess: _handleSuccess);
     }
   }
 }

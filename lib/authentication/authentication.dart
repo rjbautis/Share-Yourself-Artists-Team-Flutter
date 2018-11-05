@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class Authentication {
   final FirebaseAuth _fireBaseAuth = FirebaseAuth.instance;
@@ -30,27 +30,25 @@ class Authentication {
 
   Future<String> signInWithGoogleAndFireBase() async {
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
 
     final FirebaseUser user = await _fireBaseAuth.signInWithGoogle(
-        idToken: googleAuth.idToken,
-        accessToken: googleAuth.idToken
-    );
+        idToken: googleAuth.idToken, accessToken: googleAuth.idToken);
 
     final FirebaseUser currentUser = await _fireBaseAuth.currentUser();
-    assert (user.uid == currentUser.uid);
+    assert(user.uid == currentUser.uid);
 
     return user.uid;
   }
 
-  Future<String> signInWithEmailAndPassword(String email, String password) async {
+  Future<String> signInWithEmailAndPassword(
+      String email, String password) async {
     FirebaseUser currentUser;
 
     try {
       currentUser = await _fireBaseAuth.signInWithEmailAndPassword(
-          email: email,
-          password: password
-      );
+          email: email, password: password);
       return currentUser.uid;
     } catch (e) {
       print("Error signing in with email and password");
@@ -66,18 +64,18 @@ class Authentication {
   Future<String> verifyUserDocument(String uid) async {
     print('the uid is $uid');
 
-    final DocumentReference reference = Firestore.instance.collection('users').document(uid);
+    final DocumentReference reference =
+        Firestore.instance.collection('users').document(uid);
     DocumentSnapshot snapshot = await reference.get();
 
     if (snapshot.exists) {
       print(snapshot.data);
       return snapshot['role'];
-
     } else {
       print("User entry does not exist in Firestore.");
 
       var map = {
-        "userId": "$uid",
+        "userId": uid,
         "role": "artist",
         "email": "dummyemail@ucsc.edu"
       };
@@ -96,7 +94,7 @@ class Authentication {
   }
 
   Future<void> signOut() async {
-    print("Inside signout");
+    print("Attempting to sign out user.");
     await _googleSignIn.signOut();
     await _fireBaseAuth.signOut();
   }

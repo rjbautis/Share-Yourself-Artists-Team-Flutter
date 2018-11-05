@@ -1,15 +1,16 @@
-import 'signup.dart';
-import 'authentication.dart';
-
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import 'authentication.dart';
+import 'signup.dart';
 
 class LoginPage extends StatefulWidget {
   final Authentication authentication;
   // Custom callback function for after successful sign in
   final void Function(String) handleSuccess;
 
-  LoginPage({Key key, @required this.authentication, this.handleSuccess}) : super (key: key);
+  LoginPage({Key key, @required this.authentication, this.handleSuccess})
+      : super(key: key);
 
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -30,11 +31,10 @@ class _LoginPageState extends State<LoginPage> {
     String _email;
     String _password;
     final GlobalKey<FormState> _form = new GlobalKey<FormState>();
-    final GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey<ScaffoldState>();
+    final GlobalKey<ScaffoldState> _scaffoldState =
+        new GlobalKey<ScaffoldState>();
 
-    _onPressed() {
-      print("hi");
-    }
+    _onPressed() {}
 
     bool _validate() {
       var loginForm = _form.currentState;
@@ -53,31 +53,23 @@ class _LoginPageState extends State<LoginPage> {
           children: <Widget>[
             new IconButton(
                 iconSize: 50.0,
-                icon: new Icon(
-                    FontAwesomeIcons.facebook,
-                    color: Color.fromRGBO(59, 89, 152, 1.0)
-                ),
-                onPressed: () => _onPressed
-            ),
+                icon: new Icon(FontAwesomeIcons.facebook,
+                    color: Color.fromRGBO(59, 89, 152, 1.0)),
+                onPressed: () => _onPressed),
             new IconButton(
-              iconSize: 50.0,
-              icon: new Icon(
-                  FontAwesomeIcons.google,
-                  color: Color.fromRGBO(72, 133, 237, 1.0)
-              ),
-              onPressed: () async {
-                  String uid = await widget.authentication.signInWithGoogleAndFireBase();
+                iconSize: 50.0,
+                icon: new Icon(FontAwesomeIcons.google,
+                    color: Color.fromRGBO(72, 133, 237, 1.0)),
+                onPressed: () async {
+                  String uid =
+                      await widget.authentication.signInWithGoogleAndFireBase();
                   widget.handleSuccess(uid);
-              }
-            )
+                })
           ],
-        )
-    );
+        ));
 
     Widget email = TextFormField(
-      decoration: new InputDecoration(
-          labelText: "Email"
-      ),
+      decoration: new InputDecoration(labelText: "Email"),
       keyboardType: TextInputType.emailAddress,
       textCapitalization: TextCapitalization.none,
       validator: (input) {
@@ -106,35 +98,35 @@ class _LoginPageState extends State<LoginPage> {
       padding: const EdgeInsets.only(top: 50.0, bottom: 50.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//        mainAxisSize: MainAxisSize.max,
         children: <Widget>[
           new MaterialButton(
             color: Colors.black,
             onPressed: () {
-              Navigator.of(context).push(new MaterialPageRoute(
-                  builder: (context) => _signup),
+              Navigator.of(context).push(
+                new MaterialPageRoute(builder: (context) => _signup),
               );
             },
-            child: new Text("Sign Up", style: new TextStyle(color: Colors.white)),
+            child:
+                new Text("Sign Up", style: new TextStyle(color: Colors.white)),
           ),
-          new MaterialButton (
+          new MaterialButton(
             color: Colors.white,
             child: new Text('Sign In'),
             onPressed: () async {
               if (_validate()) {
                 print("the email is $_email and password is $_password");
-                String uid = await widget.authentication.signInWithEmailAndPassword(_email, _password);
+                String uid = await widget.authentication
+                    .signInWithEmailAndPassword(_email, _password);
                 if (uid != "") {
                   widget.handleSuccess(uid);
                 } else {
-                  _scaffoldState.currentState.showSnackBar(
-                    SnackBar(
-                      content: new Text('The password is invalid or the user does not have a password. '
-                                        'Or you may have not confirmed your email yet. If you need further '
-                                        'assistance, please send us an email.'),
-                      duration: Duration(seconds: 4),
-                    )
-                  );
+                  _scaffoldState.currentState.showSnackBar(SnackBar(
+                    content: new Text(
+                        'The password is invalid or the user does not have a password. '
+                        'Or you may have not confirmed your email yet. If you need further '
+                        'assistance, please send us an email.'),
+                    duration: Duration(seconds: 4),
+                  ));
                 }
               }
             },
@@ -157,53 +149,46 @@ class _LoginPageState extends State<LoginPage> {
               onTap: _onPressed,
             )
           ],
-        )
-    );
-
+        ));
 
     return new Scaffold(
       key: _scaffoldState,
-//      resizeToAvoidBottomPadding: false,
       backgroundColor: Colors.white,
       body: Container(
-        padding: const EdgeInsets.fromLTRB(25.0, 0.0, 25.0, 0.0),
-        child: ListView(
-          children: <Widget>[
-            Column (
-//          mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  child: Image.asset('images/logo.png'),
-                  padding: const EdgeInsets.all(20.0),
-                ),
-                Center (
-                  child: new Text(
-                    "Get Your Art Seen Today - guaranteed a response.",
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(
-                        fontSize: 25.0,
-                        color: Color.fromRGBO(255, 160, 0, 1.0)),
+          padding: const EdgeInsets.fromLTRB(25.0, 0.0, 25.0, 0.0),
+          child: ListView(
+            children: <Widget>[
+              Column(
+                children: <Widget>[
+                  Container(
+                    child: Image.asset('images/logo.png'),
+                    padding: const EdgeInsets.all(20.0),
                   ),
-                ),
-                loginSocialMedia,
-                Form (
-                  key: _form,       // Remember the state of the filled-in form
-                  child: Column(
-                    children: <Widget>[
-                      email,
-                      password,
-                    ],
+                  Center(
+                    child: new Text(
+                      "Get Your Art Seen Today - guaranteed a response.",
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                          fontSize: 25.0,
+                          color: Color.fromRGBO(255, 160, 0, 1.0)),
+                    ),
                   ),
-                ),
-                loginButtons,
-                forgotSection,
-              ],
-            ),
-          ],
-        )
-      ),
+                  loginSocialMedia,
+                  Form(
+                    key: _form, // Remember the state of the filled-in form
+                    child: Column(
+                      children: <Widget>[
+                        email,
+                        password,
+                      ],
+                    ),
+                  ),
+                  loginButtons,
+                  forgotSection,
+                ],
+              ),
+            ],
+          )),
     );
   }
 }
-
-
