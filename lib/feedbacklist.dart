@@ -229,7 +229,6 @@ class _FeedbackListState extends State<FeedbackList> {
                   onTap: () async {
                     await widget.authentication.signOut();
                     widget.handleSignOut();
-//                    Navigator.pop(context);
                   },
                 ),
               ],
