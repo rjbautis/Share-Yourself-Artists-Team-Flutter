@@ -1,5 +1,3 @@
-// Sign up
-
 import 'package:flutter/material.dart';
 
 class SignUpPage extends StatefulWidget {
@@ -15,7 +13,7 @@ class _SignUpPageState extends State<SignUpPage> {
     String _password;
     String _instagram;
     final myController = TextEditingController();
-    final GlobalKey<FormState> form= new GlobalKey<FormState>();
+    final GlobalKey<FormState> form = new GlobalKey<FormState>();
 
     _validate() {
       var loginForm = form.currentState;
@@ -30,24 +28,17 @@ class _SignUpPageState extends State<SignUpPage> {
       print("$_email");
       print("$_password");
       print("$_instagram");
-
     }
 
     Widget name = TextFormField(
-        decoration: new InputDecoration(
-            labelText: "Name"
-        ),
+        decoration: new InputDecoration(labelText: "Name"),
         keyboardType: TextInputType.text,
         maxLines: 1,
         validator: (input) => input.isEmpty ? "Name is required." : null,
-
-        onSaved: (input) => _name = input
-    );
+        onSaved: (input) => _name = input);
 
     Widget email = TextFormField(
-      decoration: new InputDecoration(
-          labelText: "Email"
-      ),
+      decoration: new InputDecoration(labelText: "Email"),
       keyboardType: TextInputType.emailAddress,
       textCapitalization: TextCapitalization.none,
       validator: (input) {
@@ -107,12 +98,12 @@ class _SignUpPageState extends State<SignUpPage> {
             onPressed: () {
               _validate();
             },
-            child: new Text("Sign In", style: new TextStyle(color: Colors.white)),
+            child:
+                new Text("Sign In", style: new TextStyle(color: Colors.white)),
           ),
         ],
       ),
     );
-
 
     return new Scaffold(
       resizeToAvoidBottomPadding: false,
@@ -129,8 +120,7 @@ class _SignUpPageState extends State<SignUpPage> {
                 "Get Your Art Seen Today - guaranteed a response.",
                 textAlign: TextAlign.center,
                 style: const TextStyle(
-                    fontSize: 25.0,
-                    color: Color.fromRGBO(255, 160, 0, 1.0)),
+                    fontSize: 25.0, color: Color.fromRGBO(255, 160, 0, 1.0)),
               ),
             ),
             Form(
