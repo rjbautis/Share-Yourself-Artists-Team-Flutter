@@ -3,14 +3,16 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
 import 'package:share_yourself_artists_team_flutter/business/feedbackpage.dart';
 
 class FeedbackList extends StatefulWidget {
+  final String uid;
   final Authentication authentication;
   final VoidCallback handleSignOut;
 
-  FeedbackList({@required this.authentication, this.handleSignOut});
+  FeedbackList({@required this.uid, this.authentication, this.handleSignOut});
 
   @override
   _FeedbackListState createState() => new _FeedbackListState();
@@ -27,34 +29,20 @@ class _FeedbackListState extends State<FeedbackList> {
   @override
   void initState() {
     super.initState();
-
-    _getArtworks();
   }
 
-  Future<void> _getArtworks() async {
-    http.Response response = await http.get(
-        Uri.encodeFull(
-            'https://us-central1-sya-dummy.cloudfunctions.net/getArtworks'),
-        headers: {"Accept": "application/json"});
-    Map<String, dynamic> data = json.decode(response.body);
-    setState(() {
-      _arts = data["result"];
-      _newArts = _arts.where((a) => a["replied"] == false).toList();
-      _repliedArts = _arts.where((a) => a["replied"] == true).toList();
+  Widget _reviewBuiler(BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot, int index) {
+    String artImage = snapshot.data.documents[index]['art']['url'].toString();
+    String artTitle = snapshot.data.documents[index]['art']['art_title'].toString();
+    String artArtist = snapshot.data.documents[index]['art']['artist_name'].toString();
+    //bool artReplied = snapshot.data.documents[index]['replied'];
+    bool artPaid = snapshot.data.documents[index]['submitted_with_free_cerdit'];
+    String artUserID = snapshot.data.documents[index]['art']['artist_id'].toString();
 
-      _numNew = _newArts.length;
-      _numReplied = _repliedArts.length;
-    });
-  }
+    var art = snapshot.data.documents[index];
 
-  Widget _buildNewCard(BuildContext ctxt, int index) {
-    Map<String, dynamic> artwork = _newArts[index];
-    String artImage = artwork["url"];
-    String artTitle = artwork["title"];
-    String artArtist = artwork["artist"];
-    bool artReplied = artwork["replied"];
-    bool artPaid = artwork["paid"];
-    String artUserID = artwork["id"];
+    if (artPaid == null)
+      artPaid = false;
 
     return new Card(
       child: Column(
@@ -73,7 +61,7 @@ class _FeedbackListState extends State<FeedbackList> {
               textAlign: TextAlign.center,
             ),
             subtitle:
-                Text(artArtist + " " + artUserID, textAlign: TextAlign.center),
+            Text(artArtist, textAlign: TextAlign.center),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -89,11 +77,11 @@ class _FeedbackListState extends State<FeedbackList> {
               IconButton(
                 icon: Icon(
                   Icons.reply,
-                  color: artReplied ? Colors.grey : Colors.orange,
+                  color: Colors.orange,
                 ),
                 tooltip: 'Respond',
                 onPressed: () {
-                  _navigateFeedback(index);
+                  _navigateFeedback(art);
                 },
               )
             ],
@@ -103,13 +91,21 @@ class _FeedbackListState extends State<FeedbackList> {
     );
   }
 
-  Widget _buildRepliedCard(BuildContext ctxt, int index) {
-    Map<String, dynamic> artwork = _repliedArts[index];
-    String artImage = artwork["url"];
-    String artTitle = artwork["title"];
-    String artArtist = artwork["artist"];
-    bool artPaid = artwork["paid"];
-    String artUserID = artwork["id"];
+
+  Widget _buildRepliedCard(BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot, int index) {
+    String artImage = snapshot.data.documents[index]['art']['url'].toString();
+    String artTitle = snapshot.data.documents[index]['art']['art_title'].toString();
+    String artArtist = snapshot.data.documents[index]['art']['artist_name'].toString();
+    String accepted = snapshot.data.documents[index]['submission_response.radios'].toString().toLowerCase();
+    bool artPaid = snapshot.data.documents[index]['submitted_with_free_cerdit'];
+    String artUserID = snapshot.data.documents[index]['art']['artist_id'].toString();
+    bool _accepted = false;
+
+    if (accepted.compareTo('accepted') == 1)
+      _accepted = true;
+
+    if (artPaid == null)
+      artPaid = false;
 
     return new Card(
       child: Column(
@@ -128,7 +124,7 @@ class _FeedbackListState extends State<FeedbackList> {
               textAlign: TextAlign.center,
             ),
             subtitle:
-                Text(artArtist + " " + artUserID, textAlign: TextAlign.center),
+                Text(artArtist, textAlign: TextAlign.center),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -142,8 +138,8 @@ class _FeedbackListState extends State<FeedbackList> {
                     vertical: 0.0, horizontal: _screenWidth * .3),
               ),
               Icon(
-                Icons.not_interested,
-                color: Colors.red,
+                _accepted ? Icons.check_circle : Icons.not_interested,
+                color: _accepted ? Colors.green :  Colors.red,
               ),
             ],
           ),
@@ -155,14 +151,13 @@ class _FeedbackListState extends State<FeedbackList> {
     );
   }
 
-  void _navigateFeedback(int index) {
+  void _navigateFeedback (var art) {
     // create new FeedbackPage
-    print(index);
     Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) => FeedbackPage(
-                artInfo: _newArts[index],
+                artInfo: art,
               )),
     );
   }
@@ -238,15 +233,46 @@ class _FeedbackListState extends State<FeedbackList> {
             ),
           ),
           body: TabBarView(children: [
-            new ListView.builder(
+            /*new ListView.builder(
               itemBuilder: (BuildContext ctxt, int index) =>
                   _buildNewCard(ctxt, index),
               itemCount: _numNew,
+            ),*/
+            new StreamBuilder(
+              stream: Firestore.instance
+                  .collection('review_requests')
+                  .where('businessId.userId', isEqualTo: '${widget.uid}')
+                  .where('replied', isEqualTo: false)
+                  .snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (!snapshot.hasData) return new Text('Loading...');
+                return new Container(
+                  child: ListView.builder(
+                    itemBuilder: (BuildContext ctxt, int index) =>
+                        _reviewBuiler(context, snapshot, index),
+                    itemCount: snapshot.data.documents.length,
+                  ),
+                );
+              },
             ),
-            new ListView.builder(
-              itemBuilder: (BuildContext ctxt, int index) =>
-                  _buildRepliedCard(ctxt, index),
-              itemCount: _numReplied,
+            new StreamBuilder(
+              stream: Firestore.instance
+                  .collection('review_requests')
+                  .where('businessId.userId', isEqualTo: '${widget.uid}')
+                  .where('replied', isEqualTo: true)
+                  .snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (!snapshot.hasData) return new Text('Loading...');
+                return new Container(
+                  child: ListView.builder(
+                    itemBuilder: (BuildContext ctxt, int index) =>
+                        _buildRepliedCard(context, snapshot, index),
+                    itemCount: snapshot.data.documents.length,
+                  ),
+                );
+              },
             ),
           ]),
         ),
