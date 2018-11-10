@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:path/path.dart' as path;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -20,8 +21,7 @@ class _ArtistUploadImageState extends State<ArtistUploadImage> {
   String location = "";
   String _display = "";
 
-  String user = "Alexis";
-  String fileName = "yes";
+  String _baseName = "";
 
   void enableUpload() {
     StorageReference firebaseStorageRef =
@@ -31,7 +31,7 @@ class _ArtistUploadImageState extends State<ArtistUploadImage> {
 
   Future<String> uploadFile() async {
     StorageReference firebaseStorageRef =
-        FirebaseStorage.instance.ref().child('$user/$fileName.jpg');
+      FirebaseStorage.instance.ref().child('${widget.uid}/$_baseName');
     StorageUploadTask task = firebaseStorageRef.putFile(_current);
 
     location = await firebaseStorageRef.getDownloadURL();
@@ -54,6 +54,7 @@ class _ArtistUploadImageState extends State<ArtistUploadImage> {
       print("You selected gallery image : " + galleryFile.path);
       setState(() {
         _current = galleryFile;
+        _baseName = path.basename(_current.path);
       });
     }
 
@@ -82,7 +83,7 @@ class _ArtistUploadImageState extends State<ArtistUploadImage> {
 
     return new Scaffold(
       resizeToAvoidBottomPadding: false,
-      appBar: AppBar(title: new Text('Artist')),
+      appBar: AppBar(title: new Text('Upload Art')),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -111,7 +112,7 @@ class _ArtistUploadImageState extends State<ArtistUploadImage> {
       ),
       body: Container(
         padding: const EdgeInsets.all(20.0),
-        child: Column(
+        child: ListView(
           children: <Widget>[
             Container(
               child: Image.asset('images/logo.png'),
