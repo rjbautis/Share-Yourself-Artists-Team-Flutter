@@ -1,8 +1,4 @@
-import 'dart:async';
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
 import 'package:share_yourself_artists_team_flutter/business/feedbackpage.dart';
@@ -20,18 +16,14 @@ class FeedbackList extends StatefulWidget {
 
 class _FeedbackListState extends State<FeedbackList> {
   double _screenWidth;
-  List<dynamic> _arts;
-  List<dynamic> _newArts;
-  List<dynamic> _repliedArts;
-  int _numNew = 0;
-  int _numReplied = 0;
 
   @override
   void initState() {
     super.initState();
   }
 
-  Widget _reviewBuiler(BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot, int index) {
+  // Builds the card for the new artworks
+  Widget _buildNewArtCard(BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot, int index) {
     String artImage = snapshot.data.documents[index]['art']['url'].toString();
     String artTitle = snapshot.data.documents[index]['art']['art_title'].toString();
     String artArtist = snapshot.data.documents[index]['art']['artist_name'].toString();
@@ -91,12 +83,12 @@ class _FeedbackListState extends State<FeedbackList> {
     );
   }
 
-
+  // Builds the card for the replied artwork tab
   Widget _buildRepliedCard(BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot, int index) {
     String artImage = snapshot.data.documents[index]['art']['url'].toString();
     String artTitle = snapshot.data.documents[index]['art']['art_title'].toString();
     String artArtist = snapshot.data.documents[index]['art']['artist_name'].toString();
-    String accepted = snapshot.data.documents[index]['submission_response.radios'].toString().toLowerCase();
+    String accepted = snapshot.data.documents[index]['submission_response']['radios'].toString().toLowerCase();
     bool artPaid = snapshot.data.documents[index]['submitted_with_free_cerdit'];
     String artUserID = snapshot.data.documents[index]['art']['artist_id'].toString();
     bool _accepted = false;
@@ -233,11 +225,6 @@ class _FeedbackListState extends State<FeedbackList> {
             ),
           ),
           body: TabBarView(children: [
-            /*new ListView.builder(
-              itemBuilder: (BuildContext ctxt, int index) =>
-                  _buildNewCard(ctxt, index),
-              itemCount: _numNew,
-            ),*/
             new StreamBuilder(
               stream: Firestore.instance
                   .collection('review_requests')
@@ -250,7 +237,7 @@ class _FeedbackListState extends State<FeedbackList> {
                 return new Container(
                   child: ListView.builder(
                     itemBuilder: (BuildContext ctxt, int index) =>
-                        _reviewBuiler(context, snapshot, index),
+                        _buildNewArtCard(context, snapshot, index),
                     itemCount: snapshot.data.documents.length,
                   ),
                 );

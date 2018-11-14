@@ -48,18 +48,22 @@ class _FeedbackPageState extends State<FeedbackPage> {
   }
 
   void _submitComment() {
+    if (comment.length < 50) {
+      // display error message
+      return;
+    }
+
     setState(() {
       // Things to submit
       // Comment, UserID, Date
       // submit the comment in the textbox
-      if (comment == null || comment == "") {
-        // display error message
-
-      }
       print(_accepted);
       print(comment);
     });
   }
+
+
+  final commentBar = SnackBar(content: Text('Please write a longer response. (min. 50 characters)'));
 
   void onEditComplete() {
     comment = _controller.text;
