@@ -19,6 +19,7 @@ class LaunchPage extends StatefulWidget {
 
 class _LaunchPageState extends State<LaunchPage> {
   Role _userRole;
+  String _uid;
 
   @override
   void initState() {
@@ -27,10 +28,17 @@ class _LaunchPageState extends State<LaunchPage> {
     // On init, check if the user had already signed in or not
     widget.authentication.alreadySignedIn().then((isSignedIn) {
       if (isSignedIn) {
-        loadPreferences().then((String role) {
+        loadRole().then((String role) {
           if (role != '') {
             setState(() {
               _userRole = role == 'business' ? Role.BUSINESS : Role.ARTIST;
+            });
+          }
+        });
+        loadUid().then((String uid) {
+          if (uid != '') {
+            setState(() {
+              _uid = uid;
             });
           }
         });
@@ -38,17 +46,26 @@ class _LaunchPageState extends State<LaunchPage> {
     });
   }
 
-  Future<void> savePreferences(String role) async {
+  Future<void> savePreferences(String role, String uid) async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     await sharedPreferences.setString('role', role);
+    await sharedPreferences.setString('uid', uid);
   }
 
-  Future<String> loadPreferences() async {
+  Future<String> loadRole() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
     print('The role saved from disk is ' + sharedPreferences.getString('role'));
 
     return sharedPreferences.getString('role');
+  }
+
+  Future<String> loadUid() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+
+    print('The uid saved from disk is ' + sharedPreferences.getString('uid'));
+
+    return sharedPreferences.getString('uid');
   }
 
   // If Sign in was successful, change userRole
@@ -58,16 +75,19 @@ class _LaunchPageState extends State<LaunchPage> {
 
     role = await widget.authentication.verifyUserDocument(uid);
 
-    await savePreferences(role);
+    await savePreferences(role, uid);
 
     setState(() {
       _userRole = role == 'business' ? Role.BUSINESS : Role.ARTIST;
+      _uid = uid;
     });
   }
 
   void _handleSignOut() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     await sharedPreferences.setString('role', '');
+    await sharedPreferences.setString('uid', '');
+
 
     // Set state of widget by changing Role back to null for login page
     setState(() {
@@ -83,6 +103,7 @@ class _LaunchPageState extends State<LaunchPage> {
     if (_userRole != null) {
       if (_userRole == Role.BUSINESS) {
         return new FeedbackList(
+            uid: _uid,
             authentication: widget.authentication,
             handleSignOut: _handleSignOut);
       } else if (_userRole == Role.ARTIST) {

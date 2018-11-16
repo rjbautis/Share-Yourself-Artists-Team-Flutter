@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class FeedbackPage extends StatefulWidget {
-  final Map<String, dynamic> artInfo;
+  var artInfo;
 
   FeedbackPage({@required this.artInfo});
 
@@ -28,12 +28,12 @@ class _FeedbackPageState extends State<FeedbackPage> {
   void initState() {
     super.initState();
     setState(() {
-      artImage = widget.artInfo["url"];
-      artTitle = widget.artInfo["title"];
-      artArtist = widget.artInfo["artist"];
-      artReplied = widget.artInfo["replied"];
-      artPaid = widget.artInfo["paid"];
-      artUserID = widget.artInfo["id"];
+      artImage = widget.artInfo['art']['url'].toString();
+      artTitle = widget.artInfo['art']['art_title'].toString();
+      artArtist = widget.artInfo['art']['artist_name'].toString();
+      //bool artReplied = widget.artInfo['replied'];
+      artPaid = widget.artInfo['submitted_with_free_cerdit'];
+      artUserID = widget.artInfo['art']['artist_id'].toString();
     });
   }
 
@@ -48,18 +48,22 @@ class _FeedbackPageState extends State<FeedbackPage> {
   }
 
   void _submitComment() {
+    if (comment.length < 50) {
+      // display error message
+      return;
+    }
+
     setState(() {
       // Things to submit
       // Comment, UserID, Date
       // submit the comment in the textbox
-      if (comment == null || comment == "") {
-        // display error message
-
-      }
       print(_accepted);
       print(comment);
     });
   }
+
+
+  final commentBar = SnackBar(content: Text('Please write a longer response. (min. 50 characters)'));
 
   void onEditComplete() {
     comment = _controller.text;
