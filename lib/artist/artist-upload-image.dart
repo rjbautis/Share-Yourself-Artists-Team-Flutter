@@ -5,13 +5,9 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
+import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 
 class ArtistUploadImage extends StatefulWidget {
-  final Authentication authentication;
-  final VoidCallback handleSignOut;
-
-  ArtistUploadImage({@required this.authentication, this.handleSignOut});
-
   @override
   _ArtistUploadImageState createState() => _ArtistUploadImageState();
 }
@@ -105,11 +101,9 @@ class _ArtistUploadImageState extends State<ArtistUploadImage> {
             ListTile(
               title: new Text('Log Out'),
               onTap: () async {
-                Navigator.pop(
-                    context); // Need to pop context (specifically for this page)
-
-                await widget.authentication.signOut();
-                widget.handleSignOut();
+                await Authentication.signOut();
+                resetPreferences();
+                Navigator.of(context).pushReplacementNamed('/login');
               },
             ),
           ],
