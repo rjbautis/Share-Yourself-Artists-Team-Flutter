@@ -5,9 +5,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class Authentication {
-//  final FirebaseAuth _fireBaseAuth = FirebaseAuth.instance;
-//  final GoogleSignIn _googleSignIn = GoogleSignIn();
-
   /// Returns boolean value if the user had previously signed in
   ///
   /// Checks if the [GoogleSignInAccount] or [FirebaseUser] instance is not null.
@@ -75,7 +72,7 @@ class Authentication {
     print('the uid is $uid');
 
     final DocumentReference reference =
-    Firestore.instance.collection('users').document(uid);
+        Firestore.instance.collection('users').document(uid);
     DocumentSnapshot snapshot = await reference.get();
 
     if (snapshot.exists) {
@@ -94,15 +91,15 @@ class Authentication {
     await _fireBaseAuth.signOut();
   }
 
-  static Future<String> createArtistAccount(String email, String password) async {
+  static Future<String> createArtistAccount(
+      String email, String password) async {
     final FirebaseAuth _fireBaseAuth = FirebaseAuth.instance;
-    final GoogleSignIn _googleSignIn = GoogleSignIn();
 
-    final FirebaseUser user = await _fireBaseAuth.createUserWithEmailAndPassword(
-        email: email, password: password);
+    final FirebaseUser user = await _fireBaseAuth
+        .createUserWithEmailAndPassword(email: email, password: password);
 
-    assert (user != null);
-    assert (await user.getIdToken() != null);
+    assert(user != null);
+    assert(await user.getIdToken() != null);
 
     return user.uid;
   }

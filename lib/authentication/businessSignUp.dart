@@ -99,7 +99,7 @@ class _BusinessSignUpPageState extends State<BusinessSignUpPage> {
               _validate();
             },
             child:
-            new Text("Sign In", style: new TextStyle(color: Colors.white)),
+                new Text("Sign In", style: new TextStyle(color: Colors.white)),
           ),
         ],
       ),

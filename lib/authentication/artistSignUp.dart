@@ -1,14 +1,8 @@
-import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
-import 'package:share_yourself_artists_team_flutter/artist/artist-upload-image.dart';
-import 'package:share_yourself_artists_team_flutter/launch.dart';
-import 'package:share_yourself_artists_team_flutter/authentication/login.dart';
 import 'package:flutter/material.dart';
+import 'package:share_yourself_artists_team_flutter/artist/artist-upload-image.dart';
+import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
 
 class ArtistSignUpPage extends StatefulWidget {
-  final Authentication authentication;
-
-  ArtistSignUpPage({Key key, @required this.authentication}) : super(key: key);
-
   @override
   _ArtistSignUpPageState createState() => _ArtistSignUpPageState();
 }
@@ -100,15 +94,15 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
               color: Colors.black,
               onPressed: () async {
                 if (_validate()) {
-                  String uid = await Authentication.createArtistAccount(_email, _password);
+                  String uid = await Authentication.createArtistAccount(
+                      _email, _password);
                   print('uid created is ${uid}');
-                  Navigator.of(context).pushReplacement(
-                      MaterialPageRoute(builder: (BuildContext context) =>
-                          ArtistUploadImage(authentication: widget.authentication)));
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (BuildContext context) => ArtistUploadImage()));
                 }
               },
-              child:
-                  new Text("Sign Up", style: new TextStyle(color: Colors.white)),
+              child: new Text("Sign Up",
+                  style: new TextStyle(color: Colors.white)),
             ),
           ),
         ],
@@ -131,7 +125,8 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
                     "Get Your Art Seen Today - guaranteed a response.",
                     textAlign: TextAlign.center,
                     style: const TextStyle(
-                        fontSize: 25.0, color: Color.fromRGBO(255, 160, 0, 1.0)),
+                        fontSize: 25.0,
+                        color: Color.fromRGBO(255, 160, 0, 1.0)),
                   ),
                 ),
                 Form(

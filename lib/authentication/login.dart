@@ -1,18 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 
 import 'authentication.dart';
-import 'artistSignUp.dart';
-import 'businessSignUp.dart';
 
 class LoginPage extends StatefulWidget {
-  final Authentication authentication;
-  // Custom callback function for after successful sign in
-  final void Function(String) handleSuccess;
-
-  LoginPage({Key key, @required this.authentication, this.handleSuccess})
-      : super(key: key);
-
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -21,15 +13,45 @@ class _LoginPageState extends State<LoginPage> {
   GlobalKey<FormState> _form = new GlobalKey<FormState>();
   GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey<ScaffoldState>();
 
-  ArtistSignUpPage _artistSignUp;
-  BusinessSignUpPage _businessSignUp;
+  // Determines which flow to push after successful login
+  void _navigateToRoute(String role) {
+    if (role == 'business') {
+      Navigator.of(context).pushReplacementNamed('/business');
+    }
+    if (role == 'artist') {
+      Navigator.of(context).pushReplacementNamed('/artist');
+    }
+  }
+
+  Future _handleLogin(String uid) async {
+    if (uid != "") {
+      String role;
+      role = await Authentication.verifyUserDocument(uid);
+      await savePreferences(role, uid);
+      _navigateToRoute(role);
+    } else {
+      _scaffoldState.currentState.showSnackBar(SnackBar(
+        content: new Text(
+            'The password is invalid or the user does not have a password. '
+            'Or you may have not confirmed your email yet. If you need further '
+            'assistance, please send us an email.'),
+        duration: Duration(seconds: 4),
+      ));
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    // Need to override SignUpPage
-    _artistSignUp = new ArtistSignUpPage(authentication: widget.authentication);
-    _businessSignUp = new BusinessSignUpPage();
+
+    // On init, check if the user had already signed in or not
+    Authentication.alreadySignedIn().then((isSignedIn) {
+      if (isSignedIn) {
+        loadRole().then((String role) {
+          _navigateToRoute(role);
+        });
+      }
+    });
   }
 
   @override
@@ -37,12 +59,10 @@ class _LoginPageState extends State<LoginPage> {
     String _email;
     String _password;
 
-
     _onPressed() {}
 
     bool _validate() {
       var loginForm = _form.currentState;
-
       if (loginForm.validate()) {
         loginForm.save();
         return true;
@@ -65,8 +85,9 @@ class _LoginPageState extends State<LoginPage> {
                 icon: new Icon(FontAwesomeIcons.google,
                     color: Color.fromRGBO(72, 133, 237, 1.0)),
                 onPressed: () async {
-                  String uid = await Authentication.signInWithGoogleAndFireBase();
-                  widget.handleSuccess(uid);
+                  String uid =
+                      await Authentication.signInWithGoogleAndFireBase();
+                  await _handleLogin(uid);
                 })
           ],
         ));
@@ -109,20 +130,9 @@ class _LoginPageState extends State<LoginPage> {
               onPressed: () async {
                 if (_validate()) {
                   print("the email is $_email and password is $_password");
-                  String uid = await Authentication.signInWithEmailAndPassword(_email, _password);
-                  if (uid != "") {
-                    print('nice!!');
-                    widget.handleSuccess(uid);
-                    print('LMAO!!');
-                  } else {
-                    _scaffoldState.currentState.showSnackBar(SnackBar(
-                      content: new Text(
-                          'The password is invalid or the user does not have a password. '
-                              'Or you may have not confirmed your email yet. If you need further '
-                              'assistance, please send us an email.'),
-                      duration: Duration(seconds: 4),
-                    ));
-                  }
+                  String uid = await Authentication.signInWithEmailAndPassword(
+                      _email, _password);
+                  await _handleLogin(uid);
                 }
               },
               child: new Text('Sign In'),
@@ -131,33 +141,29 @@ class _LoginPageState extends State<LoginPage> {
           Padding(
             padding: EdgeInsets.all(5.0),
           ),
-          ButtonTheme (
+          ButtonTheme(
             minWidth: 150.0,
             child: new MaterialButton(
               color: Colors.black,
               onPressed: () {
-                Navigator.of(context).push(
-                  new MaterialPageRoute(builder: (context) => _artistSignUp),
-                );
+                Navigator.of(context).pushNamed('/artistSignUp');
               },
-              child:
-              new Text("Artist Sign Up", style: new TextStyle(color: Colors.white)),
+              child: new Text("Artist Sign Up",
+                  style: new TextStyle(color: Colors.white)),
             ),
           ),
           Padding(
             padding: EdgeInsets.all(5.0),
           ),
-          ButtonTheme (
+          ButtonTheme(
             minWidth: 150.0,
             child: new MaterialButton(
               color: Colors.black,
               onPressed: () {
-                Navigator.of(context).push(
-                  new MaterialPageRoute(builder: (context) => _businessSignUp),
-                );
+                Navigator.of(context).pushNamed('/businessSignUp');
               },
-              child:
-              new Text("Business Sign Up", style: new TextStyle(color: Colors.white)),
+              child: new Text("Business Sign Up",
+                  style: new TextStyle(color: Colors.white)),
             ),
           )
         ],
