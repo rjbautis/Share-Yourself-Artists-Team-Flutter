@@ -26,7 +26,7 @@ class _LaunchPageState extends State<LaunchPage> {
     super.initState();
 
     // On init, check if the user had already signed in or not
-    widget.authentication.alreadySignedIn().then((isSignedIn) {
+    Authentication.alreadySignedIn().then((isSignedIn) {
       if (isSignedIn) {
         loadRole().then((String role) {
           if (role != '') {
@@ -73,7 +73,7 @@ class _LaunchPageState extends State<LaunchPage> {
     String role;
     print("Successful authentication. Now trying to verify user in Firestore.");
 
-    role = await widget.authentication.verifyUserDocument(uid);
+    role = await Authentication.verifyUserDocument(uid);
 
     await savePreferences(role, uid);
 

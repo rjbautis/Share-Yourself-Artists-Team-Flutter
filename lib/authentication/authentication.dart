@@ -5,13 +5,16 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class Authentication {
-  final FirebaseAuth _fireBaseAuth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
+//  final FirebaseAuth _fireBaseAuth = FirebaseAuth.instance;
+//  final GoogleSignIn _googleSignIn = GoogleSignIn();
 
   /// Returns boolean value if the user had previously signed in
   ///
   /// Checks if the [GoogleSignInAccount] or [FirebaseUser] instance is not null.
-  Future<bool> alreadySignedIn() async {
+  static Future<bool> alreadySignedIn() async {
+    final FirebaseAuth _fireBaseAuth = FirebaseAuth.instance;
+    final GoogleSignIn _googleSignIn = GoogleSignIn();
+
     GoogleSignInAccount existingGoogleUser;
     FirebaseUser existingFireBaseUser = await _fireBaseAuth.currentUser();
 
@@ -28,7 +31,10 @@ class Authentication {
     return false;
   }
 
-  Future<String> signInWithGoogleAndFireBase() async {
+  static Future<String> signInWithGoogleAndFireBase() async {
+    final FirebaseAuth _fireBaseAuth = FirebaseAuth.instance;
+    final GoogleSignIn _googleSignIn = GoogleSignIn();
+
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
     final GoogleSignInAuthentication googleAuth =
         await googleUser.authentication;
@@ -42,60 +48,62 @@ class Authentication {
     return user.uid;
   }
 
-  Future<String> signInWithEmailAndPassword(
+  static Future<String> signInWithEmailAndPassword(
       String email, String password) async {
     FirebaseUser currentUser;
+    final FirebaseAuth _fireBaseAuth = FirebaseAuth.instance;
 
     try {
       currentUser = await _fireBaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
+
+      print(currentUser);
+
       return currentUser.uid;
     } catch (e) {
       print("Error signing in with email and password");
+      print(e.toString());
       return "";
     }
   }
 
   /// Returns the role of the user from in Firestore
   ///
-  /// Performs a query against the 'users' collection and checks if the entry exists.
-  /// If it does, return the role from the snapshot document.
-  /// Otherwise, perform a transaction against the collection that creates a new document.
-  Future<String> verifyUserDocument(String uid) async {
+  /// Performs a query against the 'users' collection and returns role of user.
+  /// Returns empty string otherwise
+  static Future<String> verifyUserDocument(String uid) async {
     print('the uid is $uid');
 
     final DocumentReference reference =
-        Firestore.instance.collection('users').document(uid);
+    Firestore.instance.collection('users').document(uid);
     DocumentSnapshot snapshot = await reference.get();
 
     if (snapshot.exists) {
       print(snapshot.data);
       return snapshot['role'];
-    } else {
-      print("User entry does not exist in Firestore.");
-
-      var map = {
-        "userId": uid,
-        "role": "artist",
-        "email": "dummyemail@ucsc.edu"
-      };
-
-      await Firestore.instance.runTransaction((transaction) async {
-        try {
-          await transaction.set(reference, map);
-          print("Done creating user entry in Firestore.");
-        } catch (e) {
-          print("Firestore Exception: " + e);
-          rethrow;
-        }
-      });
-      return map['role'];
     }
+    return '';
   }
 
-  Future<void> signOut() async {
+  static Future<void> signOut() async {
+    final FirebaseAuth _fireBaseAuth = FirebaseAuth.instance;
+    final GoogleSignIn _googleSignIn = GoogleSignIn();
+
     print("Attempting to sign out user.");
     await _googleSignIn.signOut();
     await _fireBaseAuth.signOut();
+  }
+
+  static Future<String> createArtistAccount(String email, String password) async {
+    final FirebaseAuth _fireBaseAuth = FirebaseAuth.instance;
+    final GoogleSignIn _googleSignIn = GoogleSignIn();
+
+    final FirebaseUser user = await _fireBaseAuth.createUserWithEmailAndPassword(
+        email: email, password: password);
+
+    assert (user != null);
+    assert (await user.getIdToken() != null);
+
+    return user.uid;
   }
 }

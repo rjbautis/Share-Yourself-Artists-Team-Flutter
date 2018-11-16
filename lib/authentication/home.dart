@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
             ListTile(
               title: Text('Log Out'),
               onTap: () async {
-                await widget.authentication.signOut();
+                await Authentication.signOut();
                 widget.handleSignOut();
                 Navigator.pop(context);
               },
@@ -56,7 +56,7 @@ class _HomePageState extends State<HomePage> {
                 child: RaisedButton(
                     child: Text("Log Out"),
                     onPressed: () async {
-                      await widget.authentication.signOut();
+                      await Authentication.signOut();
                       widget.handleSignOut();
                     }))
           ],

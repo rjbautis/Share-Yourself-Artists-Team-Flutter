@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'authentication.dart';
-import 'signup.dart';
+import 'artistSignUp.dart';
+import 'businessSignUp.dart';
 
 class LoginPage extends StatefulWidget {
   final Authentication authentication;
@@ -17,22 +18,25 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  SignUpPage _signup;
+  GlobalKey<FormState> _form = new GlobalKey<FormState>();
+  GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey<ScaffoldState>();
+
+  ArtistSignUpPage _artistSignUp;
+  BusinessSignUpPage _businessSignUp;
 
   @override
   void initState() {
     super.initState();
     // Need to override SignUpPage
-    _signup = SignUpPage();
+    _artistSignUp = new ArtistSignUpPage(authentication: widget.authentication);
+    _businessSignUp = new BusinessSignUpPage();
   }
 
   @override
   Widget build(BuildContext context) {
     String _email;
     String _password;
-    final GlobalKey<FormState> _form = new GlobalKey<FormState>();
-    final GlobalKey<ScaffoldState> _scaffoldState =
-        new GlobalKey<ScaffoldState>();
+
 
     _onPressed() {}
 
@@ -61,8 +65,7 @@ class _LoginPageState extends State<LoginPage> {
                 icon: new Icon(FontAwesomeIcons.google,
                     color: Color.fromRGBO(72, 133, 237, 1.0)),
                 onPressed: () async {
-                  String uid =
-                      await widget.authentication.signInWithGoogleAndFireBase();
+                  String uid = await Authentication.signInWithGoogleAndFireBase();
                   widget.handleSuccess(uid);
                 })
           ],
@@ -96,40 +99,66 @@ class _LoginPageState extends State<LoginPage> {
 
     Widget loginButtons = Container(
       padding: const EdgeInsets.only(top: 50.0, bottom: 50.0),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Column(
         children: <Widget>[
-          new MaterialButton(
-            color: Colors.black,
-            onPressed: () {
-              Navigator.of(context).push(
-                new MaterialPageRoute(builder: (context) => _signup),
-              );
-            },
-            child:
-                new Text("Sign Up", style: new TextStyle(color: Colors.white)),
-          ),
-          new MaterialButton(
-            color: Colors.white,
-            child: new Text('Sign In'),
-            onPressed: () async {
-              if (_validate()) {
-                print("the email is $_email and password is $_password");
-                String uid = await widget.authentication
-                    .signInWithEmailAndPassword(_email, _password);
-                if (uid != "") {
-                  widget.handleSuccess(uid);
-                } else {
-                  _scaffoldState.currentState.showSnackBar(SnackBar(
-                    content: new Text(
-                        'The password is invalid or the user does not have a password. '
-                        'Or you may have not confirmed your email yet. If you need further '
-                        'assistance, please send us an email.'),
-                    duration: Duration(seconds: 4),
-                  ));
+          ButtonTheme(
+            minWidth: 150.0,
+            child: new OutlineButton(
+              borderSide: BorderSide(color: Colors.black),
+              color: Colors.white,
+              onPressed: () async {
+                if (_validate()) {
+                  print("the email is $_email and password is $_password");
+                  String uid = await Authentication.signInWithEmailAndPassword(_email, _password);
+                  if (uid != "") {
+                    print('nice!!');
+                    widget.handleSuccess(uid);
+                    print('LMAO!!');
+                  } else {
+                    _scaffoldState.currentState.showSnackBar(SnackBar(
+                      content: new Text(
+                          'The password is invalid or the user does not have a password. '
+                              'Or you may have not confirmed your email yet. If you need further '
+                              'assistance, please send us an email.'),
+                      duration: Duration(seconds: 4),
+                    ));
+                  }
                 }
-              }
-            },
+              },
+              child: new Text('Sign In'),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(5.0),
+          ),
+          ButtonTheme (
+            minWidth: 150.0,
+            child: new MaterialButton(
+              color: Colors.black,
+              onPressed: () {
+                Navigator.of(context).push(
+                  new MaterialPageRoute(builder: (context) => _artistSignUp),
+                );
+              },
+              child:
+              new Text("Artist Sign Up", style: new TextStyle(color: Colors.white)),
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(5.0),
+          ),
+          ButtonTheme (
+            minWidth: 150.0,
+            child: new MaterialButton(
+              color: Colors.black,
+              onPressed: () {
+                Navigator.of(context).push(
+                  new MaterialPageRoute(builder: (context) => _businessSignUp),
+                );
+              },
+              child:
+              new Text("Business Sign Up", style: new TextStyle(color: Colors.white)),
+            ),
           )
         ],
       ),

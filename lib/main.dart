@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
+import 'package:share_yourself_artists_team_flutter/artist/artist-upload-image.dart';
+import 'package:share_yourself_artists_team_flutter/business/feedbacklist.dart';
 
 import 'launch.dart';
 
@@ -15,9 +17,9 @@ class MyApp extends StatelessWidget {
       theme: new ThemeData(
         primarySwatch: Colors.orange,
       ),
-      home: new LaunchPage(
-          authentication:
-              new Authentication()), // Pass in new Authentication object
+      routes: {
+        '/': (context) => LaunchPage(authentication: new Authentication()),
+      },
     );
   }
 }

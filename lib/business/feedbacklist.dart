@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
 import 'package:share_yourself_artists_team_flutter/business/feedbackpage.dart';
+import 'package:share_yourself_artists_team_flutter/launch.dart';
 
 class FeedbackList extends StatefulWidget {
   final String uid;
@@ -217,8 +218,14 @@ class _FeedbackListState extends State<FeedbackList> {
                 ListTile(
                   title: new Text('Log Out'),
                   onTap: () async {
-                    await widget.authentication.signOut();
+                    Navigator.pop(
+                        context); // Need to pop context (specifically for this page)
+
+                    await Authentication.signOut();
                     widget.handleSignOut();
+
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) =>
+                        LaunchPage(authentication: new Authentication())));
                   },
                 ),
               ],
