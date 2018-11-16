@@ -78,7 +78,7 @@ class _FeedbackListState extends State<FeedbackList> {
                 ),
                 tooltip: 'Respond',
                 onPressed: () {
-                  _navigateFeedback(art);
+                  _navigateFeedback(art, snapshot, index);
                 },
               )
             ],
@@ -105,7 +105,8 @@ class _FeedbackListState extends State<FeedbackList> {
         snapshot.data.documents[index]['art']['artist_id'].toString();
     bool _accepted = false;
 
-    if (accepted.compareTo('accepted') == 1) _accepted = true;
+    if (accepted.compareTo('accepted') == 0)
+      _accepted = true;
 
     if (artPaid == null) artPaid = false;
 
@@ -152,13 +153,15 @@ class _FeedbackListState extends State<FeedbackList> {
     );
   }
 
-  void _navigateFeedback(var art) {
+  void _navigateFeedback (var art, AsyncSnapshot<QuerySnapshot> snapshot, int index) {
     // create new FeedbackPage
     Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) => FeedbackPage(
                 artInfo: art,
+                snapshot: snapshot,
+                index: index,
               )),
     );
   }
