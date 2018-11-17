@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
 
-import 'launch.dart';
+import 'routes.dart';
 
-void main() => runApp(new MyApp());
+void main() => runApp(new App());
 
 final themeColor = const Color(0xFF7D27);
 
-class MyApp extends StatelessWidget {
+class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return new MaterialApp(
@@ -15,9 +14,8 @@ class MyApp extends StatelessWidget {
       theme: new ThemeData(
         primarySwatch: Colors.orange,
       ),
-      home: new LaunchPage(
-          authentication:
-              new Authentication()), // Pass in new Authentication object
+      routes: routes,
+      initialRoute: '/',
     );
   }
 }

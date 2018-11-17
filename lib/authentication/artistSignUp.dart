@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:share_yourself_artists_team_flutter/artist/artist-upload-image.dart';
+import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
 
-class SignUpPage extends StatefulWidget {
+class ArtistSignUpPage extends StatefulWidget {
   @override
-  _SignUpPageState createState() => _SignUpPageState();
+  _ArtistSignUpPageState createState() => _ArtistSignUpPageState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
+class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
   @override
   Widget build(BuildContext context) {
     String _name;
@@ -15,19 +17,14 @@ class _SignUpPageState extends State<SignUpPage> {
     final myController = TextEditingController();
     final GlobalKey<FormState> form = new GlobalKey<FormState>();
 
-    _validate() {
+    bool _validate() {
       var loginForm = form.currentState;
 
       if (loginForm.validate()) {
         loginForm.save();
+        return true;
       }
-
-      print("Inside sign up");
-      print("${loginForm.validate()}");
-      print("$_name");
-      print("$_email");
-      print("$_password");
-      print("$_instagram");
+      return false;
     }
 
     Widget name = TextFormField(
@@ -87,55 +84,66 @@ class _SignUpPageState extends State<SignUpPage> {
       onSaved: (input) => _instagram = input,
     );
 
-    Widget loginButtons = Container(
+    Widget signUpButton = Container(
       padding: const EdgeInsets.only(top: 50.0, bottom: 50.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
-//        mainAxisSize: MainAxisSize.max,
         children: <Widget>[
-          new MaterialButton(
-            color: Colors.black,
-            onPressed: () {
-              _validate();
-            },
-            child:
-                new Text("Sign In", style: new TextStyle(color: Colors.white)),
+          ButtonTheme(
+            child: new MaterialButton(
+              color: Colors.black,
+              onPressed: () async {
+                if (_validate()) {
+                  String uid = await Authentication.createArtistAccount(
+                      _email, _password);
+                  print('uid created is ${uid}');
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (BuildContext context) => ArtistUploadImage()));
+                }
+              },
+              child: new Text("Sign Up",
+                  style: new TextStyle(color: Colors.white)),
+            ),
           ),
         ],
       ),
     );
 
     return new Scaffold(
-      resizeToAvoidBottomPadding: false,
       body: Container(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
+        padding: const EdgeInsets.fromLTRB(25.0, 0.0, 25.0, 0.0),
+        child: ListView(
           children: <Widget>[
-            Container(
-              child: Image.asset('images/logo.png'),
-              padding: const EdgeInsets.all(20.0),
+            Column(
+              children: <Widget>[
+                Container(
+                  child: Image.asset('images/logo.png'),
+                  padding: const EdgeInsets.all(20.0),
+                ),
+                Center(
+                  child: new Text(
+                    "Get Your Art Seen Today - guaranteed a response.",
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                        fontSize: 25.0,
+                        color: Color.fromRGBO(255, 160, 0, 1.0)),
+                  ),
+                ),
+                Form(
+                  key: form,
+                  child: Column(
+                    children: <Widget>[
+                      name,
+                      email,
+                      password,
+                      confirmPassword,
+                      instagramField
+                    ],
+                  ),
+                ),
+                signUpButton
+              ],
             ),
-            Center(
-              child: new Text(
-                "Get Your Art Seen Today - guaranteed a response.",
-                textAlign: TextAlign.center,
-                style: const TextStyle(
-                    fontSize: 25.0, color: Color.fromRGBO(255, 160, 0, 1.0)),
-              ),
-            ),
-            Form(
-              key: form,
-              child: Column(
-                children: <Widget>[
-                  name,
-                  email,
-                  password,
-                  confirmPassword,
-                  instagramField
-                ],
-              ),
-            ),
-            loginButtons
           ],
         ),
       ),
