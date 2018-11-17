@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 
-class ArtistSignUpPage extends StatefulWidget {
+class BusinessSignUpThirdPage extends StatefulWidget {
   @override
-  _ArtistSignUpPageState createState() => _ArtistSignUpPageState();
+  _BusinessSignUpThirdPageState createState() => _BusinessSignUpThirdPageState();
 }
 
-class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
+class _BusinessSignUpThirdPageState extends State<BusinessSignUpThirdPage> {
   static GlobalKey<FormState> _form = new GlobalKey<FormState>();
   static GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey<ScaffoldState>();
 
@@ -27,15 +29,13 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
     }
   }
 
-  final _confirmPassword = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     var credentials =  {
-      'name': '',
-      'email': '',
-      'password': '',
-      'instagram': ''
+      'facebook': '',
+      'instagram': '',
+      'tumblr': '',
     };
 
     bool _validate() {
@@ -48,65 +48,36 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
       return false;
     }
 
-    Widget name = TextFormField(
-        decoration: new InputDecoration(labelText: 'Name'),
-        keyboardType: TextInputType.text,
-        maxLines: 1,
-        validator: (input) => input.isEmpty ? 'Name is required.' : null,
-        onSaved: (input) => credentials['name'] = input,
+    Widget facebookUrl = TextFormField(
+      decoration: new InputDecoration(
+          contentPadding: EdgeInsets.all(10.0),
+          labelText: 'Facebook',
+          prefixIcon: new Icon(FontAwesomeIcons.facebook)
+      ),
+      keyboardType: TextInputType.url,
+      onSaved: (input) => credentials['facebook'] = input,
     );
 
-    Widget email = TextFormField(
-      decoration: new InputDecoration(labelText: 'Email'),
-      keyboardType: TextInputType.emailAddress,
-      textCapitalization: TextCapitalization.none,
-      validator: (input) {
-        if (input.isEmpty) {
-          return 'Email address is required.';
-        }
-        if (!input.contains('@')) {
-          return 'Please enter a valid email address.';
-        }
-        return null;
-      },
-      onSaved: (input) => credentials['email'] = input,
-    );
 
-    Widget password = TextFormField(
-      controller: _confirmPassword,
-      decoration: new InputDecoration(labelText: 'Password'),
-      keyboardType: TextInputType.text,
-      obscureText: true,
-      validator: (input) {
-        if (input.isEmpty) {
-          return 'Password is required.';
-        }
-        if (input.length < 6) {
-          return 'Password must be 6 characters long or more.';
-        }
-        return null;
-      },
-      onSaved: (input) => credentials['password'] = input,
-    );
 
-    Widget confirmPassword = TextFormField(
-      decoration: new InputDecoration(labelText: 'Confirm Password'),
-      keyboardType: TextInputType.text,
-      obscureText: true,
-      validator: (password) {
-        print('password is ${password}');
-        print(_confirmPassword);
-        if (password != _confirmPassword.text) {
-          return 'Passwords do not match.';
-        }
-      },
-//      onSaved: (input) => _password = input,
-    );
-
-    Widget instagramField = new TextFormField(
-      decoration: new InputDecoration(labelText: 'Instagram (Optional)'),
+    Widget instagramUrl = TextFormField(
+      decoration: new InputDecoration(
+          contentPadding: EdgeInsets.all(10.0),
+          labelText: 'Instagram',
+          prefixIcon: new Icon(FontAwesomeIcons.instagram)
+      ),
       keyboardType: TextInputType.url,
       onSaved: (input) => credentials['instagram'] = input,
+    );
+
+    Widget tumblrUrl = TextFormField(
+      decoration: new InputDecoration(
+          contentPadding: EdgeInsets.all(10.0),
+          labelText: 'Tumblr',
+          prefixIcon: new Icon(FontAwesomeIcons.tumblr)
+      ),
+      keyboardType: TextInputType.url,
+      onSaved: (input) => credentials['tumblr'] = input,
     );
 
     Widget signUpButton = Container(
@@ -119,20 +90,19 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
             child: new OutlineButton(
               borderSide: BorderSide(color: Colors.black),
               color: Colors.white,
-              onPressed: () async {
-                if (_validate()) {
-                  await _handleCreation(credentials);
-                }
-              },
+              onPressed: () => {},
               child: new Text('Done',
                   style: new TextStyle(color: Colors.black)),
             ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(5.0),
           ),
           ButtonTheme(
             minWidth: 150.0,
             child: new MaterialButton(
               color: Colors.black,
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => Navigator.popUntil(context, ModalRoute.withName('/')),
               child: new Text('Cancel',
                   style: new TextStyle(color: Colors.white)),
             ),
@@ -155,7 +125,7 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
                 ),
                 Center(
                   child: new Text(
-                    "Get Your Art Seen Today - guaranteed a response.",
+                    "Share your social media URL.",
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                         fontSize: 25.0,
@@ -169,11 +139,9 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
                   key: _form,
                   child: Column(
                     children: <Widget>[
-                      name,
-                      email,
-                      password,
-                      confirmPassword,
-                      instagramField
+                      facebookUrl,
+                      instagramUrl,
+                      tumblrUrl
                     ],
                   ),
                 ),

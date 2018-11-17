@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 
-class ArtistSignUpPage extends StatefulWidget {
+class BusinessSignUpFirstPage extends StatefulWidget {
   @override
-  _ArtistSignUpPageState createState() => _ArtistSignUpPageState();
+  _BusinessSignUpFirstPageState createState() => _BusinessSignUpFirstPageState();
 }
 
-class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
+class _BusinessSignUpFirstPageState extends State<BusinessSignUpFirstPage> {
   static GlobalKey<FormState> _form = new GlobalKey<FormState>();
   static GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey<ScaffoldState>();
 
@@ -49,11 +49,11 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
     }
 
     Widget name = TextFormField(
-        decoration: new InputDecoration(labelText: 'Name'),
-        keyboardType: TextInputType.text,
-        maxLines: 1,
-        validator: (input) => input.isEmpty ? 'Name is required.' : null,
-        onSaved: (input) => credentials['name'] = input,
+      decoration: new InputDecoration(labelText: 'Business Name'),
+      keyboardType: TextInputType.text,
+      maxLines: 1,
+      validator: (input) => input.isEmpty ? 'Name is required.' : null,
+      onSaved: (input) => credentials['name'] = input,
     );
 
     Widget email = TextFormField(
@@ -103,12 +103,6 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
 //      onSaved: (input) => _password = input,
     );
 
-    Widget instagramField = new TextFormField(
-      decoration: new InputDecoration(labelText: 'Instagram (Optional)'),
-      keyboardType: TextInputType.url,
-      onSaved: (input) => credentials['instagram'] = input,
-    );
-
     Widget signUpButton = Container(
       padding: const EdgeInsets.only(top: 50.0, bottom: 50.0),
       child: Row(
@@ -119,14 +113,17 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
             child: new OutlineButton(
               borderSide: BorderSide(color: Colors.black),
               color: Colors.white,
-              onPressed: () async {
-                if (_validate()) {
-                  await _handleCreation(credentials);
-                }
+              onPressed: () {
+//                if (_validate()) {
+                  Navigator.of(context).pushNamed('/businessSignUpSecond');
+//                }
               },
-              child: new Text('Done',
+              child: new Text('Next',
                   style: new TextStyle(color: Colors.black)),
             ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(5.0),
           ),
           ButtonTheme(
             minWidth: 150.0,
@@ -155,7 +152,7 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
                 ),
                 Center(
                   child: new Text(
-                    "Get Your Art Seen Today - guaranteed a response.",
+                    "Get Paid Today with Share Yourself Artists's easy to use platform.",
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                         fontSize: 25.0,
@@ -165,15 +162,14 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
                 Padding(
                   padding: EdgeInsets.all(5.0),
                 ),
-                Form(
+                Form (
                   key: _form,
                   child: Column(
                     children: <Widget>[
                       name,
                       email,
                       password,
-                      confirmPassword,
-                      instagramField
+                      confirmPassword
                     ],
                   ),
                 ),

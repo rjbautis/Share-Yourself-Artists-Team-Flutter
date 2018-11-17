@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+
 
 class Authentication {
   /// Returns boolean value if the user had previously signed in
@@ -26,6 +28,28 @@ class Authentication {
       return true;
     }
     return false;
+  }
+
+  static Future<String> signInWithFacebookAndFireBase() async {
+    final FirebaseAuth _fireBaseAuth = FirebaseAuth.instance;
+    final FacebookLogin _facebook = FacebookLogin();
+
+    _facebook.loginBehavior = FacebookLoginBehavior.webViewOnly;
+
+    print('ji');
+
+    final FacebookLoginResult result = await _facebook.logInWithReadPermissions(['email']);
+
+    final FirebaseUser user = await _fireBaseAuth.signInWithFacebook(
+        accessToken: result.accessToken.token);
+
+
+    print('ji');
+
+    final FirebaseUser currentUser = await _fireBaseAuth.currentUser();
+    assert(user.uid == currentUser.uid);
+
+    return user.uid;
   }
 
   static Future<String> signInWithGoogleAndFireBase() async {

@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 
-class ArtistSignUpPage extends StatefulWidget {
+class BusinessSignUpSecondPage extends StatefulWidget {
   @override
-  _ArtistSignUpPageState createState() => _ArtistSignUpPageState();
+  _BusinessSignUpSecondPageState createState() => _BusinessSignUpSecondPageState();
 }
 
-class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
+class _BusinessSignUpSecondPageState extends State<BusinessSignUpSecondPage> {
   static GlobalKey<FormState> _form = new GlobalKey<FormState>();
   static GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey<ScaffoldState>();
 
@@ -27,15 +27,15 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
     }
   }
 
-  final _confirmPassword = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     var credentials =  {
-      'name': '',
-      'email': '',
-      'password': '',
-      'instagram': ''
+      'publicationName': '',
+      'followerCount': '',
+      'website': '',
+      'shortSummary': '',
+      'additionalNotes': ''
     };
 
     bool _validate() {
@@ -48,65 +48,41 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
       return false;
     }
 
-    Widget name = TextFormField(
-        decoration: new InputDecoration(labelText: 'Name'),
-        keyboardType: TextInputType.text,
-        maxLines: 1,
-        validator: (input) => input.isEmpty ? 'Name is required.' : null,
-        onSaved: (input) => credentials['name'] = input,
+    Widget publicationName = TextFormField(
+      decoration: new InputDecoration(labelText: 'Name of Publication'),
+      keyboardType: TextInputType.text,
+      maxLines: 1,
+      validator: (input) => input.isEmpty ? 'Name of publication is required.' : null,
+      onSaved: (input) => credentials['publicationName'] = input,
     );
 
-    Widget email = TextFormField(
-      decoration: new InputDecoration(labelText: 'Email'),
-      keyboardType: TextInputType.emailAddress,
+    Widget followerCount = TextFormField(
+      decoration: new InputDecoration(labelText: 'Follower Count'),
+      keyboardType: TextInputType.numberWithOptions(decimal: false),
       textCapitalization: TextCapitalization.none,
-      validator: (input) {
-        if (input.isEmpty) {
-          return 'Email address is required.';
-        }
-        if (!input.contains('@')) {
-          return 'Please enter a valid email address.';
-        }
-        return null;
-      },
-      onSaved: (input) => credentials['email'] = input,
+      validator: (input) => input.isEmpty ? 'Follower count is required.' : null,
+      onSaved: (input) => credentials['followerCount'] = input,
     );
 
-    Widget password = TextFormField(
-      controller: _confirmPassword,
-      decoration: new InputDecoration(labelText: 'Password'),
-      keyboardType: TextInputType.text,
-      obscureText: true,
-      validator: (input) {
-        if (input.isEmpty) {
-          return 'Password is required.';
-        }
-        if (input.length < 6) {
-          return 'Password must be 6 characters long or more.';
-        }
-        return null;
-      },
-      onSaved: (input) => credentials['password'] = input,
-    );
-
-    Widget confirmPassword = TextFormField(
-      decoration: new InputDecoration(labelText: 'Confirm Password'),
-      keyboardType: TextInputType.text,
-      obscureText: true,
-      validator: (password) {
-        print('password is ${password}');
-        print(_confirmPassword);
-        if (password != _confirmPassword.text) {
-          return 'Passwords do not match.';
-        }
-      },
-//      onSaved: (input) => _password = input,
-    );
-
-    Widget instagramField = new TextFormField(
-      decoration: new InputDecoration(labelText: 'Instagram (Optional)'),
+    Widget website = TextFormField(
+      decoration: new InputDecoration(labelText: 'Website'),
       keyboardType: TextInputType.url,
-      onSaved: (input) => credentials['instagram'] = input,
+      validator: (input) => input.isEmpty ? 'Website is required.' : null,
+      onSaved: (input) => credentials['website'] = input,
+    );
+
+    Widget shortSummary = TextFormField(
+      decoration: new InputDecoration(labelText: 'About - Short summary of your page'),
+      keyboardType: TextInputType.multiline,
+
+      validator: (input) => input.isEmpty ? 'Website is required.' : null,
+      onSaved: (input) => credentials['shortSummary'] = input,
+    );
+
+    Widget additionalNotes = TextFormField(
+      decoration: new InputDecoration(labelText: 'Additional Notes'),
+      keyboardType: TextInputType.multiline,
+      onSaved: (input) => credentials['additionalNotes'] = input,
     );
 
     Widget signUpButton = Container(
@@ -119,20 +95,19 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
             child: new OutlineButton(
               borderSide: BorderSide(color: Colors.black),
               color: Colors.white,
-              onPressed: () async {
-                if (_validate()) {
-                  await _handleCreation(credentials);
-                }
-              },
-              child: new Text('Done',
+              onPressed: () => Navigator.of(context).pushNamed('/businessSignUpThird'),
+              child: new Text('Next',
                   style: new TextStyle(color: Colors.black)),
             ),
+          ),
+          Padding(
+            padding: EdgeInsets.all(5.0),
           ),
           ButtonTheme(
             minWidth: 150.0,
             child: new MaterialButton(
               color: Colors.black,
-              onPressed: () => Navigator.of(context).pop(),
+              onPressed: () => Navigator.popUntil(context, ModalRoute.withName('/')),
               child: new Text('Cancel',
                   style: new TextStyle(color: Colors.white)),
             ),
@@ -155,7 +130,7 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
                 ),
                 Center(
                   child: new Text(
-                    "Get Your Art Seen Today - guaranteed a response.",
+                    "Artists will see these account details, so answer with care.",
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                         fontSize: 25.0,
@@ -169,11 +144,11 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
                   key: _form,
                   child: Column(
                     children: <Widget>[
-                      name,
-                      email,
-                      password,
-                      confirmPassword,
-                      instagramField
+                      publicationName,
+                      followerCount,
+                      website,
+                      shortSummary,
+                      additionalNotes
                     ],
                   ),
                 ),

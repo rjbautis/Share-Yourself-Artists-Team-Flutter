@@ -10,8 +10,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  GlobalKey<FormState> _form = new GlobalKey<FormState>();
-  GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey<ScaffoldState>();
+  static GlobalKey<FormState> _form = new GlobalKey<FormState>();
+  static GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey<ScaffoldState>();
 
   // Determines which flow to push after successful login
   void _navigateToRoute(String role) {
@@ -78,7 +78,11 @@ class _LoginPageState extends State<LoginPage> {
                 iconSize: 50.0,
                 icon: new Icon(FontAwesomeIcons.facebook,
                     color: Color.fromRGBO(59, 89, 152, 1.0)),
-                onPressed: () => _onPressed),
+                onPressed: () async {
+//                  String uid =
+//                  await Authentication.signInWithFacebookAndFireBase();
+//                  await _handleLogin(uid);
+                }),
             new IconButton(
                 iconSize: 50.0,
                 icon: new Icon(FontAwesomeIcons.google,
@@ -159,7 +163,7 @@ class _LoginPageState extends State<LoginPage> {
             child: new MaterialButton(
               color: Colors.black,
               onPressed: () {
-                Navigator.of(context).pushNamed('/businessSignUp');
+                Navigator.of(context).pushNamed('/businessSignUpFirst');
               },
               child: new Text("Business Sign Up",
                   style: new TextStyle(color: Colors.white)),
@@ -175,7 +179,7 @@ class _LoginPageState extends State<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             new InkWell(
-              child: new Text("Forgot Username"),
+              child: new Text("Forgot Email"),
               onTap: _onPressed,
             ),
             new InkWell(
