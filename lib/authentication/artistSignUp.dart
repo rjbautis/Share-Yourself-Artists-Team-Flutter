@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:share_yourself_artists_team_flutter/artist/artist-upload-image.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
+import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 
 class ArtistSignUpPage extends StatefulWidget {
   @override
@@ -8,18 +8,38 @@ class ArtistSignUpPage extends StatefulWidget {
 }
 
 class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
-  final GlobalKey<FormState> form = new GlobalKey<FormState>();
+  final GlobalKey<FormState> _form = new GlobalKey<FormState>();
+  GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey<ScaffoldState>();
+
+  Future _handleCreation(Map<String, String> credentials) async {
+    String uid = await Authentication.createArtistAccount(credentials);
+    if (uid != '') {
+      await savePreferences('artist', uid);
+      print('Created user is ${uid}');
+      Navigator.of(context).pushNamedAndRemoveUntil('/artist', (Route<dynamic> route) => false);
+
+    } else {
+      _scaffoldState.currentState.showSnackBar(SnackBar(
+        content: new Text(
+            'The email address is already in use by another account.'),
+        duration: Duration(seconds: 4),
+      ));
+    }
+  }
+
+  final _confirmPassword = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    String _name;
-    String _email;
-    String _password;
-    String _instagram;
-    final myController = TextEditingController();
+    var credentials =  {
+      'name': '',
+      'email': '',
+      'password': '',
+      'instagram': ''
+    };
 
     bool _validate() {
-      var loginForm = form.currentState;
+      var loginForm = _form.currentState;
 
       if (loginForm.validate()) {
         loginForm.save();
@@ -29,60 +49,64 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
     }
 
     Widget name = TextFormField(
-        decoration: new InputDecoration(labelText: "Name"),
+        decoration: new InputDecoration(labelText: 'Name'),
         keyboardType: TextInputType.text,
         maxLines: 1,
-        validator: (input) => input.isEmpty ? "Name is required." : null,
-        onSaved: (input) => _name = input);
+        validator: (input) => input.isEmpty ? 'Name is required.' : null,
+        onSaved: (input) => credentials['name'] = input,
+    );
 
     Widget email = TextFormField(
-      decoration: new InputDecoration(labelText: "Email"),
+      decoration: new InputDecoration(labelText: 'Email'),
       keyboardType: TextInputType.emailAddress,
       textCapitalization: TextCapitalization.none,
       validator: (input) {
         if (input.isEmpty) {
-          return "Email address is required.";
+          return 'Email address is required.';
         }
         if (!input.contains('@')) {
-          return "Please enter a valid email address.";
+          return 'Please enter a valid email address.';
         }
         return null;
       },
-      onSaved: (input) => _email = input,
+      onSaved: (input) => credentials['email'] = input,
     );
 
     Widget password = TextFormField(
-//      controller: myController,
-      decoration: new InputDecoration(
-        labelText: "Password",
-      ),
+      controller: _confirmPassword,
+      decoration: new InputDecoration(labelText: 'Password'),
       keyboardType: TextInputType.text,
       obscureText: true,
-      validator: (input) => input.isEmpty ? "Password is required." : null,
-      onSaved: (input) => _password = input,
+      validator: (input) {
+        if (input.isEmpty) {
+          return 'Password is required.';
+        }
+        if (input.length < 6) {
+          return 'Password must be 6 characters long or more.';
+        }
+        return null;
+      },
+      onSaved: (input) => credentials['password'] = input,
     );
 
     Widget confirmPassword = TextFormField(
-      decoration: new InputDecoration(
-        labelText: "Confirm Password",
-      ),
+      decoration: new InputDecoration(labelText: 'Confirm Password'),
       keyboardType: TextInputType.text,
       obscureText: true,
       validator: (password) {
-        if (password != myController.text) {
-          return "Passwords do not match.";
+        print('password is ${password}');
+        print(_confirmPassword);
+        if (password != _confirmPassword.text) {
+          return 'Passwords do not match.';
         }
       },
-      onSaved: (input) => _password = input,
+//      onSaved: (input) => _password = input,
     );
 
     Widget instagramField = new TextFormField(
-      decoration: new InputDecoration(
-        labelText: "Instagram (Optional)",
-      ),
+      decoration: new InputDecoration(labelText: 'Instagram (Optional)'),
       keyboardType: TextInputType.url,
-      obscureText: true,
-      onSaved: (input) => _instagram = input,
+      onSaved: (input) => credentials['instagram'] = input,
     );
 
     Widget signUpButton = Container(
@@ -95,14 +119,10 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
               color: Colors.black,
               onPressed: () async {
                 if (_validate()) {
-                  String uid = await Authentication.createArtistAccount(
-                      _email, _password);
-                  print('uid created is ${uid}');
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (BuildContext context) => ArtistUploadImage()));
+                  await _handleCreation(credentials);
                 }
               },
-              child: new Text("Sign Up",
+              child: new Text('Sign Up',
                   style: new TextStyle(color: Colors.white)),
             ),
           ),
@@ -111,6 +131,7 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
     );
 
     return new Scaffold(
+      key: _scaffoldState,
       body: Container(
         padding: const EdgeInsets.fromLTRB(25.0, 0.0, 25.0, 0.0),
         child: ListView(
@@ -131,7 +152,7 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
                   ),
                 ),
                 Form(
-                  key: form,
+                  key: _form,
                   child: Column(
                     children: <Widget>[
                       name,

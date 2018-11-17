@@ -24,9 +24,8 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future _handleLogin(String uid) async {
-    if (uid != "") {
-      String role;
-      role = await Authentication.verifyUserDocument(uid);
+    if (uid != '') {
+      String role = await Authentication.verifyUserDocument(uid);
       await savePreferences(role, uid);
       _navigateToRoute(role);
     } else {
