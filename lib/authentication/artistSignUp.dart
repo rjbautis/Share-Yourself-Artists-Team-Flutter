@@ -8,6 +8,8 @@ class ArtistSignUpPage extends StatefulWidget {
 }
 
 class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
+  final GlobalKey<FormState> form = new GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     String _name;
@@ -15,7 +17,6 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
     String _password;
     String _instagram;
     final myController = TextEditingController();
-    final GlobalKey<FormState> form = new GlobalKey<FormState>();
 
     bool _validate() {
       var loginForm = form.currentState;
@@ -51,7 +52,7 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
     );
 
     Widget password = TextFormField(
-      controller: myController,
+//      controller: myController,
       decoration: new InputDecoration(
         labelText: "Password",
       ),

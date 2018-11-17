@@ -6,6 +6,8 @@ class BusinessSignUpPage extends StatefulWidget {
 }
 
 class _BusinessSignUpPageState extends State<BusinessSignUpPage> {
+  final GlobalKey<FormState> form = new GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     String _name;
@@ -13,7 +15,6 @@ class _BusinessSignUpPageState extends State<BusinessSignUpPage> {
     String _password;
     String _instagram;
     final myController = TextEditingController();
-    final GlobalKey<FormState> form = new GlobalKey<FormState>();
 
     _validate() {
       var loginForm = form.currentState;
