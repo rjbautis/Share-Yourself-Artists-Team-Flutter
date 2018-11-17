@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 
-class FeedbackPage extends StatefulWidget {
-  var artInfo;
+class SendArt extends StatefulWidget {
+  var snapshot;
+  int index;
 
-  FeedbackPage({@required this.artInfo});
+  SendArt({@required this.snapshot, this.index});
 
   @override
-  _FeedbackPageState createState() => new _FeedbackPageState();
+  _SendArtState createState() => new _SendArtState();
 }
 
-class _FeedbackPageState extends State<FeedbackPage> {
+class _SendArtState extends State<SendArt> {
   FocusNode _textFieldNode = new FocusNode();
   TextEditingController _controller = new TextEditingController();
   String comment;
@@ -19,31 +20,16 @@ class _FeedbackPageState extends State<FeedbackPage> {
 
   String artImage;
   String artTitle;
-  String artArtist;
-  bool artReplied;
-  bool artPaid;
+  String artDescription;
   String artUserID;
 
   @override
   void initState() {
     super.initState();
     setState(() {
-      artImage = widget.artInfo['art']['url'].toString();
-      artTitle = widget.artInfo['art']['art_title'].toString();
-      artArtist = widget.artInfo['art']['artist_name'].toString();
-      //bool artReplied = widget.artInfo['replied'];
-      artPaid = widget.artInfo['submitted_with_free_cerdit'];
-      artUserID = widget.artInfo['art']['artist_id'].toString();
-    });
-  }
-
-  void _handleResponse(int response) {
-    setState(() {
-      _radioValue = response;
-      if (response == 1)
-        _accepted = true;
-      else
-        _accepted = false;
+      artImage = widget.snapshot.data.documents[widget.index]['url'].toString();
+      artTitle = widget.snapshot.data.documents[widget.index]['art_title'].toString();
+      artDescription = widget.snapshot.data.documents[widget.index]['description'].toString();
     });
   }
 
@@ -78,7 +64,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
 
     return new Scaffold(
       appBar: AppBar(
-        title: Text('Submit Feedback'),
+        title: Text('Send to Business'),
         backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
         iconTheme: IconThemeData(color: Colors.black),
       ),
@@ -100,51 +86,14 @@ class _FeedbackPageState extends State<FeedbackPage> {
                   padding: EdgeInsets.fromLTRB(5.0, 0.0, 5.0, 5.0),
                   alignment: FractionalOffset(.15, .85),
                   child: new Text(
-                    artTitle + " by " + artArtist,
+                    artTitle + " - " + artDescription,
                     textAlign: TextAlign.left,
                     textScaleFactor: 1.5,
                     //style: TextStyle(fontStyle: FontStyle.italic),
                   )),
               new Container(
                 width: MediaQuery.of(context).size.width * .75,
-                child: new TextField(
-                  controller: _controller,
-                  focusNode: _textFieldNode,
-                  maxLines: 8,
-                  textInputAction: TextInputAction.done,
-                  decoration: InputDecoration(
-                      enabledBorder: new OutlineInputBorder(
-                          borderSide:
-                              new BorderSide(color: Colors.transparent)),
-                      disabledBorder: new OutlineInputBorder(
-                          borderSide:
-                              new BorderSide(color: Colors.transparent)),
-                      hintText: 'Your Response*'),
-                ),
-              ),
-              new Column(
-                children: <Widget>[
-                  new Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Radio(
-                          value: 1,
-                          groupValue: _radioValue,
-                          onChanged: _handleResponse),
-                      Text('Accept'),
-                    ],
-                  ),
-                  new Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Radio(
-                          value: -1,
-                          groupValue: _radioValue,
-                          onChanged: _handleResponse),
-                      Text('Decline'),
-                    ],
-                  ),
-                ],
+                /// TODO Some way to select a business
               ),
               new Padding(padding: EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0)),
               new Container(
@@ -155,7 +104,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
                       _submitEnabled ? Colors.deepOrangeAccent : Colors.grey,
                   textColor:
                       _submitEnabled ? Colors.deepOrangeAccent : Colors.grey,
-                  child: new Text('Submit Response'),
+                  child: new Text('Submit Artwork'),
                   onPressed: _submitComment,
                   borderSide: new BorderSide(
                     color:
