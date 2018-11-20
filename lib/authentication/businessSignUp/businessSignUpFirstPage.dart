@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
-import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
+import 'package:share_yourself_artists_team_flutter/authentication/businessSignUp/businessSignUpSecondPage.dart';
+import 'package:image_picker/image_picker.dart';
+
 
 class BusinessSignUpFirstPage extends StatefulWidget {
   @override
@@ -10,32 +13,33 @@ class BusinessSignUpFirstPage extends StatefulWidget {
 class _BusinessSignUpFirstPageState extends State<BusinessSignUpFirstPage> {
   static GlobalKey<FormState> _form = new GlobalKey<FormState>();
   static GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey<ScaffoldState>();
+  File _current;
+  File galleryFile;
 
-  Future _handleCreation(Map<String, String> credentials) async {
-    String uid = await Authentication.createArtistAccount(credentials);
-    if (uid != '') {
-      await savePreferences('artist', uid);
-      print('Created user is $uid');
-      Navigator.of(context).pushNamedAndRemoveUntil('/artist', (Route<dynamic> route) => false);
+  bool imagePicked = false;
 
-    } else {
-      _scaffoldState.currentState.showSnackBar(SnackBar(
-        content: new Text(
-            'The email address is already in use by another account.'),
-        duration: Duration(seconds: 4),
-      ));
-    }
-  }
 
   final _confirmPassword = TextEditingController();
 
+  imageSelectorGallery() async {
+    galleryFile = await ImagePicker.pickImage(
+      source: ImageSource.gallery,
+    );
+    print("You selected gallery image : " + galleryFile.path);
+    setState(() {
+      _current = galleryFile;
+//        _baseName = path.basename(_current.path);
+      imagePicked = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+
     var credentials =  {
       'name': '',
       'email': '',
       'password': '',
-      'instagram': ''
     };
 
     bool _validate() {
@@ -95,7 +99,7 @@ class _BusinessSignUpFirstPageState extends State<BusinessSignUpFirstPage> {
       obscureText: true,
       validator: (password) {
         print('password is ${password}');
-        print(_confirmPassword);
+//        print(_confirmPassword);
         if (password != _confirmPassword.text) {
           return 'Passwords do not match.';
         }
@@ -110,23 +114,6 @@ class _BusinessSignUpFirstPageState extends State<BusinessSignUpFirstPage> {
         children: <Widget>[
           ButtonTheme(
             minWidth: 150.0,
-            child: new OutlineButton(
-              borderSide: BorderSide(color: Colors.black),
-              color: Colors.white,
-              onPressed: () {
-//                if (_validate()) {
-                  Navigator.of(context).pushNamed('/businessSignUpSecond');
-//                }
-              },
-              child: new Text('Next',
-                  style: new TextStyle(color: Colors.black)),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(5.0),
-          ),
-          ButtonTheme(
-            minWidth: 150.0,
             child: new MaterialButton(
               color: Colors.black,
               onPressed: () => Navigator.of(context).pop(),
@@ -134,9 +121,52 @@ class _BusinessSignUpFirstPageState extends State<BusinessSignUpFirstPage> {
                   style: new TextStyle(color: Colors.white)),
             ),
           ),
+          Padding(
+            padding: EdgeInsets.all(5.0),
+          ),
+          ButtonTheme(
+            minWidth: 150.0,
+            child: new OutlineButton(
+              borderSide: BorderSide(color: Colors.black),
+              color: Colors.white,
+              onPressed: () {
+                if (_validate()) {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => BusinessSignUpSecondPage(image: _current, credentials: credentials,)));
+                }
+              },
+              child: new Text('Next',
+                  style: new TextStyle(color: Colors.black)),
+            ),
+          ),
         ],
       ),
     );
+
+    Widget uploadLogoButton = Container(
+      padding: const EdgeInsets.only(top: 40.0),
+      child: new MaterialButton(
+        child: const Text('Upload Logo from Gallery'),
+        color: Color.fromRGBO(255, 160, 0, 1.0),
+        textColor: Colors.white,
+        elevation: 4.0,
+        onPressed: imageSelectorGallery,
+        minWidth: 200.0,
+        height: 50.0,
+      ),
+    );
+
+    Widget displaySelectedFile(File file) {
+      return new ConstrainedBox(
+        constraints: new BoxConstraints(
+            minWidth: 200.0,
+            minHeight: 200.0,
+            maxWidth: 200.0,
+            maxHeight: 200.0),
+        child: file == null
+            ? new Text('Sorry nothing selected!!')
+            : new Image.file(file),
+      );
+    }
 
     return new Scaffold(
       key: _scaffoldState,
@@ -169,7 +199,9 @@ class _BusinessSignUpFirstPageState extends State<BusinessSignUpFirstPage> {
                       name,
                       email,
                       password,
-                      confirmPassword
+                      confirmPassword,
+                      uploadLogoButton,
+                      imagePicked ? displaySelectedFile(_current) : new Container(),
                     ],
                   ),
                 ),

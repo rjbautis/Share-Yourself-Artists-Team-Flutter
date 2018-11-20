@@ -1,10 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
 import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 
 class BusinessSignUpThirdPage extends StatefulWidget {
+  final File image;
+  final Map<String, String> credentials;
+
+  BusinessSignUpThirdPage({this.image, this.credentials});
+
   @override
   _BusinessSignUpThirdPageState createState() => _BusinessSignUpThirdPageState();
 }
@@ -13,12 +19,12 @@ class _BusinessSignUpThirdPageState extends State<BusinessSignUpThirdPage> {
   static GlobalKey<FormState> _form = new GlobalKey<FormState>();
   static GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey<ScaffoldState>();
 
-  Future _handleCreation(Map<String, String> credentials) async {
-    String uid = await Authentication.createArtistAccount(credentials);
+  Future _handleCreation(Map<String, String> credentials, File image) async {
+    String uid = await Authentication.createBusinessAccount(credentials, image);
     if (uid != '') {
-      await savePreferences('artist', uid);
+      await savePreferences('business', uid);
       print('Created user is $uid');
-      Navigator.of(context).pushNamedAndRemoveUntil('/artist', (Route<dynamic> route) => false);
+      Navigator.of(context).pushNamedAndRemoveUntil('/business', (Route<dynamic> route) => false);
 
     } else {
       _scaffoldState.currentState.showSnackBar(SnackBar(
@@ -32,12 +38,6 @@ class _BusinessSignUpThirdPageState extends State<BusinessSignUpThirdPage> {
 
   @override
   Widget build(BuildContext context) {
-    var credentials =  {
-      'facebook': '',
-      'instagram': '',
-      'tumblr': '',
-    };
-
     bool _validate() {
       var loginForm = _form.currentState;
 
@@ -55,7 +55,7 @@ class _BusinessSignUpThirdPageState extends State<BusinessSignUpThirdPage> {
           prefixIcon: new Icon(FontAwesomeIcons.facebook)
       ),
       keyboardType: TextInputType.url,
-      onSaved: (input) => credentials['facebook'] = input,
+      onSaved: (input) => widget.credentials['facebook'] = input,
     );
 
 
@@ -67,7 +67,7 @@ class _BusinessSignUpThirdPageState extends State<BusinessSignUpThirdPage> {
           prefixIcon: new Icon(FontAwesomeIcons.instagram)
       ),
       keyboardType: TextInputType.url,
-      onSaved: (input) => credentials['instagram'] = input,
+      onSaved: (input) => widget.credentials['instagram'] = input,
     );
 
     Widget tumblrUrl = TextFormField(
@@ -77,7 +77,7 @@ class _BusinessSignUpThirdPageState extends State<BusinessSignUpThirdPage> {
           prefixIcon: new Icon(FontAwesomeIcons.tumblr)
       ),
       keyboardType: TextInputType.url,
-      onSaved: (input) => credentials['tumblr'] = input,
+      onSaved: (input) => widget.credentials['tumblr'] = input,
     );
 
     Widget signUpButton = Container(
@@ -87,12 +87,11 @@ class _BusinessSignUpThirdPageState extends State<BusinessSignUpThirdPage> {
         children: <Widget>[
           ButtonTheme(
             minWidth: 150.0,
-            child: new OutlineButton(
-              borderSide: BorderSide(color: Colors.black),
-              color: Colors.white,
-              onPressed: () => {},
-              child: new Text('Done',
-                  style: new TextStyle(color: Colors.black)),
+            child: new MaterialButton(
+              color: Colors.black,
+              onPressed: () => Navigator.popUntil(context, ModalRoute.withName('/')),
+              child: new Text('Cancel',
+                  style: new TextStyle(color: Colors.white)),
             ),
           ),
           Padding(
@@ -100,11 +99,18 @@ class _BusinessSignUpThirdPageState extends State<BusinessSignUpThirdPage> {
           ),
           ButtonTheme(
             minWidth: 150.0,
-            child: new MaterialButton(
-              color: Colors.black,
-              onPressed: () => Navigator.popUntil(context, ModalRoute.withName('/')),
-              child: new Text('Cancel',
-                  style: new TextStyle(color: Colors.white)),
+            child: new OutlineButton(
+              borderSide: BorderSide(color: Colors.black),
+              color: Colors.white,
+              onPressed: () async {
+                if (_validate()) {
+//                  print(widget.credentials);
+//                  print(widget.image.path);
+                  await _handleCreation(widget.credentials, widget.image);
+                }
+              },
+              child: new Text('Done',
+                  style: new TextStyle(color: Colors.black)),
             ),
           ),
         ],

@@ -1,8 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
-import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
-import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
+import 'package:share_yourself_artists_team_flutter/authentication/businessSignUp/businessSignUpThirdPage.dart';
 
 class BusinessSignUpSecondPage extends StatefulWidget {
+  final File image;
+  final Map<String, String> credentials;
+
+  BusinessSignUpSecondPage({this.image, this.credentials});
+
   @override
   _BusinessSignUpSecondPageState createState() => _BusinessSignUpSecondPageState();
 }
@@ -11,33 +17,9 @@ class _BusinessSignUpSecondPageState extends State<BusinessSignUpSecondPage> {
   static GlobalKey<FormState> _form = new GlobalKey<FormState>();
   static GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey<ScaffoldState>();
 
-  Future _handleCreation(Map<String, String> credentials) async {
-    String uid = await Authentication.createArtistAccount(credentials);
-    if (uid != '') {
-      await savePreferences('artist', uid);
-      print('Created user is $uid');
-      Navigator.of(context).pushNamedAndRemoveUntil('/artist', (Route<dynamic> route) => false);
-
-    } else {
-      _scaffoldState.currentState.showSnackBar(SnackBar(
-        content: new Text(
-            'The email address is already in use by another account.'),
-        duration: Duration(seconds: 4),
-      ));
-    }
-  }
-
 
   @override
   Widget build(BuildContext context) {
-    var credentials =  {
-      'publicationName': '',
-      'followerCount': '',
-      'website': '',
-      'shortSummary': '',
-      'additionalNotes': ''
-    };
-
     bool _validate() {
       var loginForm = _form.currentState;
 
@@ -53,7 +35,7 @@ class _BusinessSignUpSecondPageState extends State<BusinessSignUpSecondPage> {
       keyboardType: TextInputType.text,
       maxLines: 1,
       validator: (input) => input.isEmpty ? 'Name of publication is required.' : null,
-      onSaved: (input) => credentials['publicationName'] = input,
+      onSaved: (input) => widget.credentials['publicationName'] = input,
     );
 
     Widget followerCount = TextFormField(
@@ -61,14 +43,14 @@ class _BusinessSignUpSecondPageState extends State<BusinessSignUpSecondPage> {
       keyboardType: TextInputType.numberWithOptions(decimal: false),
       textCapitalization: TextCapitalization.none,
       validator: (input) => input.isEmpty ? 'Follower count is required.' : null,
-      onSaved: (input) => credentials['followerCount'] = input,
+      onSaved: (input) => widget.credentials['followerCount'] = input,
     );
 
     Widget website = TextFormField(
       decoration: new InputDecoration(labelText: 'Website'),
       keyboardType: TextInputType.url,
       validator: (input) => input.isEmpty ? 'Website is required.' : null,
-      onSaved: (input) => credentials['website'] = input,
+      onSaved: (input) => widget.credentials['website'] = input,
     );
 
     Widget shortSummary = TextFormField(
@@ -76,13 +58,13 @@ class _BusinessSignUpSecondPageState extends State<BusinessSignUpSecondPage> {
       keyboardType: TextInputType.multiline,
 
       validator: (input) => input.isEmpty ? 'Website is required.' : null,
-      onSaved: (input) => credentials['shortSummary'] = input,
+      onSaved: (input) => widget.credentials['shortSummary'] = input,
     );
 
     Widget additionalNotes = TextFormField(
       decoration: new InputDecoration(labelText: 'Additional Notes'),
       keyboardType: TextInputType.multiline,
-      onSaved: (input) => credentials['additionalNotes'] = input,
+      onSaved: (input) => widget.credentials['additionalNotes'] = input,
     );
 
     Widget signUpButton = Container(
@@ -92,12 +74,11 @@ class _BusinessSignUpSecondPageState extends State<BusinessSignUpSecondPage> {
         children: <Widget>[
           ButtonTheme(
             minWidth: 150.0,
-            child: new OutlineButton(
-              borderSide: BorderSide(color: Colors.black),
-              color: Colors.white,
-              onPressed: () => Navigator.of(context).pushNamed('/businessSignUpThird'),
-              child: new Text('Next',
-                  style: new TextStyle(color: Colors.black)),
+            child: new MaterialButton(
+              color: Colors.black,
+              onPressed: () => Navigator.popUntil(context, ModalRoute.withName('/')),
+              child: new Text('Cancel',
+                  style: new TextStyle(color: Colors.white)),
             ),
           ),
           Padding(
@@ -105,11 +86,16 @@ class _BusinessSignUpSecondPageState extends State<BusinessSignUpSecondPage> {
           ),
           ButtonTheme(
             minWidth: 150.0,
-            child: new MaterialButton(
-              color: Colors.black,
-              onPressed: () => Navigator.popUntil(context, ModalRoute.withName('/')),
-              child: new Text('Cancel',
-                  style: new TextStyle(color: Colors.white)),
+            child: new OutlineButton(
+              borderSide: BorderSide(color: Colors.black),
+              color: Colors.white,
+              onPressed: () {
+                if (_validate()) {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => BusinessSignUpThirdPage(image: widget.image, credentials: widget.credentials)));
+                }
+              },
+              child: new Text('Next',
+                  style: new TextStyle(color: Colors.black)),
             ),
           ),
         ],

@@ -176,15 +176,15 @@ class _LoginPageState extends State<LoginPage> {
     Widget forgotSection = Container(
         padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 25.0),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            new InkWell(
-              child: new Text("Forgot Email"),
-              onTap: _onPressed,
-            ),
+//            new InkWell(
+//              child: new Text("Forgot Email"),
+//              onTap: _onPressed,
+//            ),
             new InkWell(
               child: new Text("Forgot Password"),
-              onTap: _onPressed,
+              onTap: () => Navigator.of(context).pushNamed('/forgotPassword'),
             )
           ],
         ));

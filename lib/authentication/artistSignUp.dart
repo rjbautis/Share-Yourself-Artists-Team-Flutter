@@ -95,7 +95,7 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
       obscureText: true,
       validator: (password) {
         print('password is ${password}');
-        print(_confirmPassword);
+//        print(_confirmPassword);
         if (password != _confirmPassword.text) {
           return 'Passwords do not match.';
         }
@@ -116,6 +116,15 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
         children: <Widget>[
           ButtonTheme(
             minWidth: 150.0,
+            child: new MaterialButton(
+              color: Colors.black,
+              onPressed: () => Navigator.of(context).pop(),
+              child: new Text('Cancel',
+                  style: new TextStyle(color: Colors.white)),
+            ),
+          ),
+          ButtonTheme(
+            minWidth: 150.0,
             child: new OutlineButton(
               borderSide: BorderSide(color: Colors.black),
               color: Colors.white,
@@ -127,16 +136,7 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
               child: new Text('Done',
                   style: new TextStyle(color: Colors.black)),
             ),
-          ),
-          ButtonTheme(
-            minWidth: 150.0,
-            child: new MaterialButton(
-              color: Colors.black,
-              onPressed: () => Navigator.of(context).pop(),
-              child: new Text('Cancel',
-                  style: new TextStyle(color: Colors.white)),
-            ),
-          ),
+          )
         ],
       ),
     );
