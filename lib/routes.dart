@@ -5,12 +5,18 @@ import 'package:share_yourself_artists_team_flutter/authentication/businessSignU
 import 'package:share_yourself_artists_team_flutter/authentication/forgotPassword.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/login.dart';
 import 'package:share_yourself_artists_team_flutter/business/businessDash.dart';
+import 'package:share_yourself_artists_team_flutter/business/editbusiness.dart';
+import 'package:share_yourself_artists_team_flutter/business/feedbacklist.dart';
 
 final routes = {
   '/artist': (BuildContext context) => new ArtistDash(),
   '/artistSignUp': (BuildContext context) => new ArtistSignUpPage(),
   '/business': (BuildContext context) => new BusinessDash(),
-  '/businessSignUpFirst': (BuildContext context) => new BusinessSignUpFirstPage(),
+  '/businessSignUpFirst': (BuildContext context) =>
+      new BusinessSignUpFirstPage(),
   '/forgotPassword': (BuildContext context) => new ForgotPasswordPage(),
+  '/business': (BuildContext context) => new FeedbackList(),
+  '/businessSignUp': (BuildContext context) => new BusinessSignUpPage(),
+  '/editBusiness': (BuildContext context) => new EditBusiness(),
   '/': (BuildContext context) => new LoginPage()
 };
