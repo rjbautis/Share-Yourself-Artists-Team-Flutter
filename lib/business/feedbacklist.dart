@@ -21,7 +21,9 @@ class _FeedbackListState extends State<FeedbackList> {
     // Grab the saved uid of current user from memory
     loadUid().then((uid) {
       print('init: current uid: ${uid}');
-      _uid = uid;
+      setState(() {
+        _uid = uid;
+      });
     });
   }
 
@@ -241,7 +243,7 @@ class _FeedbackListState extends State<FeedbackList> {
             new StreamBuilder(
               stream: Firestore.instance
                   .collection('review_requests')
-                  .where('businessId.userId', isEqualTo: _uid)
+                  .where('businessId.userId', isEqualTo: '${_uid}')
                   .where('replied', isEqualTo: false)
                   .snapshots(),
               builder: (BuildContext context,
@@ -259,7 +261,7 @@ class _FeedbackListState extends State<FeedbackList> {
             new StreamBuilder(
               stream: Firestore.instance
                   .collection('review_requests')
-                  .where('businessId.userId', isEqualTo: _uid)
+                  .where('businessId.userId', isEqualTo: '${_uid}')
                   .where('replied', isEqualTo: true)
                   .snapshots(),
               builder: (BuildContext context,
