@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 import 'package:share_yourself_artists_team_flutter/business/feedbackpage.dart';
@@ -20,7 +21,9 @@ class _FeedbackListState extends State<FeedbackList> {
     // Grab the saved uid of current user from memory
     loadUid().then((uid) {
       print('init: current uid: ${uid}');
-      _uid = uid;
+      setState(() {
+        _uid = uid;
+      });
     });
   }
 
@@ -77,7 +80,7 @@ class _FeedbackListState extends State<FeedbackList> {
                 ),
                 tooltip: 'Respond',
                 onPressed: () {
-                  _navigateFeedback(art);
+                  _navigateFeedback(art, snapshot, index);
                 },
               )
             ],
@@ -104,7 +107,8 @@ class _FeedbackListState extends State<FeedbackList> {
         snapshot.data.documents[index]['art']['artist_id'].toString();
     bool _accepted = false;
 
-    if (accepted.compareTo('accepted') == 1) _accepted = true;
+    if (accepted.compareTo('accepted') == 0)
+      _accepted = true;
 
     if (artPaid == null) artPaid = false;
 
@@ -151,13 +155,15 @@ class _FeedbackListState extends State<FeedbackList> {
     );
   }
 
-  void _navigateFeedback(var art) {
+  void _navigateFeedback (var art, AsyncSnapshot<QuerySnapshot> snapshot, int index) {
     // create new FeedbackPage
     Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) => FeedbackPage(
                 artInfo: art,
+                snapshot: snapshot,
+                index: index,
               )),
     );
   }
@@ -237,7 +243,7 @@ class _FeedbackListState extends State<FeedbackList> {
             new StreamBuilder(
               stream: Firestore.instance
                   .collection('review_requests')
-                  .where('businessId.userId', isEqualTo: _uid)
+                  .where('businessId.userId', isEqualTo: '${_uid}')
                   .where('replied', isEqualTo: false)
                   .snapshots(),
               builder: (BuildContext context,
@@ -255,7 +261,7 @@ class _FeedbackListState extends State<FeedbackList> {
             new StreamBuilder(
               stream: Firestore.instance
                   .collection('review_requests')
-                  .where('businessId.userId', isEqualTo: _uid)
+                  .where('businessId.userId', isEqualTo: '${_uid}')
                   .where('replied', isEqualTo: true)
                   .snapshots(),
               builder: (BuildContext context,

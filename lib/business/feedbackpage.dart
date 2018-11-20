@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FeedbackPage extends StatefulWidget {
   var artInfo;
+  AsyncSnapshot<QuerySnapshot> snapshot;
+  final index;
 
-  FeedbackPage({@required this.artInfo});
+  FeedbackPage({@required this.artInfo, this.snapshot, this.index});
 
   @override
   _FeedbackPageState createState() => new _FeedbackPageState();
@@ -27,6 +30,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
   @override
   void initState() {
     super.initState();
+
     setState(() {
       artImage = widget.artInfo['art']['url'].toString();
       artTitle = widget.artInfo['art']['art_title'].toString();
@@ -49,16 +53,22 @@ class _FeedbackPageState extends State<FeedbackPage> {
 
   void _submitComment() {
     if (comment.length < 50) {
-      // display error message
+      /// TODO  display error message
       return;
     }
 
-    setState(() {
-      // Things to submit
-      // Comment, UserID, Date
-      // submit the comment in the textbox
-      print(_accepted);
-      print(comment);
+    String acceptVal = 'declined';
+    if (_accepted)
+      acceptVal = 'accepted';
+
+    final DocumentReference postRef = widget.snapshot.data.documents[widget.index].reference;
+    Firestore.instance.runTransaction((Transaction tx) async {
+      DocumentSnapshot postSnapshot = widget.snapshot.data.documents[widget.index]; //await tx.get(postRef);
+      if (postSnapshot.exists) {
+        await tx.update(postRef, <String, dynamic>{'replied': true});
+        await tx.update(postRef, <String, dynamic>{'submission_response.radios': acceptVal});
+        await tx.update(postRef, <String, dynamic>{'submission_response.response': comment});
+      }
     });
   }
 
