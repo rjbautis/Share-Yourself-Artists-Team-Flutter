@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 
 class EditBusiness extends StatefulWidget {
@@ -38,7 +38,8 @@ class _EditBusinessState extends State<EditBusiness> {
   }
 
   Future _getProfile() async {
-    DocumentSnapshot businessUser = await Firestore.instance.collection('users').document(_uid).get();
+    DocumentSnapshot businessUser =
+        await Firestore.instance.collection('users').document(_uid).get();
 
     setState(() {
       _businessName = businessUser['business_name'];
@@ -54,31 +55,26 @@ class _EditBusinessState extends State<EditBusiness> {
     });
   }
 
-  Widget _buildEditProfile(BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-    String businessName = snapshot.data.documents[0]['business_name'].toString();
+  Widget _buildEditProfile(
+      BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+    String businessName =
+        snapshot.data.documents[0]['business_name'].toString();
     String email = snapshot.data.documents[0]['email'].toString();
     String facebookUrl = snapshot.data.documents[0]['facebook_url'].toString();
-    String instagramUrl = snapshot.data.documents[0]['instagram_url'].toString();
+    String instagramUrl =
+        snapshot.data.documents[0]['instagram_url'].toString();
     String publication = snapshot.data.documents[0]['publication'].toString();
     String about = snapshot.data.documents[0]['about'].toString();
-    String additionalNotes = snapshot.data.documents[0]['additional_notes'].toString();
+    String additionalNotes =
+        snapshot.data.documents[0]['additional_notes'].toString();
     String tumblrUrl = snapshot.data.documents[0]['tumblr_url'].toString();
-    String worthKnowing = snapshot.data.documents[0]['worth_knowing'].toString();
+    String worthKnowing =
+        snapshot.data.documents[0]['worth_knowing'].toString();
     String theGood = snapshot.data.documents[0]['theGood'].toString();
 
-    return new ListView(
-      padding: EdgeInsets.zero,
-      children: <Widget>[
-        ListTile(
-          title: new Text('Edit Profile'),
-
-        ),
-      ],
-    _getProfile();
     return new Card(
-      child: TextFormField (
-        decoration: InputDecoration(
-        hintText: _businessName),
+      child: TextFormField(
+        decoration: InputDecoration(hintText: email),
       ),
     );
   }
@@ -88,23 +84,23 @@ class _EditBusinessState extends State<EditBusiness> {
     return new MaterialApp(
       home: new Scaffold(
         appBar: AppBar(
-          title: Text('Edit Profile'),
-          backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
-          iconTheme: IconThemeData(color: Colors.black)
-        ),
+            title: Text('Edit Profile'),
+            backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
+            iconTheme: IconThemeData(color: Colors.black)),
         body: new StreamBuilder(
-          stream: Firestore.instance.collection('users')
+          stream: Firestore.instance
+              .collection('users')
               .where('userId', isEqualTo: _uid)
               .snapshots(),
-          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (!snapshot.hasData) return new Text('Loading...');
             return new Container(
-              child: ListView.builder(
-                itemBuilder: (BuildContext ctxt, int index) =>
-                    _buildEditProfile(context, snapshot),
-                itemCount: 1,
-              )
-            );
+                child: ListView.builder(
+              itemBuilder: (BuildContext ctxt, int index) =>
+                  _buildEditProfile(context, snapshot),
+              itemCount: 1,
+            ));
           },
         ),
       ),
