@@ -229,6 +229,12 @@ class _FeedbackListState extends State<FeedbackList> {
                   ),
                 ),
                 ListTile(
+                  title: new Text('Edit Profile'),
+                  onTap: () async {
+                    Navigator.of(context).pushReplacementNamed('/editBusiness');
+                  },
+                ),
+                ListTile(
                   title: new Text('Log Out'),
                   onTap: () async {
                     await Authentication.signOut();
