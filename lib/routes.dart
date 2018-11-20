@@ -5,6 +5,8 @@ import 'package:share_yourself_artists_team_flutter/authentication/artistSignUp.
 import 'package:share_yourself_artists_team_flutter/authentication/businessSignUp/businessSignUpFirstPage.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/forgotPassword.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/login.dart';
+import 'package:share_yourself_artists_team_flutter/business/feedbacklist.dart';
+import 'package:share_yourself_artists_team_flutter/business/editbusiness.dart';
 import 'package:share_yourself_artists_team_flutter/business/businessDash.dart';
 import 'package:share_yourself_artists_team_flutter/business/profilePage/businessProfilePage.dart';
 

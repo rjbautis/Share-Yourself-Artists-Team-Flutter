@@ -4,7 +4,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 import 'package:share_yourself_artists_team_flutter/business/businessProvideFeedback.dart';
-import 'package:share_yourself_artists_team_flutter/business/editbusiness.dart';
 
 class BusinessDash extends StatefulWidget {
   @override
@@ -166,14 +165,6 @@ class _BusinessDashState extends State<BusinessDash> {
                 snapshot: snapshot,
                 index: index,
               )),
-    );
-  }
-
-  void _navigateEditBusiness() {
-    // create new FeedbackPage
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => EditBusiness()),
     );
   }
 
