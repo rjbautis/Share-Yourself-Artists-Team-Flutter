@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:share_yourself_artists_team_flutter/artist/artist-image-info.dart';
+import 'package:path/path.dart' as path;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -17,32 +19,22 @@ class _ArtistUploadImageState extends State<ArtistUploadImage> {
   File cameraFile;
   File _current;
 
-  String location = "";
-  String _display = "";
+  String downloadURL = "";
+  String _baseName = "";
+  String _uID = "";
 
-  String user = "Alexis";
-  String fileName = "yes";
+  bool imagePicked = false;
 
-  void enableUpload() {
-    StorageReference firebaseStorageRef =
-        FirebaseStorage.instance.ref().child('$user/$fileName.jpg');
-    StorageUploadTask task = firebaseStorageRef.putFile(_current);
-  }
+  @override
+  void initState()
+  {
+    super.initState();
 
-  Future<String> uploadFile() async {
-    StorageReference firebaseStorageRef =
-        FirebaseStorage.instance.ref().child('$user/$fileName.jpg');
-    StorageUploadTask task = firebaseStorageRef.putFile(_current);
-
-    location = await firebaseStorageRef.getDownloadURL();
-
-    setState(() {
-      _display = location;
+    loadUid().then((uid) {
+      _uID = uid;
     });
-    print("File available at $location");
-
-    return location;
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +46,8 @@ class _ArtistUploadImageState extends State<ArtistUploadImage> {
       print("You selected gallery image : " + galleryFile.path);
       setState(() {
         _current = galleryFile;
+        _baseName = path.basename(_current.path);
+        imagePicked = true;
       });
     }
 
@@ -64,14 +58,15 @@ class _ArtistUploadImageState extends State<ArtistUploadImage> {
       print("You selected camera image : " + cameraFile.path);
       setState(() {
         _current = cameraFile;
+        imagePicked = true;
       });
     }
 
     Widget displaySelectedFile(File file) {
       return new ConstrainedBox(
         constraints: new BoxConstraints(
-            minWidth: 100.0,
-            minHeight: 200.0,
+            minWidth: 200.0,
+            minHeight: 300.0,
             maxWidth: 200.0,
             maxHeight: 300.0),
         child: file == null
@@ -82,7 +77,7 @@ class _ArtistUploadImageState extends State<ArtistUploadImage> {
 
     return new Scaffold(
       resizeToAvoidBottomPadding: false,
-      appBar: AppBar(title: new Text('Artist')),
+      appBar: AppBar(title: new Text('Upload Art')),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -111,7 +106,7 @@ class _ArtistUploadImageState extends State<ArtistUploadImage> {
       ),
       body: Container(
         padding: const EdgeInsets.all(20.0),
-        child: Column(
+        child: ListView(
           children: <Widget>[
             Container(
               child: Image.asset('images/logo.png'),
@@ -128,8 +123,7 @@ class _ArtistUploadImageState extends State<ArtistUploadImage> {
                 elevation: 4.0,
                 onPressed: imageSelectorGallery,
                 minWidth: 200.0,
-                height:
-                    50.0, //Need to add onPressed event in order to make button active
+                height: 50.0,
               ),
             ),
             Container(
@@ -141,28 +135,38 @@ class _ArtistUploadImageState extends State<ArtistUploadImage> {
                 elevation: 4.0,
                 onPressed: imageSelectorCamera,
                 minWidth: 200.0,
-                height:
-                    50.0, //Need to add onPressed event in order to make button active
+                height: 50.0,
               ),
             ),
             Container(
               padding: const EdgeInsets.only(top: 40.0),
               child: new MaterialButton(
-                child: const Text('Upload to Database'),
-                color: Color.fromRGBO(255, 160, 0, 1.0),
+                //child: const Text('Upload to Database'),
+                child: const Text('Next'),
+                color: imagePicked ? Color.fromRGBO(255, 160, 0, 1.0) : Colors.grey,
                 textColor: Colors.white,
                 elevation: 4.0,
-                onPressed: uploadFile,
+                onPressed: () {
+                  //setState(() {
+                    if(imagePicked == false)
+                      {
+                        return null;
+                      }
+                      else
+                        {
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => ArtistImageInfo(image:_current, uid: _uID, fileName:_baseName)));
+                        }
+//                  imagePicked ? null :
+//                  Navigator.push(context, MaterialPageRoute(builder: (context) => ArtistImageInfo(image:_current, uid:widget.uid, fileName:_baseName)));
+                //});
+                  },
                 minWidth: 200.0,
-                height:
-                    50.0, //Need to add onPressed event in order to make button active
+                height: 50.0,
               ),
             ),
             Padding(padding: const EdgeInsets.only(top: 25.0, bottom: 10.0)),
             Container(
               padding: const EdgeInsets.only(top: 10.0),
-              child: new Text("Download URL: $_display"),
-              //Need to add onPressed event in order to make button active
             ),
           ],
         ),
