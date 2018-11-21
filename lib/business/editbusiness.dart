@@ -38,20 +38,18 @@ class _EditBusinessState extends State<EditBusiness> {
     String worthKnowing = snapshot.data.documents[0]['worth_knowing'].toString();
     String theGood = snapshot.data.documents[0]['theGood'].toString();
 
-    return new ListView(
-      padding: EdgeInsets.zero,
-      children: <Widget>[
-        ListTile(
-          title: new Text('Edit Profile'),
-          
-        ),
-      ],
+    return new Card(
+      child: TextFormField (
+        decoration: InputDecoration(
+          hintText: email),
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return new MaterialApp(
+      home: new Scaffold(
         appBar: AppBar(
           title: Text('Edit Profile'),
           backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
@@ -72,6 +70,7 @@ class _EditBusinessState extends State<EditBusiness> {
             );
           },
         ),
+      ),
     );
   }
 }
