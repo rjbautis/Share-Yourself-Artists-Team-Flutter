@@ -219,7 +219,7 @@ class Authentication {
 
   static Future<String> uploadFile(File image, String name, String dir, String pathLocation) async {
     String path;
-    if (dir != '') {
+    if (dir != null) {
       path = '$name/$dir/$pathLocation';
     } else {
       path = '$name/$pathLocation';
@@ -231,31 +231,21 @@ class Authentication {
 
     // Try again if not successful
     while (!task.isSuccessful) {
-      print('upload not complete, trying again');
-      storageTaskSnapshot = await task.onComplete;
+      print('upload not complete, try again');
+      return null;
     }
 
     String downloadURL = await storageTaskSnapshot.ref.getDownloadURL();
 
     if(downloadURL != null || downloadURL != "")
     {
-      print("\n");
-      print("\n");
-      print("In uploadfile");
-      print("SUCCESS!!!!!!");
-      print("\n");
-      print("\n");
+      print("Successfully uploaded the file");
+      return downloadURL;
     }
     else{
-      print("\n");
-      print("\n");
-      print("In uploadfile");
-      print("FAIL");
-      print("\n");
-      print("\n");
+      print("Failed to upload the file");
       return null;
     }
-    return downloadURL;
   }
 
 }
