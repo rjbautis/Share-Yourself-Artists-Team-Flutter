@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 import 'package:share_yourself_artists_team_flutter/business/feedbackpage.dart';
+import 'package:share_yourself_artists_team_flutter/business/editbusiness.dart';
 
 class FeedbackList extends StatefulWidget {
   @override
@@ -168,6 +169,16 @@ class _FeedbackListState extends State<FeedbackList> {
     );
   }
 
+  void _navigateEditBusiness () {
+    // create new FeedbackPage
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => EditBusiness(
+          )),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final title = 'Submitted Artwork';
@@ -227,6 +238,12 @@ class _FeedbackListState extends State<FeedbackList> {
                     backgroundColor: Colors.white,
                     child: new Text('T'),
                   ),
+                ),
+                ListTile(
+                  title: new Text('Edit Profile'),
+                  onTap: () async {
+                    _navigateEditBusiness();
+                  },
                 ),
                 ListTile(
                   title: new Text('Log Out'),
