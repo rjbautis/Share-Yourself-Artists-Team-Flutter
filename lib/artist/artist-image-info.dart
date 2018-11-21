@@ -6,15 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ArtistImageInfo extends StatefulWidget{
-//  final Authentication authentication;
-//  final VoidCallback handleSignOut;
-//  final String uid;
 
     final File image;
     final String uid;
     final String fileName;
-
-//  ArtistImageInfo({@required this.authentication, this.handleSignOut, this.uid});
 
   ArtistImageInfo({Key key, this.image, this.uid, this.fileName}) : super(key: key);
 
