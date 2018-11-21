@@ -98,7 +98,7 @@ class _ArtistUploadImageState extends State<ArtistUploadImage> {
               onTap: () async {
                 await Authentication.signOut();
                 resetPreferences();
-                Navigator.of(context).pushReplacementNamed('/login');
+                Navigator.of(context).pushReplacementNamed('/');
               },
             ),
           ],
