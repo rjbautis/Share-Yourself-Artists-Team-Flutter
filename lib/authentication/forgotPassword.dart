@@ -14,7 +14,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   String _email;
 
-  void _handleReset() async {
+  Future _handleReset() async {
     try {
       await Authentication.resetPassword(_email);
       Navigator.of(context).pop();
