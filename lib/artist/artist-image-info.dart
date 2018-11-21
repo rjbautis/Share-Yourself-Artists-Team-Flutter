@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
+import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 
 class ArtistImageInfo extends StatefulWidget{
 //  final Authentication authentication;
@@ -309,10 +311,9 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
             ListTile(
               title: new Text('Log Out'),
               onTap: () async {
-                Navigator.pop(
-                    context); // Need to pop context (specifically for this page)
-//                await widget.authentication.signOut();
-//                widget.handleSignOut();
+                await Authentication.signOut();
+                resetPreferences();
+                Navigator.of(context).pushReplacementNamed('/');
               },
             ),
           ],
