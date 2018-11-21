@@ -48,8 +48,7 @@ class _EditBusinessState extends State<EditBusiness> {
 
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      home: new Scaffold(
+    return new Scaffold(
         appBar: AppBar(
           title: Text('Edit Profile'),
           backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
