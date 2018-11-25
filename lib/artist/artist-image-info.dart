@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
+import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 
 class ArtistImageInfo extends StatefulWidget{
 
@@ -20,6 +22,8 @@ class ArtistImageInfo extends StatefulWidget{
 class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderStateMixin{
   static GlobalKey<FormState> form = new GlobalKey<FormState>();
   static GlobalKey _globalKey = new GlobalKey();
+  GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey<ScaffoldState>();
+
   Animation _animation;
   AnimationController _controller;
 
@@ -40,6 +44,10 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
   bool _didItWork = false;
   bool done = false;
 
+  bool correctTitle = true;
+  bool correctName = true;
+  bool correctDesc = true;
+
   _setDate()
   {
     var now = new DateTime.now().millisecondsSinceEpoch;
@@ -58,29 +66,29 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
 
     if(downloadURL != null || downloadURL != "")
     {
-      print("\n");
-      print("\n");
-      print("In uploadfile");
-      print("SUCCESS!!!!!!");
-      check = true;
-      print("\n");
-      print("\n");
+        print("\n");
+        print("\n");
+        print("In task.iscomplete");
+        print("SUCCESS!!!!!!");
+        check = true;
+        print("\n");
+        print("\n");
+
+        print("--------------------\n");
+        print("In uploadFile\n");
+        print("${widget.uid}");
+        print("${widget.fileName}");
+        print("$downloadURL");
+        print("--------------------\n");
     }
     else{
       print("\n");
       print("\n");
-      print("In uploadfile");
+      print("In task.iscomplete");
       print("FAIL");
       print("\n");
       print("\n");
     }
-
-    print("--------------------\n");
-    print("In uploadFile in second file\n");
-    print("${widget.uid}");
-    print("${widget.fileName}");
-    print("$downloadURL");
-    print("--------------------\n");
 
     setState(() {
       location = downloadURL;
@@ -89,8 +97,6 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
           done = true;
           _state = 2;
         }
-      print("\n\nValue of done in uploadFile");
-      print("$done");
     });
 
     return location;
@@ -98,21 +104,25 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
 
   Future _submit(bool value) async
   {
-//    try
-//    {
+    try
+    {
       await uploadFile();
       await _confirm();
 
       value = done;
-//    }
-//    catch(e){
-//      print("\n");
-//      print("\n");
-//      print("FAIL");
-//      print("\n");
-//      print("\n");
-//    }
-
+    }
+    catch(e){
+      print("\n");
+      print("\n");
+      print("In submit\nFAIL");
+      print("\n");
+      print("\n");
+      _scaffoldState.currentState.showSnackBar(SnackBar(
+        content: new Text(
+            'The databse is down, please try again later '),
+        duration: Duration(seconds: 4),
+      ));
+    }
   }
 
   Future _confirm() async
@@ -128,12 +138,11 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
 
     Firestore.instance.collection('art').document()
         .setData({ 'art_title': '$artTitle',
-      'artist_id': '${widget.uid}',
-      'artist_name': '$artistName',
-      'description':'$description',
-      'upload_date': uploadDate,
-      //'url':'${widget.url}'});
-      'url':'$location'});
+                    'artist_id': '${widget.uid}',
+                    'artist_name': '$artistName',
+                    'description':'$description',
+                    'upload_date': uploadDate,
+                    'url':'$location'});
 
     print("\n");
     print("\n");
@@ -158,13 +167,27 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-    print("Hi");
+
+    bool _validate() {
+      var loginForm = form.currentState;
+
+      if (loginForm.validate()) {
+        loginForm.save();
+        return true;
+      }
+      return false;
+    }
 
     Widget getArtTitle = TextFormField(
       decoration: new InputDecoration(labelText: "Artist Title"),
       keyboardType: TextInputType.text,
       maxLines:1,
-      validator: (input) => input.isEmpty ? "Title is required." : null,
+      validator: (input) {
+        if (input.isEmpty) {
+          return "Title is required.";
+        }
+        return null;
+      },
       onSaved: (input) => artTitle = input,
     );
 
@@ -184,25 +207,8 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
       onSaved: (input) => description = input,
     );
 
-    Widget submit = Container(
-      padding: const EdgeInsets.only(top: 40.0),
-      child: new MaterialButton(
-        child: const Text('Submit'),
-        color: Color.fromRGBO(255, 160, 0, 1.0),
-        textColor: Colors.white,
-        elevation: 4.0,
-        onPressed: () async {
-          await uploadFile();
-          await _confirm();
-        },
-        minWidth: 200.0,
-        height: 50.0, //Need to add onPressed event in order to make button active
-      )
-    );
 
     Widget setUpButtonChild() {
-      print("\n\nValue of state in setUpButton");
-      print("$_state");
       if (_state == 0) {
         return new Text(
           "Submit",
@@ -222,14 +228,12 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
         );
       } else if(_state == 2){
         return Icon(Icons.check, color: Colors.white);
-      } else if(_state == 3){
+      } else{
         return Icon(Icons.close, color: Colors.white);
       }
     }
 
     void animateButton() {
-      print("\n\nin Animate Button");
-      //bool plswork = false;
       double initialWidth = _globalKey.currentContext.size.width;
 
       _controller =
@@ -243,13 +247,6 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
       _controller.forward();
 
       _submit(_didItWork);
-
-      print("\n\nValue of done in animateButton");
-      print("$done");
-
-      print("\n\n////////////////////");
-      print("Value of diditwork in animateButton");
-      print("$_didItWork");
 
       setState(() {
         _state = 1;
@@ -270,20 +267,15 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
         else{
 //          Timer(Duration(milliseconds: 3300), ()
 //          {
-              setState(() {
-                _state = 3;
-              });
-              print("\n");
-              print("\n");
-              print("In diditwork");
-              print("FAIL!!!!");
-              print("\n");
-              print("\n");
+//              setState(() {
+//                _state = 3;
+//              });
             //});
         }
     }
 
     return new Scaffold(
+      key: _scaffoldState,
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(title: new Text('Enter Art Information')),
       drawer: Drawer(
@@ -304,10 +296,9 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
             ListTile(
               title: new Text('Log Out'),
               onTap: () async {
-                Navigator.pop(
-                    context); // Need to pop context (specifically for this page)
-//                await widget.authentication.signOut();
-//                widget.handleSignOut();
+                await Authentication.signOut();
+                resetPreferences();
+                Navigator.of(context).pushReplacementNamed('/');
               },
             ),
           ],
@@ -335,8 +326,8 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
             Container(
               child: new PhysicalModel(
                 elevation: 8.0,
-                shadowColor: Colors.lightGreenAccent,
-                color: Colors.lightGreen,
+                shadowColor: Colors.orangeAccent,
+                color: Color.fromRGBO(255, 160, 0, 1.0),
                 borderRadius: BorderRadius.circular(25.0),
                 child: Container(
                   key: _globalKey,
@@ -345,21 +336,26 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
                   child: new RaisedButton(
                     padding: EdgeInsets.all(0.0),
                     child: setUpButtonChild(),
-                    onPressed: () {
-                      setState(() {
-                        if (_state == 0) {
-                          animateButton();
-
+                    onPressed: ()
+                    {
+                      setState(()
+                      {
+                        if(_validate())
+                          {
+                            if (_state == 0)
+                            {
+                              animateButton();
+                            }
+                          }
                         }
-                      });
+                      );
                     },
                     elevation: 4.0,
-                    color: Colors.lightGreen,
+                    color: Color.fromRGBO(255, 160, 0, 1.0),
                   ),
                 ),
               ),
             ),
-            submit
           ],
         ),
       ),
