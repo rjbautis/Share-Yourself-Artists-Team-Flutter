@@ -4,13 +4,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
 import 'package:share_yourself_artists_team_flutter/artist/artist-upload-image.dart';
 import 'package:share_yourself_artists_team_flutter/artist/send-art.dart';
+import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 
 class ArtistDash extends StatefulWidget {
-  final String uid;
-  final Authentication authentication;
-  final VoidCallback handleSignOut;
 
-  ArtistDash({@required this.uid, this.authentication, this.handleSignOut});
+  ArtistDash();
 
   @override
   _ArtistDashState createState() => new _ArtistDashState();
@@ -19,10 +17,17 @@ class ArtistDash extends StatefulWidget {
 class _ArtistDashState extends State<ArtistDash> {
   double _screenWidth;
   bool _cardView = false;
+  String _uid;
 
   @override
   void initState() {
     super.initState();
+
+    // Grab the saved uid of current user from memory
+    loadUid().then((uid) {
+      print('init: current uid: ${uid}');
+      _uid = uid;
+    });
   }
 
   void _navigateUpload() {
@@ -30,8 +35,7 @@ class _ArtistDashState extends State<ArtistDash> {
       context,
       MaterialPageRoute(
           builder: (context) => ArtistUploadImage(
-            authentication: widget.authentication,
-            handleSignOut: widget.handleSignOut,
+
           )),
     );
   }
@@ -168,8 +172,9 @@ class _ArtistDashState extends State<ArtistDash> {
                 ListTile(
                   title: new Text('Log Out'),
                   onTap: () async {
-                    await widget.authentication.signOut();
-                    widget.handleSignOut();
+                    await Authentication.signOut();
+                    resetPreferences();
+                    Navigator.of(context).pushReplacementNamed('/login');
                   },
                 ),
               ],
