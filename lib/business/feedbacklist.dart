@@ -234,7 +234,7 @@ class _FeedbackListState extends State<FeedbackList> {
                   onTap: () async {
                     await Authentication.signOut();
                     resetPreferences();
-                    Navigator.of(context).pushReplacementNamed('/login');
+                    Navigator.of(context).pushReplacementNamed('/');
                   },
                 ),
               ],

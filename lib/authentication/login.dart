@@ -10,8 +10,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  GlobalKey<FormState> _form = new GlobalKey<FormState>();
-  GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey<ScaffoldState>();
+  static GlobalKey<FormState> _form = new GlobalKey<FormState>();
+  static GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey<ScaffoldState>();
 
   // Determines which flow to push after successful login
   void _navigateToRoute(String role) {
@@ -24,17 +24,16 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future _handleLogin(String uid) async {
-    if (uid != "") {
-      String role;
-      role = await Authentication.verifyUserDocument(uid);
+    if (uid != '') {
+      String role = await Authentication.verifyUserDocument(uid);
       await savePreferences(role, uid);
       _navigateToRoute(role);
     } else {
       _scaffoldState.currentState.showSnackBar(SnackBar(
         content: new Text(
             'The password is invalid or the user does not have a password. '
-            'Or you may have not confirmed your email yet. If you need further '
-            'assistance, please send us an email.'),
+                'Or you may have not confirmed your email yet. If you need further '
+                'assistance, please send us an email.'),
         duration: Duration(seconds: 4),
       ));
     }
@@ -79,14 +78,18 @@ class _LoginPageState extends State<LoginPage> {
                 iconSize: 50.0,
                 icon: new Icon(FontAwesomeIcons.facebook,
                     color: Color.fromRGBO(59, 89, 152, 1.0)),
-                onPressed: () => _onPressed),
+                onPressed: () async {
+//                  String uid =
+//                  await Authentication.signInWithFacebookAndFireBase();
+//                  await _handleLogin(uid);
+                }),
             new IconButton(
                 iconSize: 50.0,
                 icon: new Icon(FontAwesomeIcons.google,
                     color: Color.fromRGBO(72, 133, 237, 1.0)),
                 onPressed: () async {
                   String uid =
-                      await Authentication.signInWithGoogleAndFireBase();
+                  await Authentication.signInWithGoogleAndFireBase();
                   await _handleLogin(uid);
                 })
           ],
@@ -160,7 +163,7 @@ class _LoginPageState extends State<LoginPage> {
             child: new MaterialButton(
               color: Colors.black,
               onPressed: () {
-                Navigator.of(context).pushNamed('/businessSignUp');
+                Navigator.of(context).pushNamed('/businessSignUpFirst');
               },
               child: new Text("Business Sign Up",
                   style: new TextStyle(color: Colors.white)),
@@ -173,15 +176,15 @@ class _LoginPageState extends State<LoginPage> {
     Widget forgotSection = Container(
         padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 25.0),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            new InkWell(
-              child: new Text("Forgot Username"),
-              onTap: _onPressed,
-            ),
+//            new InkWell(
+//              child: new Text("Forgot Email"),
+//              onTap: _onPressed,
+//            ),
             new InkWell(
               child: new Text("Forgot Password"),
-              onTap: _onPressed,
+              onTap: () => Navigator.of(context).pushNamed('/forgotPassword'),
             )
           ],
         ));

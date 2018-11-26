@@ -1,41 +1,45 @@
-import 'package:flutter/material.dart';
-import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
-import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
+import 'dart:io';
 
-class ArtistSignUpPage extends StatefulWidget {
+import 'package:flutter/material.dart';
+import 'package:share_yourself_artists_team_flutter/authentication/businessSignUp/businessSignUpSecondPage.dart';
+import 'package:image_picker/image_picker.dart';
+
+
+class BusinessSignUpFirstPage extends StatefulWidget {
   @override
-  _ArtistSignUpPageState createState() => _ArtistSignUpPageState();
+  _BusinessSignUpFirstPageState createState() => _BusinessSignUpFirstPageState();
 }
 
-class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
+class _BusinessSignUpFirstPageState extends State<BusinessSignUpFirstPage> {
   static GlobalKey<FormState> _form = new GlobalKey<FormState>();
   static GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey<ScaffoldState>();
+  File _current;
+  File galleryFile;
 
-  Future _handleCreation(Map<String, String> credentials) async {
-    String uid = await Authentication.createArtistAccount(credentials);
-    if (uid != '') {
-      await savePreferences('artist', uid);
-      print('Created user is $uid');
-      Navigator.of(context).pushNamedAndRemoveUntil('/artist', (Route<dynamic> route) => false);
+  bool imagePicked = false;
 
-    } else {
-      _scaffoldState.currentState.showSnackBar(SnackBar(
-        content: new Text(
-            'The email address is already in use by another account.'),
-        duration: Duration(seconds: 4),
-      ));
-    }
-  }
 
   final _confirmPassword = TextEditingController();
 
+  imageSelectorGallery() async {
+    galleryFile = await ImagePicker.pickImage(
+      source: ImageSource.gallery,
+    );
+    print("You selected gallery image : " + galleryFile.path);
+    setState(() {
+      _current = galleryFile;
+//        _baseName = path.basename(_current.path);
+      imagePicked = true;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+
     var credentials =  {
       'name': '',
       'email': '',
       'password': '',
-      'instagram': ''
     };
 
     bool _validate() {
@@ -49,7 +53,7 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
     }
 
     Widget name = TextFormField(
-      decoration: new InputDecoration(labelText: 'Name'),
+      decoration: new InputDecoration(labelText: 'Business Name'),
       keyboardType: TextInputType.text,
       maxLines: 1,
       validator: (input) => input.isEmpty ? 'Name is required.' : null,
@@ -103,12 +107,6 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
 //      onSaved: (input) => _password = input,
     );
 
-    Widget instagramField = new TextFormField(
-      decoration: new InputDecoration(labelText: 'Instagram (Optional)'),
-      keyboardType: TextInputType.url,
-      onSaved: (input) => credentials['instagram'] = input,
-    );
-
     Widget signUpButton = Container(
       padding: const EdgeInsets.only(top: 50.0, bottom: 50.0),
       child: Row(
@@ -123,23 +121,52 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
                   style: new TextStyle(color: Colors.white)),
             ),
           ),
+          Padding(
+            padding: EdgeInsets.all(5.0),
+          ),
           ButtonTheme(
             minWidth: 150.0,
             child: new OutlineButton(
               borderSide: BorderSide(color: Colors.black),
               color: Colors.white,
-              onPressed: () async {
+              onPressed: () {
                 if (_validate()) {
-                  await _handleCreation(credentials);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => BusinessSignUpSecondPage(image: _current, credentials: credentials,)));
                 }
               },
-              child: new Text('Done',
+              child: new Text('Next',
                   style: new TextStyle(color: Colors.black)),
             ),
-          )
+          ),
         ],
       ),
     );
+
+    Widget uploadLogoButton = Container(
+      padding: const EdgeInsets.only(top: 40.0),
+      child: new MaterialButton(
+        child: const Text('Upload Logo from Gallery'),
+        color: Color.fromRGBO(255, 160, 0, 1.0),
+        textColor: Colors.white,
+        elevation: 4.0,
+        onPressed: imageSelectorGallery,
+        minWidth: 200.0,
+        height: 50.0,
+      ),
+    );
+
+    Widget displaySelectedFile(File file) {
+      return new ConstrainedBox(
+        constraints: new BoxConstraints(
+            minWidth: 200.0,
+            minHeight: 200.0,
+            maxWidth: 200.0,
+            maxHeight: 200.0),
+        child: file == null
+            ? new Text('Sorry nothing selected!!')
+            : new Image.file(file),
+      );
+    }
 
     return new Scaffold(
       key: _scaffoldState,
@@ -155,7 +182,7 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
                 ),
                 Center(
                   child: new Text(
-                    "Get Your Art Seen Today - guaranteed a response.",
+                    "Get Paid Today with Share Yourself Artists's easy to use platform.",
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                         fontSize: 25.0,
@@ -165,7 +192,7 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
                 Padding(
                   padding: EdgeInsets.all(5.0),
                 ),
-                Form(
+                Form (
                   key: _form,
                   child: Column(
                     children: <Widget>[
@@ -173,7 +200,8 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
                       email,
                       password,
                       confirmPassword,
-                      instagramField
+                      uploadLogoButton,
+                      imagePicked ? displaySelectedFile(_current) : new Container(),
                     ],
                   ),
                 ),
