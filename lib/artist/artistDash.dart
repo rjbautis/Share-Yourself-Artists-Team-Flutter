@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
-import 'package:share_yourself_artists_team_flutter/artist/artist-upload-image.dart';
-import 'package:share_yourself_artists_team_flutter/artist/send-art.dart';
+import 'package:share_yourself_artists_team_flutter/artist/artistUploadImage.dart';
+import 'package:share_yourself_artists_team_flutter/artist/artistSendArt.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 
 class ArtistDash extends StatefulWidget {
@@ -44,7 +44,7 @@ class _ArtistDashState extends State<ArtistDash> {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => SendArt(
+          builder: (context) => ArtistSendArt(
             snapshot: snapshot,
             index: index,
           )),
@@ -174,7 +174,7 @@ class _ArtistDashState extends State<ArtistDash> {
                   onTap: () async {
                     await Authentication.signOut();
                     resetPreferences();
-                    Navigator.of(context).pushReplacementNamed('/login');
+                    Navigator.of(context).pushReplacementNamed('/');
                   },
                 ),
               ],
