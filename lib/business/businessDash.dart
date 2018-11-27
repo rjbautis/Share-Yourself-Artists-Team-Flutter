@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
-import 'package:share_yourself_artists_team_flutter/business/feedbackpage.dart';
+import 'package:share_yourself_artists_team_flutter/business/businessProvideFeedback.dart';
 
-class FeedbackList extends StatefulWidget {
+class BusinessDash extends StatefulWidget {
   @override
-  _FeedbackListState createState() => new _FeedbackListState();
+  _BusinessDashState createState() => new _BusinessDashState();
 }
 
-class _FeedbackListState extends State<FeedbackList> {
+class _BusinessDashState extends State<BusinessDash> {
   double _screenWidth;
   String _uid;
 
@@ -160,7 +160,7 @@ class _FeedbackListState extends State<FeedbackList> {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => FeedbackPage(
+          builder: (context) => BusinessProvideFeedback(
                 artInfo: art,
                 snapshot: snapshot,
                 index: index,

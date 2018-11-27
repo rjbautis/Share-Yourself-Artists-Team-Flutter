@@ -7,9 +7,9 @@ import 'package:share_yourself_artists_team_flutter/authentication/authenticatio
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 
 class ArtistImageInfo extends StatefulWidget{
-    final File image;
-    final String uid;
-    final String fileName;
+  final File image;
+  final String uid;
+  final String fileName;
 
   ArtistImageInfo({Key key, this.image, this.uid, this.fileName}) : super(key: key);
 
@@ -36,13 +36,17 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
   String artistName = ""; //Prompt this
   String description = ""; //Prompt this
 
-  int _state = 0;
+  int _progressState = 0;
   bool _didItWork = false;
 
   bool correctTitle = true;
   bool correctName = true;
   bool correctDesc = true;
 
+  final int SUBMIT = 0;
+  final int INPROGRESS = 1;
+  final int SUCCESS = 2;
+  
 
   Future<String> _handleUpload() async {
     print('${widget.uid} ${widget.fileName}');
@@ -53,7 +57,7 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
     // If there exists a downloadUrl, set the state to the checkmark
     if (check) {
       setState(() {
-        _state = 2;
+        _progressState = SUCCESS;
       });
       return downloadUrl;
 
@@ -64,7 +68,7 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
         duration: Duration(seconds: 4),
       ));
       setState(() {
-        _state = 0;
+        _progressState = SUBMIT;
       });
       return null;
     }
@@ -147,7 +151,7 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
 
 
     Widget setUpButtonChild() {
-      if (_state == 0) {
+      if (_progressState == SUBMIT) {
         return new Text(
           "Submit",
           style: const TextStyle(
@@ -155,7 +159,7 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
             fontSize: 16.0,
           ),
         );
-      } else if (_state == 1) {
+      } else if (_progressState == INPROGRESS) {
         return SizedBox(
           height: 36.0,
           width: 36.0,
@@ -164,7 +168,7 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
             valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
           ),
         );
-      } else if(_state == 2){
+      } else if(_progressState == SUCCESS){
         return Icon(Icons.check, color: Colors.white);
       } else{
         return Icon(Icons.close, color: Colors.white);
@@ -186,7 +190,7 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
 
       // Set circular progress bar while submitting the artwork
       setState(() {
-        _state = 1;
+        _progressState = INPROGRESS;
       });
 
       _didItWork = await _postToArtCollection(_didItWork);
@@ -197,7 +201,7 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
         print("SUCCESS!!!!");
 
         setState(() {
-          _state = 2;
+          _progressState = SUCCESS;
         });
 
         Timer(Duration(seconds: 1), () {
@@ -213,7 +217,7 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
           duration: Duration(seconds: 4),
         ));
         setState(() {
-          _state = 0;
+          _progressState = SUBMIT;
         });
       }
     }
@@ -282,7 +286,7 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
                     child: setUpButtonChild(),
                     onPressed: () async {
                       if(_validate()) {
-                        if (_state == 0) {
+                        if (_progressState == SUBMIT) {
                           await animateButton();
                         }
                       }
