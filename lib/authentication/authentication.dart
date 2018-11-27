@@ -111,7 +111,7 @@ class Authentication {
     print("Attempting to sign out user.");
     await _googleSignIn.signOut();
     await _fireBaseAuth.signOut();
-    print('Successfuly signout');
+    print('Successfully signed out');
   }
 
   static Future resetPassword(String email) async {
