@@ -11,7 +11,16 @@ class EditBusiness extends StatefulWidget {
 
 class _EditBusinessState extends State<EditBusiness> {
   String _uid;
-  String _business_name;
+  String _businessName;
+  String _email;
+  String _facebookUrl;
+  String _instagramUrl;
+  String _publication;
+  String _about;
+  String _additionalNotes;
+  String _tumblrUrl;
+  String _worthKnowing;
+  String _theGood;
 
   @override
   void initState() {
@@ -24,34 +33,41 @@ class _EditBusinessState extends State<EditBusiness> {
         _uid = uid;
       });
     });
+
+    _getProfile();
+  }
+
+  Future _getProfile() async {
+    DocumentSnapshot businessUser = await Firestore.instance.collection('users').document(_uid).get();
+
+    setState(() {
+      _businessName = businessUser['business_name'];
+      _email = businessUser['email'];
+      _facebookUrl = businessUser['facebook_url'];
+      _instagramUrl = businessUser['instagram_url'];
+      _publication = businessUser['publication'];
+      _about = businessUser['about'];
+      _additionalNotes = businessUser['additional_notes'];
+      _tumblrUrl = businessUser['tumblr_url'];
+      _worthKnowing = businessUser['worth_knowing'];
+      _theGood = businessUser['theGood'];
+    });
   }
 
   Widget _buildEditProfile(BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-    String businessName = snapshot.data.documents[0]['business_name'].toString();
-    String email = snapshot.data.documents[0]['email'].toString();
-    String facebookUrl = snapshot.data.documents[0]['facebook_url'].toString();
-    String instagramUrl = snapshot.data.documents[0]['instagram_url'].toString();
-    String publication = snapshot.data.documents[0]['publication'].toString();
-    String about = snapshot.data.documents[0]['about'].toString();
-    String additionalNotes = snapshot.data.documents[0]['additional_notes'].toString();
-    String tumblrUrl = snapshot.data.documents[0]['tumblr_url'].toString();
-    String worthKnowing = snapshot.data.documents[0]['worth_knowing'].toString();
-    String theGood = snapshot.data.documents[0]['theGood'].toString();
-
-    return new ListView(
-      padding: EdgeInsets.zero,
-      children: <Widget>[
-        ListTile(
-          title: new Text('Edit Profile'),
-          
-        ),
-      ],
+    _getProfile();
+    return new Card(
+      child: TextFormField (
+        decoration: InputDecoration(
+        hintText: _businessName),
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
+    return new MaterialApp(
+      home: new Scaffold(
         appBar: AppBar(
           title: Text('Edit Profile'),
           backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
@@ -72,6 +88,7 @@ class _EditBusinessState extends State<EditBusiness> {
             );
           },
         ),
+      ),
     );
   }
 }
