@@ -178,6 +178,7 @@ class _FeedbackListState extends State<FeedbackList> {
         length: 2,
         child: Scaffold(
           appBar: AppBar(
+            iconTheme: IconThemeData(color: Colors.black),
             backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
             title: Text(
               title,
