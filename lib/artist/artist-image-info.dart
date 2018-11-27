@@ -1,14 +1,12 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 
 class ArtistImageInfo extends StatefulWidget{
-
     final File image;
     final String uid;
     final String fileName;
@@ -37,126 +35,70 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
   String artistId = "";
   String artistName = ""; //Prompt this
   String description = ""; //Prompt this
-  int uploadDate = 0;
 
-  int _state = 0;
-
+  int _progressState = 0;
   bool _didItWork = false;
-  bool done = false;
 
   bool correctTitle = true;
   bool correctName = true;
   bool correctDesc = true;
 
-  _setDate()
-  {
-    var now = new DateTime.now().millisecondsSinceEpoch;
-    uploadDate = now;
-  }
+  final int SUBMIT = 0;
+  final int INPROGRESS = 1;
+  final int SUCCESS = 2;
+  
 
-  Future<String> uploadFile() async {
+  Future<String> _handleUpload() async {
+    print('${widget.uid} ${widget.fileName}');
 
-    bool check = false;
+    String downloadUrl = await Authentication.uploadFile(widget.image, widget.uid, null, widget.fileName);
+    bool check = downloadUrl != null ? true : false;
 
-    StorageReference firebaseStorageRef =
-    FirebaseStorage.instance.ref().child('${widget.uid}/${widget.fileName}');
-    StorageUploadTask task = firebaseStorageRef.putFile(widget.image);
+    // If there exists a downloadUrl, set the state to the checkmark
+    if (check) {
+      setState(() {
+        _progressState = SUCCESS;
+      });
+      return downloadUrl;
 
-    downloadURL = await firebaseStorageRef.getDownloadURL();
-
-    if(downloadURL != null || downloadURL != "")
-    {
-        print("\n");
-        print("\n");
-        print("In task.iscomplete");
-        print("SUCCESS!!!!!!");
-        check = true;
-        print("\n");
-        print("\n");
-
-        print("--------------------\n");
-        print("In uploadFile\n");
-        print("${widget.uid}");
-        print("${widget.fileName}");
-        print("$downloadURL");
-        print("--------------------\n");
-    }
-    else{
-      print("\n");
-      print("\n");
-      print("In task.iscomplete");
-      print("FAIL");
-      print("\n");
-      print("\n");
-    }
-
-    setState(() {
-      location = downloadURL;
-      if(check)
-        {
-          done = true;
-          _state = 2;
-        }
-    });
-
-    return location;
-  }
-
-  Future _submit(bool value) async
-  {
-    try
-    {
-      await uploadFile();
-      await _confirm();
-
-      value = done;
-    }
-    catch(e){
-      print("\n");
-      print("\n");
-      print("In submit\nFAIL");
-      print("\n");
-      print("\n");
+    } else {
       _scaffoldState.currentState.showSnackBar(SnackBar(
         content: new Text(
-            'The databse is down, please try again later '),
+            'There was a problem with uploading, please try again.'),
         duration: Duration(seconds: 4),
       ));
+      setState(() {
+        _progressState = SUBMIT;
+      });
+      return null;
     }
+
   }
 
-  Future _confirm() async
-  {
-    var loginForm = form.currentState;
+  Future<bool> _postToArtCollection(bool value) async  {
+    String downloadUrl = await _handleUpload();
 
-    if(loginForm.validate())
-    {
-      loginForm.save();
+    if (downloadUrl == null) {
+      return false;
     }
 
-    _setDate();
+    await _confirm(downloadUrl);
+    return true;
+  }
 
-    Firestore.instance.collection('art').document()
-        .setData({ 'art_title': '$artTitle',
-                    'artist_id': '${widget.uid}',
-                    'artist_name': '$artistName',
-                    'description':'$description',
-                    'upload_date': uploadDate,
-                    'url':'$location'});
+  Future _confirm(String downloadUrl) async {
+    print('trying to store in art collection');
 
-    print("\n");
-    print("\n");
-    print("--------------------\n");
-    print("Confirmed:");
-    print("$artTitle");
-    print("${widget.uid}");
-    print("$artistName");
-    print("$description");
-    print("$uploadDate");
-    print("$location");
-    print("--------------------\n");
-    print("\n");
-    print("\n");
+    await Firestore.instance.collection('art').document().setData(
+      { 'art_title': artTitle,
+        'artist_id': '${widget.uid}',
+        'artist_name': artistName,
+        'description': description,
+        'upload_date': new DateTime.now().millisecondsSinceEpoch,
+        'url': downloadUrl
+      });
+
+    print('sucessfully stored in art collection');
   }
 
   @override
@@ -209,7 +151,7 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
 
 
     Widget setUpButtonChild() {
-      if (_state == 0) {
+      if (_progressState == SUBMIT) {
         return new Text(
           "Submit",
           style: const TextStyle(
@@ -217,7 +159,7 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
             fontSize: 16.0,
           ),
         );
-      } else if (_state == 1) {
+      } else if (_progressState == INPROGRESS) {
         return SizedBox(
           height: 36.0,
           width: 36.0,
@@ -226,14 +168,14 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
             valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
           ),
         );
-      } else if(_state == 2){
+      } else if(_progressState == SUCCESS){
         return Icon(Icons.check, color: Colors.white);
       } else{
         return Icon(Icons.close, color: Colors.white);
       }
     }
 
-    void animateButton() {
+    Future animateButton() async {
       double initialWidth = _globalKey.currentContext.size.width;
 
       _controller =
@@ -246,32 +188,38 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
         });
       _controller.forward();
 
-      _submit(_didItWork);
-
+      // Set circular progress bar while submitting the artwork
       setState(() {
-        _state = 1;
+        _progressState = INPROGRESS;
       });
 
-      if(_didItWork)
-        {
-          setState(() {
-            _state = 2;
-          });
-          print("\n");
-          print("\n");
-          print("In diditWork");
-          print("SUCCESS!!!!");
-          print("\n");
-          print("\n");
-        }
-        else{
-//          Timer(Duration(milliseconds: 3300), ()
-//          {
-//              setState(() {
-//                _state = 3;
-//              });
-            //});
-        }
+      _didItWork = await _postToArtCollection(_didItWork);
+
+      // If everything was successful, reset the state of the progress and pop
+      if(_didItWork) {
+        print("In _postToArtCollection");
+        print("SUCCESS!!!!");
+
+        setState(() {
+          _progressState = SUCCESS;
+        });
+
+        Timer(Duration(seconds: 1), () {
+          Navigator.of(context).pop('done');
+        });
+
+
+      } else {
+        print('Submitting to not work');
+        _scaffoldState.currentState.showSnackBar(SnackBar(
+          content: new Text(
+              'There was a problem with uploading, please try again.'),
+          duration: Duration(seconds: 4),
+        ));
+        setState(() {
+          _progressState = SUBMIT;
+        });
+      }
     }
 
     return new Scaffold(
@@ -336,19 +284,12 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
                   child: new RaisedButton(
                     padding: EdgeInsets.all(0.0),
                     child: setUpButtonChild(),
-                    onPressed: ()
-                    {
-                      setState(()
-                      {
-                        if(_validate())
-                          {
-                            if (_state == 0)
-                            {
-                              animateButton();
-                            }
-                          }
+                    onPressed: () async {
+                      if(_validate()) {
+                        if (_progressState == SUBMIT) {
+                          await animateButton();
                         }
-                      );
+                      }
                     },
                     elevation: 4.0,
                     color: Color.fromRGBO(255, 160, 0, 1.0),

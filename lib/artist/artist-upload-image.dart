@@ -147,19 +147,21 @@ class _ArtistUploadImageState extends State<ArtistUploadImage> {
                 color: imagePicked ? Color.fromRGBO(255, 160, 0, 1.0) : Colors.grey,
                 textColor: Colors.white,
                 elevation: 4.0,
-                onPressed: () {
-                  //setState(() {
-                    if(imagePicked == false)
-                      {
-                        return null;
-                      }
-                      else
-                        {
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => ArtistImageInfo(image:_current, uid: _uID, fileName:_baseName)));
-                        }
-//                  imagePicked ? null :
-//                  Navigator.push(context, MaterialPageRoute(builder: (context) => ArtistImageInfo(image:_current, uid:widget.uid, fileName:_baseName)));
-                //});
+                onPressed: () async {
+                  if (imagePicked == false) {
+                    return null;
+                  }
+                  else {
+                    final finishedUploading = await Navigator.push(context, MaterialPageRoute(builder: (context) => ArtistImageInfo(image:_current, uid: _uID, fileName:_baseName)));
+                    if (finishedUploading == 'done') {
+                      print('Finally finished uploading');
+
+                      // Reset the state of the current file to null, so that it won't show up after pop()
+                      setState(() {
+                        _current = null;
+                      });
+                    }
+                  }
                   },
                 minWidth: 200.0,
                 height: 50.0,
