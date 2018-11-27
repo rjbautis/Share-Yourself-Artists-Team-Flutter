@@ -46,7 +46,7 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
   final int SUBMIT = 0;
   final int INPROGRESS = 1;
   final int SUCCESS = 2;
-
+  
 
   Future<String> _handleUpload() async {
     print('${widget.uid} ${widget.fileName}');
