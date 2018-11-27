@@ -7,9 +7,9 @@ import 'package:share_yourself_artists_team_flutter/authentication/authenticatio
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 
 class ArtistImageInfo extends StatefulWidget{
-    final File image;
-    final String uid;
-    final String fileName;
+  final File image;
+  final String uid;
+  final String fileName;
 
   ArtistImageInfo({Key key, this.image, this.uid, this.fileName}) : super(key: key);
 

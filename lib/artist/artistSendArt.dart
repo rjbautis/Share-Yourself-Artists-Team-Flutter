@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 
-class SendArt extends StatefulWidget {
+class ArtistSendArt extends StatefulWidget {
   var snapshot;
   int index;
 
-  SendArt({@required this.snapshot, this.index});
+  ArtistSendArt({@required this.snapshot, this.index});
 
   @override
-  _SendArtState createState() => new _SendArtState();
+  _ArtistSendArtState createState() => new _ArtistSendArtState();
 }
 
-class _SendArtState extends State<SendArt> {
+class _ArtistSendArtState extends State<ArtistSendArt> {
   FocusNode _textFieldNode = new FocusNode();
   TextEditingController _controller = new TextEditingController();
   String comment;
