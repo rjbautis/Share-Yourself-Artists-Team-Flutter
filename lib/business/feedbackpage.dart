@@ -89,7 +89,8 @@ class _FeedbackPageState extends State<FeedbackPage> {
     return new Scaffold(
       appBar: AppBar(
         title: Text('Submit Feedback'),
-        backgroundColor: Colors.orangeAccent,
+        backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
+        iconTheme: IconThemeData(color: Colors.black),
       ),
       body: new Center(
         child: new ListView(children: <Widget>[
