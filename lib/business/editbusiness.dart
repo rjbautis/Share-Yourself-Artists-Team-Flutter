@@ -55,6 +55,7 @@ class _EditBusinessState extends State<EditBusiness> {
   }
 
   Widget _buildEditProfile(BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+    _getProfile();
     return new Card(
       child: TextFormField (
         decoration: InputDecoration(
