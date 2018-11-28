@@ -12,15 +12,12 @@ class EditBusiness extends StatefulWidget {
 class _EditBusinessState extends State<EditBusiness> {
   String _uid;
   String _businessName;
-  String _email;
-  String _about;
-  String _additionalNotes;
-  String _worthKnowing;
-  String _theGood;
   String _publication;
-  String _facebookUrl;
-  String _instagramUrl;
-  String _tumblrUrl;
+  String _followerCount;
+  String _website;
+  String _about;
+  String _worthKnowing;
+  String _additionalNotes;
 
   @override
   void initState() {
@@ -33,31 +30,81 @@ class _EditBusinessState extends State<EditBusiness> {
         _uid = uid;
       });
     });
-    _getProfile();
   }
 
-  Widget _buildEditProfile(
-      BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-    String businessName =
-        snapshot.data.documents[0]['business_name'].toString();
-    String email = snapshot.data.documents[0]['email'].toString();
-    String facebookUrl = snapshot.data.documents[0]['facebook_url'].toString();
-    String instagramUrl =
-        snapshot.data.documents[0]['instagram_url'].toString();
-    String publication = snapshot.data.documents[0]['publication'].toString();
-    String about = snapshot.data.documents[0]['about'].toString();
-    String additionalNotes =
-        snapshot.data.documents[0]['additional_notes'].toString();
-    String tumblrUrl = snapshot.data.documents[0]['tumblr_url'].toString();
-    String worthKnowing =
-        snapshot.data.documents[0]['worth_knowing'].toString();
-    String theGood = snapshot.data.documents[0]['theGood'].toString();
+  Future _getProfile(AsyncSnapshot<QuerySnapshot> snapshot) async {
+    setState(() {
+      _businessName = snapshot.data.documents[0]['business_name'].toString();
+      _publication = snapshot.data.documents[0]['publication'].toString();
+      _followerCount = snapshot.data.documents[0]['follower_count'].toString();
+      _website = snapshot.data.documents[0]['website'].toString();
+      _about = snapshot.data.documents[0]['about'].toString();
+      _worthKnowing = snapshot.data.documents[0]['worth_knowing'].toString();
+      _additionalNotes =
+          snapshot.data.documents[0]['additional_notes'].toString();
+    });
+  }
 
-    return new Card(
-      child: TextFormField(
-        decoration: InputDecoration(hintText: email),
+  Widget _buildProfile(AsyncSnapshot<QuerySnapshot> snapshot) {
+    _getProfile(snapshot);
+
+    return new Column(children: <Widget>[
+      TextFormField(
+        initialValue: _businessName,
+        decoration: InputDecoration(labelText: 'Business Name'),
+        onSaved: (input) => setState(() {
+              _businessName = input;
+            }),
       ),
-    );
+      TextFormField(
+        initialValue: _publication,
+        decoration: InputDecoration(labelText: 'Publication'),
+        onSaved: (input) => _publication = input,
+      ),
+      TextFormField(
+        initialValue: _followerCount,
+        decoration: InputDecoration(labelText: 'Follower Count'),
+        onSaved: (input) => _followerCount = input,
+      ),
+      TextFormField(
+        initialValue: _website,
+        decoration: InputDecoration(labelText: 'Website'),
+        onSaved: (input) => _website = input,
+      ),
+      TextFormField(
+        initialValue: _about,
+        maxLines: 8,
+        decoration: InputDecoration(labelText: 'About'),
+        onSaved: (input) => _about = input,
+      ),
+      TextFormField(
+        initialValue: _worthKnowing,
+        maxLines: 3,
+        decoration: InputDecoration(labelText: 'Worth Knowing'),
+        onSaved: (input) => _worthKnowing = input,
+      ),
+      TextFormField(
+        initialValue: _additionalNotes,
+        maxLines: 3,
+        decoration: InputDecoration(labelText: 'Additional Notes'),
+        onSaved: (input) => _additionalNotes = input,
+      ),
+    ]);
+  }
+
+  Future _updateProfile() async {
+    await Firestore.instance.collection('users').document(_uid).updateData({
+      'business_name': _businessName,
+      'publication': _publication,
+      'follower_count': _followerCount,
+      'website': _website,
+      'about': _about,
+      'worth_knowing': _worthKnowing,
+      'additional_notes': _additionalNotes
+    });
+
+    print('sucessfully updated business profile');
+    print(_businessName);
   }
 
   @override
@@ -66,20 +113,30 @@ class _EditBusinessState extends State<EditBusiness> {
       appBar: AppBar(
           title: Text('Edit Profile'),
           backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
-          iconTheme: IconThemeData(color: Colors.black)),
+          iconTheme: IconThemeData(color: Colors.black),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.check),
+              onPressed: () {
+                _updateProfile();
+                Navigator.pop(context);
+              },
+            ),
+          ]),
       body: new StreamBuilder(
         stream: Firestore.instance
             .collection('users')
-            .where('userId', isEqualTo: _uid)
+            .where('userId', isEqualTo: '${_uid}')
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (!snapshot.hasData) return new Text('Loading...');
           return new Container(
-              child: ListView.builder(
-            itemBuilder: (BuildContext ctxt, int index) =>
-                _buildEditProfile(context, snapshot),
-            itemCount: 1,
-          ));
+            child: ListView.builder(
+              itemBuilder: (BuildContext ctxt, int index) =>
+                  _buildProfile(snapshot),
+              itemCount: 1,
+            ),
+          );
         },
       ),
     );
