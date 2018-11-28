@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
 import 'package:share_yourself_artists_team_flutter/artist/artistUploadImage.dart';
-import 'package:share_yourself_artists_team_flutter/artist/artistSendArt.dart';
+import 'package:share_yourself_artists_team_flutter/artist/send-art.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 
 class ArtistDash extends StatefulWidget {
@@ -44,7 +44,7 @@ class _ArtistDashState extends State<ArtistDash> {
     Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => ArtistSendArt(
+          builder: (context) => SendArt(
             snapshot: snapshot,
             index: index,
           )),
