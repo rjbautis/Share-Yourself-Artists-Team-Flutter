@@ -49,9 +49,11 @@ class _SendArtState extends State<SendArt> {
     );
 
     setState(() {
-      _submitEnabled = true;
-      _busName = businessInfo[0];
-      _bUID = businessInfo[1];
+      if (businessInfo != null) {
+        _busName = businessInfo[0];
+        _bUID = businessInfo[1];
+        _submitEnabled = true;
+      }
     });
   }
 

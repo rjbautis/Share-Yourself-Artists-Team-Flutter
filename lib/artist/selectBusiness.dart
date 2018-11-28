@@ -24,6 +24,7 @@ class _BusinessSelectState extends State<BusinessSelect> {
       BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot, int index) {
     String name = snapshot.data.documents[index]['business_name'].toString();
     String uid = snapshot.data.documents[index]['userId'].toString();
+    String theGood = snapshot.data.documents[index]['the_good'].toString();
 
     if (!name.toLowerCase().contains(_searchTerm.toLowerCase())) {
       return null;
@@ -31,7 +32,7 @@ class _BusinessSelectState extends State<BusinessSelect> {
 
     return new ListTile(
       title: Text(name),
-      subtitle: Text(uid),
+      subtitle: Text(theGood),
       onTap: () {
         List<String> selectedBus = new List(2);
         selectedBus[0] = name;
