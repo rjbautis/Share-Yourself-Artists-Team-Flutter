@@ -56,6 +56,8 @@ class _ArtistDashState extends State<ArtistDash> {
         snapshot.data.documents[index]['description'].toString();
     int uploadDate = snapshot.data.documents[index]['upload_date'];
 
+    print("")
+
     DateTime upload =
         DateTime.fromMillisecondsSinceEpoch(uploadDate, isUtc: false);
     String dateString = upload.month.toString() +
