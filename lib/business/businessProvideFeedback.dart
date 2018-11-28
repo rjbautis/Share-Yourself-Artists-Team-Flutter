@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class FeedbackPage extends StatefulWidget {
+class BusinessProvideFeedback extends StatefulWidget {
   var artInfo;
   AsyncSnapshot<QuerySnapshot> snapshot;
   final index;
 
-  FeedbackPage({@required this.artInfo, this.snapshot, this.index});
+  BusinessProvideFeedback({@required this.artInfo, this.snapshot, this.index});
 
   @override
-  _FeedbackPageState createState() => new _FeedbackPageState();
+  _BusinessProvideFeedbackState createState() => new _BusinessProvideFeedbackState();
 }
 
-class _FeedbackPageState extends State<FeedbackPage> {
+class _BusinessProvideFeedbackState extends State<BusinessProvideFeedback> {
   FocusNode _textFieldNode = new FocusNode();
   TextEditingController _controller = new TextEditingController();
   String comment;

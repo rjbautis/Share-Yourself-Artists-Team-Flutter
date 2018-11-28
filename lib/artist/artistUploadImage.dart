@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:share_yourself_artists_team_flutter/artist/artist-image-info.dart';
+import 'package:share_yourself_artists_team_flutter/artist/artistImageInfo.dart';
 import 'package:path/path.dart' as path;
 import 'package:path/path.dart' as path;
 import 'package:firebase_storage/firebase_storage.dart';
