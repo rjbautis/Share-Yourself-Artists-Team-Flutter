@@ -13,14 +13,14 @@ class _EditBusinessState extends State<EditBusiness> {
   String _uid;
   String _businessName;
   String _email;
-  String _facebookUrl;
-  String _instagramUrl;
-  String _publication;
   String _about;
   String _additionalNotes;
-  String _tumblrUrl;
   String _worthKnowing;
   String _theGood;
+  String _publication;
+  String _facebookUrl;
+  String _instagramUrl;
+  String _tumblrUrl;
 
   @override
   void initState() {
@@ -33,7 +33,6 @@ class _EditBusinessState extends State<EditBusiness> {
         _uid = uid;
       });
     });
-
     _getProfile();
   }
 
