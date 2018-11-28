@@ -9,19 +9,20 @@ class ArtistSignUpPage extends StatefulWidget {
 
 class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
   static GlobalKey<FormState> _form = new GlobalKey<FormState>();
-  static GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey<ScaffoldState>();
+  static GlobalKey<ScaffoldState> _scaffoldState =
+      new GlobalKey<ScaffoldState>();
 
   Future _handleCreation(Map<String, String> credentials) async {
     String uid = await Authentication.createArtistAccount(credentials);
     if (uid != '') {
       await savePreferences('artist', uid);
       print('Created user is $uid');
-      Navigator.of(context).pushNamedAndRemoveUntil('/artist', (Route<dynamic> route) => false);
-
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil('/artist', (Route<dynamic> route) => false);
     } else {
       _scaffoldState.currentState.showSnackBar(SnackBar(
-        content: new Text(
-            'The email address is already in use by another account.'),
+        content:
+            new Text('The email address is already in use by another account.'),
         duration: Duration(seconds: 4),
       ));
     }
@@ -31,7 +32,7 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    var credentials =  {
+    var credentials = {
       'name': '',
       'email': '',
       'password': '',
@@ -119,8 +120,8 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
             child: new MaterialButton(
               color: Colors.black,
               onPressed: () => Navigator.of(context).pop(),
-              child: new Text('Cancel',
-                  style: new TextStyle(color: Colors.white)),
+              child:
+                  new Text('Cancel', style: new TextStyle(color: Colors.white)),
             ),
           ),
           ButtonTheme(
@@ -133,8 +134,8 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
                   await _handleCreation(credentials);
                 }
               },
-              child: new Text('Done',
-                  style: new TextStyle(color: Colors.black)),
+              child:
+                  new Text('Done', style: new TextStyle(color: Colors.black)),
             ),
           )
         ],

@@ -1,12 +1,9 @@
-import 'dart:async';
 import 'dart:io';
 
-import 'package:share_yourself_artists_team_flutter/artist/artistImageInfo.dart';
-import 'package:path/path.dart' as path;
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
+import 'package:path/path.dart' as path;
+import 'package:share_yourself_artists_team_flutter/artist/artistImageInfo.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 
 class ArtistUploadImage extends StatefulWidget {
@@ -26,15 +23,13 @@ class _ArtistUploadImageState extends State<ArtistUploadImage> {
   bool imagePicked = false;
 
   @override
-  void initState()
-  {
+  void initState() {
     super.initState();
 
     loadUid().then((uid) {
       _uID = uid;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -117,15 +112,22 @@ class _ArtistUploadImageState extends State<ArtistUploadImage> {
               child: new MaterialButton(
                 //child: const Text('Upload to Database'),
                 child: const Text('Next'),
-                color: imagePicked ? Color.fromRGBO(255, 160, 0, 1.0) : Colors.grey,
+                color: imagePicked
+                    ? Color.fromRGBO(255, 160, 0, 1.0)
+                    : Colors.grey,
                 textColor: Colors.white,
                 elevation: 4.0,
                 onPressed: () async {
                   if (imagePicked == false) {
                     return null;
-                  }
-                  else {
-                    final finishedUploading = await Navigator.push(context, MaterialPageRoute(builder: (context) => ArtistImageInfo(image:_current, uid: _uID, fileName:_baseName)));
+                  } else {
+                    final finishedUploading = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ArtistImageInfo(
+                                image: _current,
+                                uid: _uID,
+                                fileName: _baseName)));
                     if (finishedUploading == 'done') {
                       print('Finally finished uploading');
 
@@ -135,7 +137,7 @@ class _ArtistUploadImageState extends State<ArtistUploadImage> {
                       });
                     }
                   }
-                  },
+                },
                 minWidth: 200.0,
                 height: 50.0,
               ),

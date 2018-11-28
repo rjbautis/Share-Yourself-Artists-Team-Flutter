@@ -10,7 +10,8 @@ final routes = {
   '/artist': (BuildContext context) => new ArtistDash(),
   '/artistSignUp': (BuildContext context) => new ArtistSignUpPage(),
   '/business': (BuildContext context) => new BusinessDash(),
-  '/businessSignUpFirst': (BuildContext context) => new BusinessSignUpFirstPage(),
+  '/businessSignUpFirst': (BuildContext context) =>
+      new BusinessSignUpFirstPage(),
   '/forgotPassword': (BuildContext context) => new ForgotPasswordPage(),
   '/': (BuildContext context) => new LoginPage()
 };

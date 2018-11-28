@@ -1,23 +1,23 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:share_yourself_artists_team_flutter/authentication/businessSignUp/businessSignUpSecondPage.dart';
 import 'package:image_picker/image_picker.dart';
-
+import 'package:share_yourself_artists_team_flutter/authentication/businessSignUp/businessSignUpSecondPage.dart';
 
 class BusinessSignUpFirstPage extends StatefulWidget {
   @override
-  _BusinessSignUpFirstPageState createState() => _BusinessSignUpFirstPageState();
+  _BusinessSignUpFirstPageState createState() =>
+      _BusinessSignUpFirstPageState();
 }
 
 class _BusinessSignUpFirstPageState extends State<BusinessSignUpFirstPage> {
   static GlobalKey<FormState> _form = new GlobalKey<FormState>();
-  static GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey<ScaffoldState>();
+  static GlobalKey<ScaffoldState> _scaffoldState =
+      new GlobalKey<ScaffoldState>();
   File _current;
   File galleryFile;
 
   bool imagePicked = false;
-
 
   final _confirmPassword = TextEditingController();
 
@@ -35,8 +35,7 @@ class _BusinessSignUpFirstPageState extends State<BusinessSignUpFirstPage> {
 
   @override
   Widget build(BuildContext context) {
-
-    var credentials =  {
+    var credentials = {
       'name': '',
       'email': '',
       'password': '',
@@ -117,8 +116,8 @@ class _BusinessSignUpFirstPageState extends State<BusinessSignUpFirstPage> {
             child: new MaterialButton(
               color: Colors.black,
               onPressed: () => Navigator.of(context).pop(),
-              child: new Text('Cancel',
-                  style: new TextStyle(color: Colors.white)),
+              child:
+                  new Text('Cancel', style: new TextStyle(color: Colors.white)),
             ),
           ),
           Padding(
@@ -131,11 +130,17 @@ class _BusinessSignUpFirstPageState extends State<BusinessSignUpFirstPage> {
               color: Colors.white,
               onPressed: () {
                 if (_validate()) {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => BusinessSignUpSecondPage(image: _current, credentials: credentials,)));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => BusinessSignUpSecondPage(
+                                image: _current,
+                                credentials: credentials,
+                              )));
                 }
               },
-              child: new Text('Next',
-                  style: new TextStyle(color: Colors.black)),
+              child:
+                  new Text('Next', style: new TextStyle(color: Colors.black)),
             ),
           ),
         ],
@@ -192,7 +197,7 @@ class _BusinessSignUpFirstPageState extends State<BusinessSignUpFirstPage> {
                 Padding(
                   padding: EdgeInsets.all(5.0),
                 ),
-                Form (
+                Form(
                   key: _form,
                   child: Column(
                     children: <Widget>[
@@ -201,7 +206,9 @@ class _BusinessSignUpFirstPageState extends State<BusinessSignUpFirstPage> {
                       password,
                       confirmPassword,
                       uploadLogoButton,
-                      imagePicked ? displaySelectedFile(_current) : new Container(),
+                      imagePicked
+                          ? displaySelectedFile(_current)
+                          : new Container(),
                     ],
                   ),
                 ),

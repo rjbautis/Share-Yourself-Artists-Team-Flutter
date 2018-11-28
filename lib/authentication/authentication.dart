@@ -3,10 +3,9 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 //import 'package:flutter_facebook_login/flutter_facebook_login.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-
 
 class Authentication {
   /// Returns boolean value if the user had previously signed in
@@ -56,7 +55,8 @@ class Authentication {
     final GoogleSignIn _googleSignIn = GoogleSignIn();
 
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
 
     final FirebaseUser user = await _fireBaseAuth.signInWithGoogle(
         idToken: googleAuth.idToken, accessToken: googleAuth.idToken);
@@ -94,7 +94,7 @@ class Authentication {
     print('the uid is $uid');
 
     final DocumentReference reference =
-    Firestore.instance.collection('users').document(uid);
+        Firestore.instance.collection('users').document(uid);
     DocumentSnapshot snapshot = await reference.get();
 
     if (snapshot.exists) {
@@ -119,13 +119,14 @@ class Authentication {
     await _fireBaseAuth.sendPasswordResetEmail(email: email);
   }
 
-  static Future<String> createArtistAccount(Map<String, String> credentials) async {
+  static Future<String> createArtistAccount(
+      Map<String, String> credentials) async {
     final FirebaseAuth _fireBaseAuth = FirebaseAuth.instance;
     FirebaseUser user;
 
     try {
-      user = await _fireBaseAuth
-          .createUserWithEmailAndPassword(email: credentials['email'], password: credentials['password']);
+      user = await _fireBaseAuth.createUserWithEmailAndPassword(
+          email: credentials['email'], password: credentials['password']);
     } catch (e) {
       print('Error when creating user: ${e.toString()}');
       return '';
@@ -151,20 +152,24 @@ class Authentication {
 
       final filteredCredentials = _filterData(data);
 
-      await Firestore.instance.collection('users').document(user.uid).setData(filteredCredentials);
+      await Firestore.instance
+          .collection('users')
+          .document(user.uid)
+          .setData(filteredCredentials);
       print('Finished creating user document for ${user.uid}');
     }
 
     return user.uid;
   }
 
-  static Future<String> createBusinessAccount(Map<String, String> credentials, File image) async {
+  static Future<String> createBusinessAccount(
+      Map<String, String> credentials, File image) async {
     final FirebaseAuth _fireBaseAuth = FirebaseAuth.instance;
     FirebaseUser user;
 
     try {
-      user = await _fireBaseAuth
-          .createUserWithEmailAndPassword(email: credentials['email'], password: credentials['password']);
+      user = await _fireBaseAuth.createUserWithEmailAndPassword(
+          email: credentials['email'], password: credentials['password']);
     } catch (e) {
       print('Error when creating user: ${e.toString()}');
       return '';
@@ -201,7 +206,10 @@ class Authentication {
 
       print(filteredCredentials);
 
-      await Firestore.instance.collection('users').document(user.uid).setData(filteredCredentials);
+      await Firestore.instance
+          .collection('users')
+          .document(user.uid)
+          .setData(filteredCredentials);
       print('Finished creating user document for ${user.uid}');
     }
 
@@ -211,20 +219,20 @@ class Authentication {
   // Filter out all keys with empty string (i.e. optional)
   static Map<String, Object> _filterData(Map<String, Object> data) {
     return new Map.fromIterable(
-        data.keys.where(
-                (key) =>  data[key].toString() != ''),
-        value: (key) => data[key]
-    );
+        data.keys.where((key) => data[key].toString() != ''),
+        value: (key) => data[key]);
   }
 
-  static Future<String> uploadFile(File image, String name, String dir, String pathLocation) async {
+  static Future<String> uploadFile(
+      File image, String name, String dir, String pathLocation) async {
     String path;
     if (dir != null) {
       path = '$name/$dir/$pathLocation';
     } else {
       path = '$name/$pathLocation';
     }
-    StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child(path);
+    StorageReference firebaseStorageRef =
+        FirebaseStorage.instance.ref().child(path);
     StorageUploadTask task = firebaseStorageRef.putFile(image);
 
     StorageTaskSnapshot storageTaskSnapshot = await task.onComplete;
@@ -237,15 +245,12 @@ class Authentication {
 
     String downloadURL = await storageTaskSnapshot.ref.getDownloadURL();
 
-    if(downloadURL != null || downloadURL != "")
-    {
+    if (downloadURL != null || downloadURL != "") {
       print("Successfully uploaded the file");
       return downloadURL;
-    }
-    else{
+    } else {
       print("Failed to upload the file");
       return null;
     }
   }
-
 }

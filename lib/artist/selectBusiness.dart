@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 class BusinessSelect extends StatefulWidget {
   BusinessSelect();
@@ -9,10 +9,10 @@ class BusinessSelect extends StatefulWidget {
 }
 
 class _BusinessSelectState extends State<BusinessSelect> {
+  TextEditingController _controller = new TextEditingController();
   double _screenWidth;
   double _screenHeight;
   bool _cardView = false;
-  String _uid;
   String _searchTerm = "";
 
   @override
@@ -25,15 +25,28 @@ class _BusinessSelectState extends State<BusinessSelect> {
     String name = snapshot.data.documents[index]['business_name'].toString();
     String uid = snapshot.data.documents[index]['userId'].toString();
 
+    if (!name.toLowerCase().contains(_searchTerm.toLowerCase())) {
+      return null;
+    }
+
     return new ListTile(
       title: Text(name),
       subtitle: Text(uid),
       onTap: () {
-        setState(() {
-          _uid = uid;
-        });
+        List<String> selectedBus = new List(2);
+        selectedBus[0] = name;
+        selectedBus[1] = uid;
+        Navigator.of(context).pop(selectedBus);
       },
     );
+  }
+
+  void _search() {
+    setState(() {
+      _searchTerm = _controller.text.toLowerCase();
+    });
+
+    //build(context);
   }
 
   @override
@@ -41,6 +54,7 @@ class _BusinessSelectState extends State<BusinessSelect> {
     final title = 'Select a Business';
     _screenWidth = MediaQuery.of(context).size.width;
     _screenHeight = MediaQuery.of(context).size.height;
+    _controller.addListener(_search);
 
     return Scaffold(
       appBar: AppBar(
@@ -56,25 +70,24 @@ class _BusinessSelectState extends State<BusinessSelect> {
       body: new Container(
         width: _screenWidth,
         height: _screenHeight,
-        child: new Column(
+        child: new ListView(
           children: <Widget>[
-            new Container(
-              width: _screenWidth * .90,
+            /*new Container(
+              width: _screenWidth * .80,
               child: new TextFormField(
-                onSaved: (input) => _searchTerm = input,
+                controller: _controller,
                 textInputAction: TextInputAction.done,
                 decoration: InputDecoration(
                   hintText: '  Search...',
                 ),
               ),
-            ),
+            ),*/
             new Container(
-              height: _screenHeight - 123,
+              height: _screenHeight, // - 123,
               child: new StreamBuilder(
                 stream: Firestore.instance
                     .collection("users")
                     .where("role", isEqualTo: "business")
-                    //.where("business_name".toLowerCase().compareTo(_searchTerm).toString(), isEqualTo: 0)
                     .snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {

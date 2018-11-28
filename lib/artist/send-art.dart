@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:share_yourself_artists_team_flutter/artist/selectBusiness.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SendArt extends StatefulWidget {
   var snapshot;
@@ -20,6 +17,7 @@ class _SendArtState extends State<SendArt> {
   String comment;
   bool _submitEnabled = false;
   String _bUID = 'n/a';
+  String _busName = 'n/a';
 
   String artImage;
   String artTitle;
@@ -31,29 +29,34 @@ class _SendArtState extends State<SendArt> {
     super.initState();
     setState(() {
       artImage = widget.snapshot.data.documents[widget.index]['url'].toString();
-      artTitle = widget.snapshot.data.documents[widget.index]['art_title'].toString();
-      artDescription = widget.snapshot.data.documents[widget.index]['description'].toString();
+      artTitle =
+          widget.snapshot.data.documents[widget.index]['art_title'].toString();
+      artDescription = widget
+          .snapshot.data.documents[widget.index]['description']
+          .toString();
     });
   }
 
   void _submitArtwork() {
     /// TODO Submit the art to a business
+    Navigator.pop(context);
   }
 
-  void _navBusiness() {
-    Navigator.push(
+  Future _navBusiness() async {
+    final businessInfo = await Navigator.push(
       context,
-      MaterialPageRoute(
-          builder: (context) => BusinessSelect(
-
-          )),
+      MaterialPageRoute(builder: (context) => BusinessSelect()),
     );
-  }
 
+    setState(() {
+      _submitEnabled = true;
+      _busName = businessInfo[0];
+      _bUID = businessInfo[1];
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-
     return new Scaffold(
       appBar: AppBar(
         title: Text('Send to Business'),
@@ -75,25 +78,26 @@ class _SendArtState extends State<SendArt> {
                 ),
               ),
               new Container(
-                  padding: EdgeInsets.fromLTRB(5.0, 0.0, 5.0, 5.0),
-                  alignment: FractionalOffset(.15, .85),
-                  child: new Text(
-                    artTitle + " - " + artDescription,
-                    textAlign: TextAlign.left,
-                    textScaleFactor: 1.5,
-                    //style: TextStyle(fontStyle: FontStyle.italic),
-                  ),
+                padding: EdgeInsets.fromLTRB(5.0, 0.0, 5.0, 5.0),
+                alignment: FractionalOffset(.15, .85),
+                child: new Text(
+                  artTitle + " - " + artDescription,
+                  textAlign: TextAlign.left,
+                  textScaleFactor: 1.5,
+                  //style: TextStyle(fontStyle: FontStyle.italic),
+                ),
               ),
-              new Padding(padding: EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0)),
+              new Padding(padding: EdgeInsets.fromLTRB(5.0, 30.0, 0.0, 0.0)),
               new Container(
-                /// TODO Some way to select a business
-                width:  MediaQuery.of(context).size.width * .75,
+                width: MediaQuery.of(context).size.width * .75,
                 height: MediaQuery.of(context).size.width * .08,
                 child: new OutlineButton(
                   splashColor: Colors.deepOrangeAccent,
                   textColor: Colors.deepOrangeAccent,
                   child: new Text('Select a Business'),
-                  onPressed: () { _navBusiness(); },
+                  onPressed: () async {
+                    await _navBusiness();
+                  },
                   borderSide: new BorderSide(
                     color: Colors.deepOrangeAccent,
                   ),
@@ -101,9 +105,9 @@ class _SendArtState extends State<SendArt> {
               ),
               new Padding(padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0)),
               new Text(
-                'Selected: ' + _bUID,
+                'Sent to: ' + _busName,
               ),
-              new Padding(padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0)),
+              new Padding(padding: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0)),
               new Container(
                 width: MediaQuery.of(context).size.width * .75,
                 height: MediaQuery.of(context).size.width * .08,
@@ -113,7 +117,9 @@ class _SendArtState extends State<SendArt> {
                   textColor:
                       _submitEnabled ? Colors.deepOrangeAccent : Colors.grey,
                   child: new Text('Submit Artwork'),
-                  onPressed: () { _submitArtwork(); },
+                  onPressed: () {
+                    _submitArtwork();
+                  },
                   borderSide: new BorderSide(
                     color:
                         _submitEnabled ? Colors.deepOrangeAccent : Colors.grey,

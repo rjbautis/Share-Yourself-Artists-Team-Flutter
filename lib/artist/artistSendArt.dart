@@ -28,8 +28,11 @@ class _ArtistSendArtState extends State<ArtistSendArt> {
     super.initState();
     setState(() {
       artImage = widget.snapshot.data.documents[widget.index]['url'].toString();
-      artTitle = widget.snapshot.data.documents[widget.index]['art_title'].toString();
-      artDescription = widget.snapshot.data.documents[widget.index]['description'].toString();
+      artTitle =
+          widget.snapshot.data.documents[widget.index]['art_title'].toString();
+      artDescription = widget
+          .snapshot.data.documents[widget.index]['description']
+          .toString();
     });
   }
 
@@ -48,8 +51,8 @@ class _ArtistSendArtState extends State<ArtistSendArt> {
     });
   }
 
-
-  final commentBar = SnackBar(content: Text('Please write a longer response. (min. 50 characters)'));
+  final commentBar = SnackBar(
+      content: Text('Please write a longer response. (min. 50 characters)'));
 
   void onEditComplete() {
     comment = _controller.text;
@@ -93,6 +96,7 @@ class _ArtistSendArtState extends State<ArtistSendArt> {
                   )),
               new Container(
                 width: MediaQuery.of(context).size.width * .75,
+
                 /// TODO Some way to select a business
               ),
               new Padding(padding: EdgeInsets.fromLTRB(5.0, 0.0, 0.0, 0.0)),
