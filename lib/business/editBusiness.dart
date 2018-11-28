@@ -13,14 +13,14 @@ class _EditBusinessState extends State<EditBusiness> {
   String _uid;
   String _businessName;
   String _email;
-  String _facebookUrl;
-  String _instagramUrl;
-  String _publication;
   String _about;
   String _additionalNotes;
-  String _tumblrUrl;
   String _worthKnowing;
   String _theGood;
+  String _publication;
+  String _facebookUrl;
+  String _instagramUrl;
+  String _tumblrUrl;
 
   @override
   void initState() {
@@ -33,12 +33,12 @@ class _EditBusinessState extends State<EditBusiness> {
         _uid = uid;
       });
     });
-
     _getProfile();
   }
 
   Future _getProfile() async {
-    DocumentSnapshot businessUser = await Firestore.instance.collection('users').document(_uid).get();
+    DocumentSnapshot businessUser =
+        await Firestore.instance.collection('users').document(_uid).get();
 
     setState(() {
       _businessName = businessUser['business_name'];
@@ -54,41 +54,51 @@ class _EditBusinessState extends State<EditBusiness> {
     });
   }
 
-  Widget _buildEditProfile(BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-    _getProfile();
-    return new Card(
-      child: TextFormField (
-        decoration: InputDecoration(
-        hintText: _businessName),
-      ),
-    );
+  void _updateProfile() {
+
   }
 
   @override
   Widget build(BuildContext context) {
-    return new MaterialApp(
-      home: new Scaffold(
-        appBar: AppBar(
+    return new Scaffold(
+      appBar: AppBar(
           title: Text('Edit Profile'),
           backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
-          iconTheme: IconThemeData(color: Colors.black)
-        ),
-        body: new StreamBuilder(
-          stream: Firestore.instance.collection('users')
-              .where('userId', isEqualTo: _uid)
-              .snapshots(),
-          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (!snapshot.hasData) return new Text('Loading...');
-            return new Container(
-              child: ListView.builder(
-                itemBuilder: (BuildContext ctxt, int index) =>
-                    _buildEditProfile(context, snapshot),
-                itemCount: 1,
-              )
-            );
-          },
-        ),
+          iconTheme: IconThemeData(color: Colors.black),
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.check),
+              onPressed: () {
+                _updateProfile();
+                Navigator.pop(context);
+              },
+            ),
+          ]
       ),
+      body: new Column(children: <Widget>[
+        TextFormField(
+          initialValue: _businessName,
+          decoration: InputDecoration(labelText: 'Business Name'),
+          onSaved: (input) => _businessName = input,
+        ),
+        TextFormField(
+          initialValue: _email,
+          decoration: InputDecoration(labelText: 'Email'),
+          onSaved: (input) => _email = input,
+        ),
+        TextFormField(
+          initialValue: _about,
+          maxLines: 8,
+          decoration: InputDecoration(labelText: 'About'),
+          onSaved: (input) => _about = input,
+        ),
+        TextFormField(
+          initialValue: _additionalNotes,
+          maxLines: 3,
+          decoration: InputDecoration(labelText: 'Additional Notes'),
+          onSaved: (input) => _additionalNotes = input,
+        ),
+      ]),
     );
   }
 }
