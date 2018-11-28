@@ -1,23 +1,25 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 
-class ArtistImageInfo extends StatefulWidget{
+class ArtistImageInfo extends StatefulWidget {
   final File image;
   final String uid;
   final String fileName;
 
-  ArtistImageInfo({Key key, this.image, this.uid, this.fileName}) : super(key: key);
+  ArtistImageInfo({Key key, this.image, this.uid, this.fileName})
+      : super(key: key);
 
   @override
   _ArtistImageInfoState createState() => _ArtistImageInfoState();
 }
 
-class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderStateMixin{
+class _ArtistImageInfoState extends State<ArtistImageInfo>
+    with TickerProviderStateMixin {
   static GlobalKey<FormState> form = new GlobalKey<FormState>();
   static GlobalKey _globalKey = new GlobalKey();
   GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey<ScaffoldState>();
@@ -46,12 +48,12 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
   final int SUBMIT = 0;
   final int INPROGRESS = 1;
   final int SUCCESS = 2;
-  
 
   Future<String> _handleUpload() async {
     print('${widget.uid} ${widget.fileName}');
 
-    String downloadUrl = await Authentication.uploadFile(widget.image, widget.uid, null, widget.fileName);
+    String downloadUrl = await Authentication.uploadFile(
+        widget.image, widget.uid, null, widget.fileName);
     bool check = downloadUrl != null ? true : false;
 
     // If there exists a downloadUrl, set the state to the checkmark
@@ -60,11 +62,10 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
         _progressState = SUCCESS;
       });
       return downloadUrl;
-
     } else {
       _scaffoldState.currentState.showSnackBar(SnackBar(
-        content: new Text(
-            'There was a problem with uploading, please try again.'),
+        content:
+            new Text('There was a problem with uploading, please try again.'),
         duration: Duration(seconds: 4),
       ));
       setState(() {
@@ -72,10 +73,9 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
       });
       return null;
     }
-
   }
 
-  Future<bool> _postToArtCollection(bool value) async  {
+  Future<bool> _postToArtCollection(bool value) async {
     String downloadUrl = await _handleUpload();
 
     if (downloadUrl == null) {
@@ -89,14 +89,14 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
   Future _confirm(String downloadUrl) async {
     print('trying to store in art collection');
 
-    await Firestore.instance.collection('art').document().setData(
-      { 'art_title': artTitle,
-        'artist_id': '${widget.uid}',
-        'artist_name': artistName,
-        'description': description,
-        'upload_date': new DateTime.now().millisecondsSinceEpoch,
-        'url': downloadUrl
-      });
+    await Firestore.instance.collection('art').document().setData({
+      'art_title': artTitle,
+      'artist_id': '${widget.uid}',
+      'artist_name': artistName,
+      'description': description,
+      'upload_date': new DateTime.now().millisecondsSinceEpoch,
+      'url': downloadUrl
+    });
 
     print('sucessfully stored in art collection');
   }
@@ -109,7 +109,6 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
 
   @override
   Widget build(BuildContext context) {
-
     bool _validate() {
       var loginForm = form.currentState;
 
@@ -123,7 +122,7 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
     Widget getArtTitle = TextFormField(
       decoration: new InputDecoration(labelText: "Artist Title"),
       keyboardType: TextInputType.text,
-      maxLines:1,
+      maxLines: 1,
       validator: (input) {
         if (input.isEmpty) {
           return "Title is required.";
@@ -136,7 +135,7 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
     Widget getArtistName = TextFormField(
       decoration: new InputDecoration(labelText: "Artist Name"),
       keyboardType: TextInputType.text,
-      maxLines:1,
+      maxLines: 1,
       validator: (input) => input.isEmpty ? "Artist name is required." : null,
       onSaved: (input) => artistName = input,
     );
@@ -148,7 +147,6 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
       validator: (input) => input.isEmpty ? "Description is required." : null,
       onSaved: (input) => description = input,
     );
-
 
     Widget setUpButtonChild() {
       if (_progressState == SUBMIT) {
@@ -168,9 +166,9 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
             valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
           ),
         );
-      } else if(_progressState == SUCCESS){
+      } else if (_progressState == SUCCESS) {
         return Icon(Icons.check, color: Colors.white);
-      } else{
+      } else {
         return Icon(Icons.close, color: Colors.white);
       }
     }
@@ -178,8 +176,8 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
     Future animateButton() async {
       double initialWidth = _globalKey.currentContext.size.width;
 
-      _controller =
-          AnimationController(duration: Duration(milliseconds: 300), vsync: this);
+      _controller = AnimationController(
+          duration: Duration(milliseconds: 300), vsync: this);
       _animation = Tween(begin: 0.0, end: 1.0).animate(_controller)
         ..addListener(() {
           setState(() {
@@ -196,7 +194,7 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
       _didItWork = await _postToArtCollection(_didItWork);
 
       // If everything was successful, reset the state of the progress and pop
-      if(_didItWork) {
+      if (_didItWork) {
         print("In _postToArtCollection");
         print("SUCCESS!!!!");
 
@@ -207,13 +205,11 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
         Timer(Duration(seconds: 1), () {
           Navigator.of(context).pop('done');
         });
-
-
       } else {
         print('Submitting to not work');
         _scaffoldState.currentState.showSnackBar(SnackBar(
-          content: new Text(
-              'There was a problem with uploading, please try again.'),
+          content:
+              new Text('There was a problem with uploading, please try again.'),
           duration: Duration(seconds: 4),
         ));
         setState(() {
@@ -258,18 +254,16 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
           children: <Widget>[
             Container(
               child: Image.asset('images/logo.png'),
-              padding: const EdgeInsets.only(left: 20.0, right: 20.0, top:20.0, bottom: 30.0),
+              padding: const EdgeInsets.only(
+                  left: 20.0, right: 20.0, top: 20.0, bottom: 30.0),
             ),
             Form(
-              key: form,
-              child: Column(
-                children: <Widget>[
+                key: form,
+                child: Column(children: <Widget>[
                   getArtTitle,
                   getArtistName,
                   getDescription,
-                ]
-              )
-            ),
+                ])),
             Padding(padding: const EdgeInsets.only(top: 25.0, bottom: 10.0)),
             Container(
               child: new PhysicalModel(
@@ -285,7 +279,7 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
                     padding: EdgeInsets.all(0.0),
                     child: setUpButtonChild(),
                     onPressed: () async {
-                      if(_validate()) {
+                      if (_validate()) {
                         if (_progressState == SUBMIT) {
                           await animateButton();
                         }

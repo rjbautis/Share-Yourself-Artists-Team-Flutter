@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
 
 class BusinessProvideFeedback extends StatefulWidget {
   var artInfo;
@@ -9,7 +9,8 @@ class BusinessProvideFeedback extends StatefulWidget {
   BusinessProvideFeedback({@required this.artInfo, this.snapshot, this.index});
 
   @override
-  _BusinessProvideFeedbackState createState() => new _BusinessProvideFeedbackState();
+  _BusinessProvideFeedbackState createState() =>
+      new _BusinessProvideFeedbackState();
 }
 
 class _BusinessProvideFeedbackState extends State<BusinessProvideFeedback> {
@@ -58,22 +59,27 @@ class _BusinessProvideFeedbackState extends State<BusinessProvideFeedback> {
     }
 
     String acceptVal = 'declined';
-    if (_accepted)
-      acceptVal = 'accepted';
+    if (_accepted) acceptVal = 'accepted';
 
-    final DocumentReference postRef = widget.snapshot.data.documents[widget.index].reference;
+    final DocumentReference postRef =
+        widget.snapshot.data.documents[widget.index].reference;
     Firestore.instance.runTransaction((Transaction tx) async {
-      DocumentSnapshot postSnapshot = widget.snapshot.data.documents[widget.index]; //await tx.get(postRef);
+      DocumentSnapshot postSnapshot =
+          widget.snapshot.data.documents[widget.index]; //await tx.get(postRef);
       if (postSnapshot.exists) {
         await tx.update(postRef, <String, dynamic>{'replied': true});
-        await tx.update(postRef, <String, dynamic>{'submission_response.radios': acceptVal});
-        await tx.update(postRef, <String, dynamic>{'submission_response.response': comment});
+        await tx.update(postRef,
+            <String, dynamic>{'submission_response.radios': acceptVal});
+        await tx.update(postRef,
+            <String, dynamic>{'submission_response.response': comment});
       }
     });
+
+    Navigator.pop(context);
   }
 
-
-  final commentBar = SnackBar(content: Text('Please write a longer response. (min. 50 characters)'));
+  final commentBar = SnackBar(
+      content: Text('Please write a longer response. (min. 50 characters)'));
 
   void onEditComplete() {
     comment = _controller.text;
