@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
 import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
-import 'package:share_yourself_artists_team_flutter/artist/artistUploadImage.dart';
+import 'package:flutter/material.dart';
 import 'package:share_yourself_artists_team_flutter/artist/artistSendArt.dart';
+import 'package:share_yourself_artists_team_flutter/artist/artistUploadImage.dart';
+import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 
 class ArtistDash extends StatefulWidget {
-
   ArtistDash();
 
   @override
@@ -16,7 +16,7 @@ class ArtistDash extends StatefulWidget {
 
 class _ArtistDashState extends State<ArtistDash> {
   double _screenWidth;
-  bool _cardView = false;
+  bool _cardView = true;
   String _uid;
 
   @override
@@ -33,10 +33,7 @@ class _ArtistDashState extends State<ArtistDash> {
   void _navigateUpload() {
     Navigator.push(
       context,
-      MaterialPageRoute(
-          builder: (context) => ArtistUploadImage(
-
-          )),
+      MaterialPageRoute(builder: (context) => ArtistUploadImage()),
     );
   }
 
@@ -45,26 +42,33 @@ class _ArtistDashState extends State<ArtistDash> {
       context,
       MaterialPageRoute(
           builder: (context) => ArtistSendArt(
-            snapshot: snapshot,
-            index: index,
-          )),
+                snapshot: snapshot,
+                index: index,
+              )),
     );
   }
 
-  Widget _buildList(BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot, int index) {
+  Widget _buildList(
+      BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot, int index) {
     String artImage = snapshot.data.documents[index]['url'].toString();
     String artTitle = snapshot.data.documents[index]['art_title'].toString();
-    String artDescription = snapshot.data.documents[index]['description'].toString();
+    String artDescription =
+        snapshot.data.documents[index]['description'].toString();
     int uploadDate = snapshot.data.documents[index]['upload_date'];
 
-    DateTime upload = DateTime.fromMillisecondsSinceEpoch(uploadDate, isUtc: false);
-    String dateString = upload.month.toString() + '-' + upload.day.toString() + '-' + upload.year.toString();
+    DateTime upload =
+        DateTime.fromMillisecondsSinceEpoch(uploadDate, isUtc: false);
+    String dateString = upload.month.toString() +
+        '-' +
+        upload.day.toString() +
+        '-' +
+        upload.year.toString();
 
     if (!_cardView) {
       return new Dismissible(
         // Show a red background as the item is swiped away
         background: Container(
-            color: Colors.green,
+          color: Colors.green,
         ),
         key: Key(artTitle + Random().nextInt(1000000).toString()),
         onDismissed: (direction) {
@@ -93,10 +97,7 @@ class _ArtistDashState extends State<ArtistDash> {
                 artTitle,
                 textAlign: TextAlign.center,
               ),
-              subtitle:
-              Text(
-                  dateString,
-                  textAlign: TextAlign.center),
+              subtitle: Text(dateString, textAlign: TextAlign.center),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -115,7 +116,9 @@ class _ArtistDashState extends State<ArtistDash> {
                 IconButton(
                   icon: Icon(Icons.send),
                   color: Color.fromRGBO(255, 160, 0, 1.0),
-                  onPressed: () { _navigateSend(snapshot, index); },
+                  onPressed: () {
+                    _navigateSend(snapshot, index);
+                  },
                 ),
               ],
             ),
@@ -131,73 +134,77 @@ class _ArtistDashState extends State<ArtistDash> {
     _screenWidth = MediaQuery.of(context).size.width;
 
     return MaterialApp(
-        home: Scaffold(
-          appBar: AppBar(
-            iconTheme: IconThemeData(color: Colors.black),
-            backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
-            title: Text(
-              title,
-              style: TextStyle(
-                color: Colors.black,
-              ),
+      home: Scaffold(
+        appBar: AppBar(
+          iconTheme: IconThemeData(color: Colors.black),
+          backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
+          title: Text(
+            title,
+            style: TextStyle(
+              color: Colors.black,
             ),
-            actions: <Widget>[
-              IconButton(
-                icon: _cardView ? Icon(Icons.list) : Icon(Icons.image),
-                onPressed: () { setState(() {
+          ),
+          actions: <Widget>[
+            IconButton(
+              icon: _cardView ? Icon(Icons.list) : Icon(Icons.image),
+              onPressed: () {
+                setState(() {
                   _cardView = !_cardView;
-                }); },
+                });
+              },
+            ),
+            IconButton(
+              icon: Icon(Icons.file_upload),
+              onPressed: () {
+                _navigateUpload();
+              },
+            ),
+          ],
+        ),
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              UserAccountsDrawerHeader(
+                decoration: BoxDecoration(
+                  color: Color.fromRGBO(255, 160, 0, 1.0),
+                ),
+                accountName: new Text('Artist'),
+                accountEmail: new Text('gmail.com'),
+                currentAccountPicture: new CircleAvatar(
+                  backgroundColor: Colors.white,
+                  child: new Text('T'),
+                ),
               ),
-              IconButton(
-                  icon: Icon(Icons.file_upload),
-                  onPressed: () {_navigateUpload(); },
+              ListTile(
+                title: new Text('Log Out'),
+                onTap: () async {
+                  await Authentication.signOut();
+                  resetPreferences();
+                  Navigator.of(context).pushReplacementNamed('/');
+                },
               ),
             ],
           ),
-          drawer: Drawer(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: <Widget>[
-                UserAccountsDrawerHeader(
-                  decoration: BoxDecoration(
-                    color: Color.fromRGBO(255, 160, 0, 1.0),
-                  ),
-                  accountName: new Text('Artist'),
-                  accountEmail: new Text('gmail.com'),
-                  currentAccountPicture: new CircleAvatar(
-                    backgroundColor: Colors.white,
-                    child: new Text('T'),
-                  ),
-                ),
-                ListTile(
-                  title: new Text('Log Out'),
-                  onTap: () async {
-                    await Authentication.signOut();
-                    resetPreferences();
-                    Navigator.of(context).pushReplacementNamed('/');
-                  },
-                ),
-              ],
-            ),
-          ),
-          body: StreamBuilder(
-              stream: Firestore.instance
-                  .collection('art')
-                  .where('artist_id', isEqualTo: 'H2kEJMbkyxUhcAfKH1jcMeDOn442')
-                  .snapshots(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (!snapshot.hasData) return new Text('Loading...');
-                return new Container(
-                  child: ListView.builder(
-                    itemBuilder: (BuildContext ctxt, int index) =>
-                        _buildList(context, snapshot, index),
-                    itemCount: snapshot.data.documents.length,
-                  ),
-                );
-              },
-            ),
         ),
-      );
+        body: StreamBuilder(
+          stream: Firestore.instance
+              .collection('art')
+              .where('artist_id', isEqualTo: '${_uid}')
+              .snapshots(),
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (!snapshot.hasData) return new Text('Loading...');
+            return new Container(
+              child: ListView.builder(
+                itemBuilder: (BuildContext ctxt, int index) =>
+                    _buildList(context, snapshot, index),
+                itemCount: snapshot.data.documents.length,
+              ),
+            );
+          },
+        ),
+      ),
+    );
   }
 }
