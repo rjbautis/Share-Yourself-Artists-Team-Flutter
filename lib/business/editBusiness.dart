@@ -11,6 +11,8 @@ class EditBusiness extends StatefulWidget {
 
 class _EditBusinessState extends State<EditBusiness> {
   String _uid;
+  TextEditingController _controller = new TextEditingController();
+
   String _businessName;
   String _publication;
   String _followerCount;
@@ -45,11 +47,19 @@ class _EditBusinessState extends State<EditBusiness> {
     });
   }
 
+  void onEditComplete() {
+    setState(() {
+      _businessName = _controller.text;
+    });
+  }
+
   Widget _buildProfile(AsyncSnapshot<QuerySnapshot> snapshot) {
     _getProfile(snapshot);
+    _controller.addListener(onEditComplete);
 
     return new Column(children: <Widget>[
       TextFormField(
+        controller: _controller,
         initialValue: _businessName,
         decoration: InputDecoration(labelText: 'Business Name'),
         onSaved: (input) => setState(() {
