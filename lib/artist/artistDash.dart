@@ -133,8 +133,7 @@ class _ArtistDashState extends State<ArtistDash> {
     final title = 'Dashboard';
     _screenWidth = MediaQuery.of(context).size.width;
 
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(color: Colors.black),
           backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
@@ -210,7 +209,6 @@ class _ArtistDashState extends State<ArtistDash> {
             );
           },
         ),
-      ),
     );
   }
 }
