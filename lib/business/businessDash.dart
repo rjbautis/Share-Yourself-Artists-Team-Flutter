@@ -230,6 +230,12 @@ class _BusinessDashState extends State<BusinessDash> {
                   ),
                 ),
                 ListTile(
+                  title: new Text('View Profile'),
+                  onTap: () async {
+                    Navigator.of(context).pushNamed('/businessProfilePage');
+                  },
+                ),
+                ListTile(
                   title: new Text('Log Out'),
                   onTap: () async {
                     await Authentication.signOut();
