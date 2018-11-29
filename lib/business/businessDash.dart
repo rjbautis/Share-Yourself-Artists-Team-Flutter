@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 import 'package:share_yourself_artists_team_flutter/business/businessProvideFeedback.dart';
@@ -107,8 +106,7 @@ class _BusinessDashState extends State<BusinessDash> {
         snapshot.data.documents[index]['art']['artist_id'].toString();
     bool _accepted = false;
 
-    if (accepted.compareTo('accepted') == 0)
-      _accepted = true;
+    if (accepted.compareTo('accepted') == 0) _accepted = true;
 
     if (artPaid == null) artPaid = false;
 
@@ -155,7 +153,8 @@ class _BusinessDashState extends State<BusinessDash> {
     );
   }
 
-  void _navigateFeedback (var art, AsyncSnapshot<QuerySnapshot> snapshot, int index) {
+  void _navigateFeedback(
+      var art, AsyncSnapshot<QuerySnapshot> snapshot, int index) {
     // create new FeedbackPage
     Navigator.push(
       context,
@@ -174,116 +173,122 @@ class _BusinessDashState extends State<BusinessDash> {
     _screenWidth = MediaQuery.of(context).size.width;
 
     return DefaultTabController(
-        length: 2,
-        child: Scaffold(
-          appBar: AppBar(
-            iconTheme: IconThemeData(color: Colors.black),
-            backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
-            title: Text(
-              title,
-              style: TextStyle(
-                color: Colors.black,
-              ),
-            ),
-            bottom: TabBar(
-                indicatorColor: Colors.black,
-                labelColor: Colors.black,
-                tabs: [
-                  Tab(
-                    child: new Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        new Text('New'),
-                        new Padding(
-                            padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0)),
-                        new Icon(Icons.inbox),
-                      ],
-                    ),
-                  ),
-                  Tab(
-                    child: new Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
-                        new Text('Replied'),
-                        new Padding(
-                            padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0)),
-                        new Icon(Icons.done_all),
-                      ],
-                    ),
-                  ),
-                ]),
-          ),
-          drawer: Drawer(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: <Widget>[
-                UserAccountsDrawerHeader(
-                  decoration: BoxDecoration(
-                    color: Color.fromRGBO(255, 160, 0, 1.0),
-                  ),
-                  accountName: new Text('Business'),
-                  accountEmail: new Text('gmail.com'),
-                  currentAccountPicture: new CircleAvatar(
-                    backgroundColor: Colors.white,
-                    child: new Text('T'),
-                  ),
-                ),
-                ListTile(
-                  title: new Text('View Profile'),
-                  onTap: () async {
-                    Navigator.of(context).pushNamed('/businessProfilePage');
-                  },
-                ),
-                ListTile(
-                  title: new Text('Log Out'),
-                  onTap: () async {
-                    await Authentication.signOut();
-                    resetPreferences();
-                    Navigator.of(context).pushReplacementNamed('/');
-                  },
-                ),
-              ],
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          iconTheme: IconThemeData(color: Colors.black),
+          backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
+          title: Text(
+            title,
+            style: TextStyle(
+              color: Colors.black,
             ),
           ),
-          body: TabBarView(children: [
-            new StreamBuilder(
-              stream: Firestore.instance
-                  .collection('review_requests')
-                  .where('businessId.userId', isEqualTo: '${_uid}')
-                  .where('replied', isEqualTo: false)
-                  .snapshots(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (!snapshot.hasData) return new Text('Loading...');
-                return new Container(
-                  child: ListView.builder(
-                    itemBuilder: (BuildContext ctxt, int index) =>
-                        _buildNewArtCard(context, snapshot, index),
-                    itemCount: snapshot.data.documents.length,
+          bottom: TabBar(
+              indicatorColor: Colors.black,
+              labelColor: Colors.black,
+              tabs: [
+                Tab(
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      new Text('New'),
+                      new Padding(
+                          padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0)),
+                      new Icon(Icons.inbox),
+                    ],
                   ),
-                );
-              },
-            ),
-            new StreamBuilder(
-              stream: Firestore.instance
-                  .collection('review_requests')
-                  .where('businessId.userId', isEqualTo: '${_uid}')
-                  .where('replied', isEqualTo: true)
-                  .snapshots(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (!snapshot.hasData) return new Text('Loading...');
-                return new Container(
-                  child: ListView.builder(
-                    itemBuilder: (BuildContext ctxt, int index) =>
-                        _buildRepliedCard(context, snapshot, index),
-                    itemCount: snapshot.data.documents.length,
+                ),
+                Tab(
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      new Text('Replied'),
+                      new Padding(
+                          padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0)),
+                      new Icon(Icons.done_all),
+                    ],
                   ),
-                );
-              },
-            ),
-          ]),
+                ),
+              ]),
         ),
+        drawer: Drawer(
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              UserAccountsDrawerHeader(
+                decoration: BoxDecoration(
+                  color: Color.fromRGBO(255, 160, 0, 1.0),
+                ),
+                accountName: new Text('Business'),
+                accountEmail: new Text('gmail.com'),
+                currentAccountPicture: new CircleAvatar(
+                  backgroundColor: Colors.white,
+                  child: new Text('T'),
+                ),
+              ),
+              ListTile(
+                title: new Text('View Profile'),
+                onTap: () async {
+                  Navigator.of(context).pushNamed('/businessProfilePage');
+                },
+              ),
+              ListTile(
+                title: new Text('Edit Profile'),
+                onTap: () async {
+                  Navigator.of(context).pushNamed('/editBusiness');
+                },
+              ),
+              ListTile(
+                title: new Text('Log Out'),
+                onTap: () async {
+                  await Authentication.signOut();
+                  resetPreferences();
+                  Navigator.of(context).pushReplacementNamed('/');
+                },
+              ),
+            ],
+          ),
+        ),
+        body: TabBarView(children: [
+          new StreamBuilder(
+            stream: Firestore.instance
+                .collection('review_requests')
+                .where('businessId.userId', isEqualTo: '${_uid}')
+                .where('replied', isEqualTo: false)
+                .snapshots(),
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (!snapshot.hasData) return new Text('Loading...');
+              return new Container(
+                child: ListView.builder(
+                  itemBuilder: (BuildContext ctxt, int index) =>
+                      _buildNewArtCard(context, snapshot, index),
+                  itemCount: snapshot.data.documents.length,
+                ),
+              );
+            },
+          ),
+          new StreamBuilder(
+            stream: Firestore.instance
+                .collection('review_requests')
+                .where('businessId.userId', isEqualTo: '${_uid}')
+                .where('replied', isEqualTo: true)
+                .snapshots(),
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (!snapshot.hasData) return new Text('Loading...');
+              return new Container(
+                child: ListView.builder(
+                  itemBuilder: (BuildContext ctxt, int index) =>
+                      _buildRepliedCard(context, snapshot, index),
+                  itemCount: snapshot.data.documents.length,
+                ),
+              );
+            },
+          ),
+        ]),
+      ),
     );
   }
 }
