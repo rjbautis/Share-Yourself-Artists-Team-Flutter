@@ -70,8 +70,7 @@ class _ArtistProfilePageState extends State<ArtistProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: new Text('View Profile'),
           backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
@@ -125,7 +124,6 @@ class _ArtistProfilePageState extends State<ArtistProfilePage> {
             );
           },
         ),
-      ),
     );
   }
 }

@@ -173,8 +173,7 @@ class _BusinessDashState extends State<BusinessDash> {
     final title = 'Submitted Artwork';
     _screenWidth = MediaQuery.of(context).size.width;
 
-    return MaterialApp(
-      home: DefaultTabController(
+    return DefaultTabController(
         length: 2,
         child: Scaffold(
           appBar: AppBar(
@@ -285,7 +284,6 @@ class _BusinessDashState extends State<BusinessDash> {
             ),
           ]),
         ),
-      ),
     );
   }
 }
