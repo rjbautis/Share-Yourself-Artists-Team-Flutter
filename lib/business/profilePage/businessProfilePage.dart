@@ -3,52 +3,62 @@ import 'package:flutter/material.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 
-class ArtistProfilePage extends StatefulWidget {
+class BusinessProfilePage extends StatefulWidget {
   @override
-  _ArtistProfilePageState createState() => _ArtistProfilePageState();
+  _BusinessProfilePageState createState() => _BusinessProfilePageState();
 }
 
-class _ArtistProfilePageState extends State<ArtistProfilePage> {
+class _BusinessProfilePageState extends State<BusinessProfilePage> {
   String _uid;
 
   Widget _buildList(
       BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot, int index) {
-    String _name = snapshot.data.documents[index]['name'].toString();
-    int _fc = snapshot.data.documents[index]['free_credits'];
-    int _pc = snapshot.data.documents[index]['credits'];
+    String _name = snapshot.data.documents[index]['business_name'].toString();
     String _email = snapshot.data.documents[index]['email'].toString();
-    int _join = snapshot.data.documents[index]['upload_date'];
-
-
-    print(snapshot.data.documents[index].toString());
-
-
+    String _publication =
+        snapshot.data.documents[index]['publication'].toString();
+    String _followers =
+        snapshot.data.documents[index]['follower_count'].toString();
+    String _website = snapshot.data.documents[index]['website'].toString();
+    String _about = snapshot.data.documents[index]['about'].toString();
+    String _wk = snapshot.data.documents[index]['worth_knowing'].toString();
+    String _addNotes =
+        snapshot.data.documents[index]['additional_notes'].toString();
+//    int _join = snapshot.data.documents[index]['joined_on'];
 
     print("\n\n-------------\n\n");
     print("$_name");
     print("\n\n-------------\n\n");
 
-    DateTime upload = DateTime.fromMillisecondsSinceEpoch(_join, isUtc: false);
-    String dateString = upload.month.toString() +
-        '-' +
-        upload.day.toString() +
-        '-' +
-        upload.year.toString();
+//    DateTime upload = DateTime.fromMillisecondsSinceEpoch(_join, isUtc: false);
+//    String dateString = upload.month.toString() +
+//        '-' +
+//        upload.day.toString() +
+//        '-' +
+//        upload.year.toString();
 
     return new Container(
       child: Column(
-        mainAxisSize: MainAxisSize.min,
+        //mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           new Padding(padding: const EdgeInsets.only(top: 40.0)),
           new Text("Name: $_name"),
           new Padding(padding: const EdgeInsets.only(top: 40.0)),
-          new Text("Free Credits: $_fc"),
+          new Text("Email: $_email"),
           new Padding(padding: const EdgeInsets.only(top: 40.0)),
-          new Text("Paid Credits: $_pc"),
+          new Text("Publication: $_publication"),
           new Padding(padding: const EdgeInsets.only(top: 40.0)),
-          new Text("Email:  $_email"),
+          new Text("Follower Count:  $_followers"),
           new Padding(padding: const EdgeInsets.only(top: 40.0)),
-          new Text("Join Date: $dateString"),
+          new Text("Website: $_website"),
+          new Padding(padding: const EdgeInsets.only(top: 40.0)),
+          new Text("About: $_about"),
+          new Padding(padding: const EdgeInsets.only(top: 40.0)),
+          new Text("Worth Knowing: $_wk"),
+          new Padding(padding: const EdgeInsets.only(top: 40.0)),
+          new Text("Additional Notes: $_addNotes"),
+//          new Padding(padding: const EdgeInsets.only(top: 40.0)),
+//          new Text("Join Date: $dateString"),
         ],
       ),
     );
@@ -73,7 +83,7 @@ class _ArtistProfilePageState extends State<ArtistProfilePage> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: new Text('View Profile'),
+          title: new Text('View Business Profile'),
           backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
         ),
         drawer: Drawer(
