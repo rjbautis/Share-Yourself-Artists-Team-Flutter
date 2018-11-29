@@ -254,6 +254,7 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
     print("\n\n-------------\n\n");
     print("$_join");
     print("$_joinFlag");
+
     print("\n\n-------------\n\n");
 
 //    DateTime upload = DateTime.fromMillisecondsSinceEpoch(_join, isUtc: false);
@@ -267,6 +268,7 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
       child: Column(
         //mainAxisSize: MainAxisSize.min,
         children: <Widget>[
+
           _checkNameFlag(),
           _checkEmailFlag(),
           _checkPubFlag(),
@@ -276,6 +278,7 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
           _checkWKFlag(),
           _checkAddFlag(),
           _checkJoinFlag(),
+
 //          new Padding(padding: const EdgeInsets.only(top: 40.0)),
 //          new Text("Join Date: $dateString"),
         ],
@@ -299,8 +302,7 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: new Text('View Business Profile'),
           backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
@@ -354,7 +356,6 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
             );
           },
         ),
-      ),
     );
   }
 }
