@@ -16,7 +16,7 @@ final routes = {
       new BusinessSignUpFirstPage(),
   '/forgotPassword': (BuildContext context) => new ForgotPasswordPage(),
   '/artistProfilePage': (BuildContext context) => new ArtistProfilePage(),
-  '/businessProfilePage': (BuildContext context) => new BusinessProfilePage(),
+  //'/businessProfilePage': (BuildContext context) => new BusinessProfilePage(),
   '/editBusiness': (BuildContext context) => new EditBusiness(),
   '/': (BuildContext context) => new LoginPage()
 };

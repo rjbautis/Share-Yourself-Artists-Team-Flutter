@@ -11,7 +11,13 @@ class EditBusiness extends StatefulWidget {
 
 class _EditBusinessState extends State<EditBusiness> {
   String _uid;
-  TextEditingController _controller = new TextEditingController();
+  TextEditingController _businessNameController;
+  TextEditingController _publicationController;
+  TextEditingController _followerCountController;
+  TextEditingController _websiteController;
+  TextEditingController _aboutController;
+  TextEditingController _worthKnowingController;
+  TextEditingController _additionalNotesController;
 
   String _businessName;
   String _publication;
@@ -34,7 +40,7 @@ class _EditBusinessState extends State<EditBusiness> {
     });
   }
 
-  Future _getProfile(AsyncSnapshot<QuerySnapshot> snapshot) async {
+  /*Future _getProfile(AsyncSnapshot<QuerySnapshot> snapshot) async {
     setState(() {
       _businessName = snapshot.data.documents[0]['business_name'].toString();
       _publication = snapshot.data.documents[0]['publication'].toString();
@@ -45,56 +51,98 @@ class _EditBusinessState extends State<EditBusiness> {
       _additionalNotes =
           snapshot.data.documents[0]['additional_notes'].toString();
     });
+  }*/
+
+  Future onEditBusinessNameComplete() async {
+    _businessName = _businessNameController.text;
   }
 
-  void onEditComplete() {
-    setState(() {
-      _businessName = _controller.text;
-    });
+  Future onEditPublicationComplete() async {
+    _publication = _publicationController.text;
+  }
+
+  Future onEditFollowerCountComplete() async {
+    _followerCount = _followerCountController.text;
+  }
+
+  Future onEditWebsiteComplete() async {
+    _website = _websiteController.text;
+  }
+
+  Future onEditAboutComplete() async {
+    _about = _aboutController.text;
+  }
+
+  Future onEditWorthKnowingComplete() async {
+    _worthKnowing = _worthKnowingController.text;
+  }
+
+  Future onEditAdditionalNotesComplete() async {
+    _additionalNotes = _additionalNotesController.text;
   }
 
   Widget _buildProfile(AsyncSnapshot<QuerySnapshot> snapshot) {
-    _getProfile(snapshot);
-    _controller.addListener(onEditComplete);
+    //_getProfile(snapshot);
+    _businessNameController = new TextEditingController(
+        text: snapshot.data.documents[0]['business_name'].toString());
+    _publicationController = new TextEditingController(
+        text: snapshot.data.documents[0]['publication'].toString());
+    _followerCountController = new TextEditingController(
+        text: snapshot.data.documents[0]['follower_count'].toString());
+    _websiteController = new TextEditingController(
+        text: snapshot.data.documents[0]['website'].toString());
+    _aboutController = new TextEditingController(
+        text: snapshot.data.documents[0]['about'].toString());
+    _worthKnowingController = new TextEditingController(
+        text: snapshot.data.documents[0]['worth_knowing'].toString());
+    _additionalNotesController = new TextEditingController(
+        text: snapshot.data.documents[0]['additional_notes'].toString());
+
+    _businessNameController.addListener(onEditBusinessNameComplete);
+    _publicationController.addListener(onEditPublicationComplete);
+    _followerCountController.addListener(onEditFollowerCountComplete);
+    _websiteController.addListener(onEditWebsiteComplete);
+    _aboutController.addListener(onEditAboutComplete);
+    _worthKnowingController.addListener(onEditWorthKnowingComplete);
+    _additionalNotesController.addListener(onEditAdditionalNotesComplete);
 
     return new Column(children: <Widget>[
       TextFormField(
-        //controller: _controller,
-        initialValue: _businessName,
+        controller: _businessNameController,
         decoration: InputDecoration(labelText: 'Business Name'),
         onSaved: (input) => setState(() {
               _businessName = input;
             }),
       ),
       TextFormField(
-        initialValue: _publication,
+        controller: _publicationController,
         decoration: InputDecoration(labelText: 'Publication'),
         onSaved: (input) => _publication = input,
       ),
       TextFormField(
-        initialValue: _followerCount,
+        controller: _followerCountController,
         decoration: InputDecoration(labelText: 'Follower Count'),
         onSaved: (input) => _followerCount = input,
       ),
       TextFormField(
-        initialValue: _website,
+        controller: _websiteController,
         decoration: InputDecoration(labelText: 'Website'),
         onSaved: (input) => _website = input,
       ),
       TextFormField(
-        initialValue: _about,
+        controller: _aboutController,
         maxLines: 8,
         decoration: InputDecoration(labelText: 'About'),
         onSaved: (input) => _about = input,
       ),
       TextFormField(
-        initialValue: _worthKnowing,
+        controller: _worthKnowingController,
         maxLines: 3,
         decoration: InputDecoration(labelText: 'Worth Knowing'),
         onSaved: (input) => _worthKnowing = input,
       ),
       TextFormField(
-        initialValue: _additionalNotes,
+        controller: _additionalNotesController,
         maxLines: 3,
         decoration: InputDecoration(labelText: 'Additional Notes'),
         onSaved: (input) => _additionalNotes = input,
