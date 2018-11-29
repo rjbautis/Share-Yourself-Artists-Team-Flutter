@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 import 'package:share_yourself_artists_team_flutter/business/businessProvideFeedback.dart';
-import 'package:share_yourself_artists_team_flutter/business/editBusiness.dart';
 
 class BusinessDash extends StatefulWidget {
   @override
@@ -168,14 +167,6 @@ class _BusinessDashState extends State<BusinessDash> {
     );
   }
 
-  void _navigateEditBusiness() {
-    // create new FeedbackPage
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => EditBusiness()),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final title = 'Submitted Artwork';
@@ -245,7 +236,7 @@ class _BusinessDashState extends State<BusinessDash> {
               ListTile(
                 title: new Text('Edit Profile'),
                 onTap: () async {
-                  _navigateEditBusiness();
+                  Navigator.of(context).pushNamed('/editBusiness');
                 },
               ),
               ListTile(
