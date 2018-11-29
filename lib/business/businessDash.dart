@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 import 'package:share_yourself_artists_team_flutter/business/businessProvideFeedback.dart';
@@ -108,8 +107,7 @@ class _BusinessDashState extends State<BusinessDash> {
         snapshot.data.documents[index]['art']['artist_id'].toString();
     bool _accepted = false;
 
-    if (accepted.compareTo('accepted') == 0)
-      _accepted = true;
+    if (accepted.compareTo('accepted') == 0) _accepted = true;
 
     if (artPaid == null) artPaid = false;
 
@@ -156,7 +154,8 @@ class _BusinessDashState extends State<BusinessDash> {
     );
   }
 
-  void _navigateFeedback (var art, AsyncSnapshot<QuerySnapshot> snapshot, int index) {
+  void _navigateFeedback(
+      var art, AsyncSnapshot<QuerySnapshot> snapshot, int index) {
     // create new FeedbackPage
     Navigator.push(
       context,
@@ -241,7 +240,7 @@ class _BusinessDashState extends State<BusinessDash> {
                 ListTile(
                   title: new Text('Edit Profile'),
                   onTap: () async {
-                    Navigator.of(context).pushReplacementNamed('/editBusiness');
+                    _navigateEditBusiness();
                   },
                 ),
                 ListTile(
