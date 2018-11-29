@@ -37,21 +37,26 @@ class _EditBusinessState extends State<EditBusiness> {
       setState(() {
         _uid = uid;
       });
+      _getProfile();
     });
   }
 
-  /*Future _getProfile(AsyncSnapshot<QuerySnapshot> snapshot) async {
-    setState(() {
-      _businessName = snapshot.data.documents[0]['business_name'].toString();
-      _publication = snapshot.data.documents[0]['publication'].toString();
-      _followerCount = snapshot.data.documents[0]['follower_count'].toString();
-      _website = snapshot.data.documents[0]['website'].toString();
-      _about = snapshot.data.documents[0]['about'].toString();
-      _worthKnowing = snapshot.data.documents[0]['worth_knowing'].toString();
-      _additionalNotes =
-          snapshot.data.documents[0]['additional_notes'].toString();
-    });
-  }*/
+  Future _getProfile() async {
+    DocumentSnapshot business =
+        await Firestore.instance.collection('users').document(_uid).get();
+    if (business.exists) {
+      print("exists");
+      setState(() {
+        _businessName = business['business_name'];
+        _publication = business['publication'];
+        _followerCount = business['follower_count'];
+        _website = business['website'];
+        _about = business['about'];
+        _worthKnowing = business['worth_knowing'];
+        _additionalNotes = business['additional_notes'];
+      });
+    }
+  }
 
   Future onEditBusinessNameComplete() async {
     _businessName = _businessNameController.text;
@@ -82,7 +87,6 @@ class _EditBusinessState extends State<EditBusiness> {
   }
 
   Widget _buildProfile(AsyncSnapshot<QuerySnapshot> snapshot) {
-    //_getProfile(snapshot);
     _businessNameController = new TextEditingController(
         text: snapshot.data.documents[0]['business_name'].toString());
     _publicationController = new TextEditingController(
@@ -110,42 +114,33 @@ class _EditBusinessState extends State<EditBusiness> {
       TextFormField(
         controller: _businessNameController,
         decoration: InputDecoration(labelText: 'Business Name'),
-        onSaved: (input) => setState(() {
-              _businessName = input;
-            }),
       ),
       TextFormField(
         controller: _publicationController,
         decoration: InputDecoration(labelText: 'Publication'),
-        onSaved: (input) => _publication = input,
       ),
       TextFormField(
         controller: _followerCountController,
         decoration: InputDecoration(labelText: 'Follower Count'),
-        onSaved: (input) => _followerCount = input,
       ),
       TextFormField(
         controller: _websiteController,
         decoration: InputDecoration(labelText: 'Website'),
-        onSaved: (input) => _website = input,
       ),
       TextFormField(
         controller: _aboutController,
         maxLines: 8,
         decoration: InputDecoration(labelText: 'About'),
-        onSaved: (input) => _about = input,
       ),
       TextFormField(
         controller: _worthKnowingController,
         maxLines: 3,
         decoration: InputDecoration(labelText: 'Worth Knowing'),
-        onSaved: (input) => _worthKnowing = input,
       ),
       TextFormField(
         controller: _additionalNotesController,
         maxLines: 3,
         decoration: InputDecoration(labelText: 'Additional Notes'),
-        onSaved: (input) => _additionalNotes = input,
       ),
     ]);
   }
