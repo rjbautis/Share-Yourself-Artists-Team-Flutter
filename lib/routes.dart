@@ -5,7 +5,7 @@ import 'package:share_yourself_artists_team_flutter/authentication/businessSignU
 import 'package:share_yourself_artists_team_flutter/authentication/forgotPassword.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/login.dart';
 import 'package:share_yourself_artists_team_flutter/business/businessDash.dart';
-import 'package:share_yourself_artists_team_flutter/business/editbusiness.dart';
+import 'package:share_yourself_artists_team_flutter/business/editBusiness.dart';
 
 final routes = {
   '/artist': (BuildContext context) => new ArtistDash(),

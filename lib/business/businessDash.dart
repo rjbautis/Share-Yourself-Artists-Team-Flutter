@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 import 'package:share_yourself_artists_team_flutter/business/businessProvideFeedback.dart';
-import 'package:share_yourself_artists_team_flutter/business/editbusiness.dart';
+import 'package:share_yourself_artists_team_flutter/business/editBusiness.dart';
 
 class BusinessDash extends StatefulWidget {
   @override
