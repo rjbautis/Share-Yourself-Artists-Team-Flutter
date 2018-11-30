@@ -11,44 +11,165 @@ class ArtistProfilePage extends StatefulWidget {
 class _ArtistProfilePageState extends State<ArtistProfilePage> {
   String _uid;
 
+  String _name = "";
+  int _fc = 0;
+  int _pc = 0;
+  String _email = "";
+  int _join = 0;
+
+  int _nameFlag = 0;
+  int _fcFlag = 0;
+  int _pcFlag = 0;
+  int _emailFlag = 0;
+  int _joinFlag = 0;
+
+  Widget _emptyContainer() {
+    return new Container(
+      child: Column(
+        //mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          new Padding(padding: const EdgeInsets.only(top: 0.0)),
+        ],
+      ),
+    );
+  }
+
+  Widget _checkNameFlag() {
+    if (_nameFlag == 0) {
+      return new Container(
+        child: Column(
+          //mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            new Padding(padding: const EdgeInsets.only(top: 40.0)),
+            new Text("Name: $_name"),
+          ],
+        ),
+      );
+    }
+    _nameFlag = 0;
+    return _emptyContainer();
+  }
+
+  Widget _checkFCFlag() {
+    if (_fcFlag == 0) {
+      return new Container(
+        child: Column(
+          //mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            new Padding(padding: const EdgeInsets.only(top: 40.0)),
+            new Text("Free Credits: $_fc"),
+          ],
+        ),
+      );
+    }
+    _fcFlag = 0;
+    return _emptyContainer();
+  }
+
+  Widget _checkPCFlag() {
+    if (_pcFlag == 0) {
+      return new Container(
+        child: Column(
+          //mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            new Padding(padding: const EdgeInsets.only(top: 40.0)),
+            new Text("Paid Credits: $_pc"),
+          ],
+        ),
+      );
+    }
+    _pcFlag = 0;
+    return _emptyContainer();
+  }
+
+  Widget _checkEmailFlag() {
+    if (_emailFlag == 0) {
+      return new Container(
+        child: Column(
+          //mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            new Padding(padding: const EdgeInsets.only(top: 40.0)),
+            new Text("Email: $_email"),
+          ],
+        ),
+      );
+    }
+    _emailFlag = 0;
+    return _emptyContainer();
+  }
+
+  Widget _checkJoinFlag() {
+    if (_joinFlag == 0) {
+      DateTime upload =
+          DateTime.fromMillisecondsSinceEpoch(_join, isUtc: false);
+      String dateString = upload.month.toString() +
+          '-' +
+          upload.day.toString() +
+          '-' +
+          upload.year.toString();
+
+      return new Container(
+        child: Column(
+          //mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            new Padding(padding: const EdgeInsets.only(top: 40.0)),
+            new Text("Join Date: $dateString"),
+          ],
+        ),
+      );
+    }
+    _joinFlag = 0;
+    return _emptyContainer();
+  }
+
+  bool _isNull(String arg) {
+    if (identical(arg, "null") || identical(arg, '') || arg == null) {
+      return true;
+    }
+    return false;
+  }
+
   Widget _buildList(
       BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot, int index) {
-    String _name = snapshot.data.documents[index]['name'].toString();
-    int _fc = snapshot.data.documents[index]['free_credits'];
-    int _pc = snapshot.data.documents[index]['credits'];
-    String _email = snapshot.data.documents[index]['email'].toString();
-    int _join = snapshot.data.documents[index]['upload_date'];
+    if (_isNull(snapshot.data.documents[index]['name'])) {
+      _nameFlag = 1;
+    } else {
+      _name = snapshot.data.documents[index]['name'].toString();
+    }
 
+    if (_isNull(snapshot.data.documents[index]['free_credits'])) {
+      _fcFlag = 1;
+    } else {
+      _fc = snapshot.data.documents[index]['free_credits'];
+    }
 
-    print(snapshot.data.documents[index].toString());
+    if (_isNull(snapshot.data.documents[index]['credits'])) {
+      _pcFlag = 1;
+    } else {
+      _pc = snapshot.data.documents[index]['credits'];
+    }
 
+    if (_isNull(snapshot.data.documents[index]['email'])) {
+      _emailFlag = 1;
+    } else {
+      _email = snapshot.data.documents[index]['email'].toString();
+    }
 
-
-    print("\n\n-------------\n\n");
-    print("$_name");
-    print("\n\n-------------\n\n");
-
-    DateTime upload = DateTime.fromMillisecondsSinceEpoch(_join, isUtc: false);
-    String dateString = upload.month.toString() +
-        '-' +
-        upload.day.toString() +
-        '-' +
-        upload.year.toString();
+    if (_isNull(snapshot.data.documents[index]['upload_date'])) {
+      _joinFlag = 1;
+    } else {
+      _join = snapshot.data.documents[index]['upload_date'];
+    }
 
     return new Container(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          new Padding(padding: const EdgeInsets.only(top: 40.0)),
-          new Text("Name: $_name"),
-          new Padding(padding: const EdgeInsets.only(top: 40.0)),
-          new Text("Free Credits: $_fc"),
-          new Padding(padding: const EdgeInsets.only(top: 40.0)),
-          new Text("Paid Credits: $_pc"),
-          new Padding(padding: const EdgeInsets.only(top: 40.0)),
-          new Text("Email:  $_email"),
-          new Padding(padding: const EdgeInsets.only(top: 40.0)),
-          new Text("Join Date: $dateString"),
+          _checkNameFlag(),
+          _checkFCFlag(),
+          _checkPCFlag(),
+          _checkEmailFlag(),
+          _checkJoinFlag(),
         ],
       ),
     );
@@ -71,59 +192,58 @@ class _ArtistProfilePageState extends State<ArtistProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: new Text('View Profile'),
-          backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
+      appBar: AppBar(
+        title: new Text('View Profile'),
+        backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
+      ),
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            UserAccountsDrawerHeader(
+              decoration: BoxDecoration(
+                color: Color.fromRGBO(255, 160, 0, 1.0),
+              ),
+              accountName: new Text('Artist'),
+              accountEmail: new Text('gmail.com'),
+              currentAccountPicture: new CircleAvatar(
+                backgroundColor: Colors.white,
+                child: new Text('T'),
+              ),
+            ),
+            ListTile(
+              title: new Text('View Profile'),
+              onTap: () async {
+                Navigator.of(context).pushNamed('/artistProfilePage');
+              },
+            ),
+            ListTile(
+              title: new Text('Log Out'),
+              onTap: () async {
+                await Authentication.signOut();
+                resetPreferences();
+                Navigator.of(context).pushReplacementNamed('/');
+              },
+            ),
+          ],
         ),
-        drawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              UserAccountsDrawerHeader(
-                decoration: BoxDecoration(
-                  color: Color.fromRGBO(255, 160, 0, 1.0),
-                ),
-                accountName: new Text('Artist'),
-                accountEmail: new Text('gmail.com'),
-                currentAccountPicture: new CircleAvatar(
-                  backgroundColor: Colors.white,
-                  child: new Text('T'),
-                ),
-              ),
-              ListTile(
-                title: new Text('View Profile'),
-                onTap: () async {
-                  Navigator.of(context).pushNamed('/artistProfilePage');
-                },
-              ),
-              ListTile(
-                title: new Text('Log Out'),
-                onTap: () async {
-                  await Authentication.signOut();
-                  resetPreferences();
-                  Navigator.of(context).pushReplacementNamed('/');
-                },
-              ),
-            ],
-          ),
-        ),
-        body: StreamBuilder(
-          stream: Firestore.instance
-              .collection('users')
-              .where('userId', isEqualTo: '$_uid')
-              .snapshots(),
-          builder:
-              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (!snapshot.hasData) return new Text('Loading...');
-            return new Container(
-              child: ListView.builder(
-                itemBuilder: (BuildContext ctxt, int index) =>
-                    _buildList(context, snapshot, index),
-                itemCount: snapshot.data.documents.length,
-              ),
-            );
-          },
-        ),
+      ),
+      body: StreamBuilder(
+        stream: Firestore.instance
+            .collection('users')
+            .where('userId', isEqualTo: '$_uid')
+            .snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (!snapshot.hasData) return new Text('Loading...');
+          return new Container(
+            child: ListView.builder(
+              itemBuilder: (BuildContext ctxt, int index) =>
+                  _buildList(context, snapshot, index),
+              itemCount: snapshot.data.documents.length,
+            ),
+          );
+        },
+      ),
     );
   }
 }
