@@ -196,6 +196,14 @@ class _ArtistProfilePageState extends State<ArtistProfilePage> {
       appBar: AppBar(
         title: new Text('View Profile'),
         backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: () {
+              Navigator.of(context).pushReplacementNamed('/editArtist');
+            },
+          ),
+        ],
       ),
       body: StreamBuilder(
         stream: Firestore.instance

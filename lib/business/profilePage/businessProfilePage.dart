@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
-import 'package:share_yourself_artists_team_flutter/user/drawer.dart';
 
 class BusinessProfilePage extends StatefulWidget {
   @override
@@ -269,7 +267,6 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
       child: Column(
         //mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-
           _checkNameFlag(),
           _checkEmailFlag(),
           _checkPubFlag(),
@@ -304,27 +301,26 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: new Text('View Business Profile'),
-          backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
-        ),
-        body: StreamBuilder(
-          stream: Firestore.instance
-              .collection('users')
-              .where('userId', isEqualTo: '$_uid')
-              .snapshots(),
-          builder:
-              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (!snapshot.hasData) return new Text('Loading...');
-            return new Container(
-              child: ListView.builder(
-                itemBuilder: (BuildContext ctxt, int index) =>
-                    _buildList(context, snapshot, index),
-                itemCount: snapshot.data.documents.length,
-              ),
-            );
-          },
-        ),
+      appBar: AppBar(
+        title: new Text('View Business Profile'),
+        backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
+      ),
+      body: StreamBuilder(
+        stream: Firestore.instance
+            .collection('users')
+            .where('userId', isEqualTo: '$_uid')
+            .snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (!snapshot.hasData) return new Text('Loading...');
+          return new Container(
+            child: ListView.builder(
+              itemBuilder: (BuildContext ctxt, int index) =>
+                  _buildList(context, snapshot, index),
+              itemCount: snapshot.data.documents.length,
+            ),
+          );
+        },
+      ),
     );
   }
 }

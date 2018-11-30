@@ -115,7 +115,7 @@ class _ArtistSendArtState extends State<ArtistSendArt> {
 
     if (pc == null)
       pc = 0;
-
+    
     if (fc > 0) {
       fc--;
       await Firestore.instance
