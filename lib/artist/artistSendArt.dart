@@ -115,7 +115,7 @@ class _ArtistSendArtState extends State<ArtistSendArt> {
 
     if (pc == null)
       pc = 0;
-
+    
     if (fc > 0) {
       fc--;
       await Firestore.instance
@@ -234,6 +234,14 @@ class _ArtistSendArtState extends State<ArtistSendArt> {
                 ),
               ),
               new Padding(padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 10.0)),
+              new ListTile(
+                title: Text('Available Free Credits'),
+                subtitle: Text(_freeCredits.toString()),
+              ),
+              new ListTile(
+                title: Text('Available Credits'),
+                subtitle: Text(_paidCredits.toString()),
+              ),
             ],
           ),
         ]),
