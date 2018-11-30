@@ -1,6 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:share_yourself_artists_team_flutter/artist/selectBusiness.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 
 class ArtistSendArt extends StatefulWidget {
@@ -110,12 +110,10 @@ class _ArtistSendArtState extends State<ArtistSendArt> {
     bool _paid = false;
     bool _freeSubmit = false;
 
-    if (fc == null)
-      fc = 0;
+    if (fc == null) fc = 0;
 
-    if (pc == null)
-      pc = 0;
-    
+    if (pc == null) pc = 0;
+
     if (fc > 0) {
       fc--;
       await Firestore.instance
@@ -168,8 +166,10 @@ class _ArtistSendArtState extends State<ArtistSendArt> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
-        title: Text('Send to Business'),
-        backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
+        title: new Image.asset('images/logo.png'),
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        centerTitle: true,
         iconTheme: IconThemeData(color: Colors.black),
       ),
       body: new Center(

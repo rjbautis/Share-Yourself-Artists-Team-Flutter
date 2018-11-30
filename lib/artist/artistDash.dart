@@ -144,13 +144,10 @@ class _ArtistDashState extends State<ArtistDash> {
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(color: Colors.black),
-        backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
-        title: Text(
-          title,
-          style: TextStyle(
-            color: Colors.black,
-          ),
-        ),
+        title: new Image.asset('images/logo.png'),
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        centerTitle: true,
         actions: <Widget>[
           IconButton(
             icon: _cardView ? Icon(Icons.list) : Icon(Icons.image),

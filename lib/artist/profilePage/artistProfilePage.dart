@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 
 class ArtistProfilePage extends StatefulWidget {
@@ -9,6 +10,7 @@ class ArtistProfilePage extends StatefulWidget {
 
 class _ArtistProfilePageState extends State<ArtistProfilePage> {
   String _uid;
+  String _photoUrl = '';
 
   String _name = "";
   int _fc = 0;
@@ -39,7 +41,9 @@ class _ArtistProfilePageState extends State<ArtistProfilePage> {
         child: Column(
           //mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            new Padding(padding: const EdgeInsets.only(top: 40.0)),
+            new Padding(
+                padding:
+                    const EdgeInsets.only(top: 40.0, left: 40.0, right: 40.0)),
             new Text("Name: $_name"),
           ],
         ),
@@ -128,6 +132,33 @@ class _ArtistProfilePageState extends State<ArtistProfilePage> {
     return false;
   }
 
+  Widget _profilePic() {
+//    (_photoUrl != '')
+////        ? new CircleAvatar(
+////            backgroundImage: new NetworkImage(_photoUrl),
+////          )
+////        : new CircleAvatar(
+////            backgroundColor: Colors.white,
+////            child: new Icon(Icons.person),
+////          );
+
+    return new Container(
+        margin: const EdgeInsets.all(15.0),
+        padding:
+            const EdgeInsets.only(top: 3.0, bottom: 3.0, right: 3.0, left: 3.0),
+        decoration:
+            new BoxDecoration(border: new Border.all(color: Colors.black)),
+        child: new Column(
+          children: <Widget>[
+            Padding(
+                padding: EdgeInsets.only(
+                    left: 8.0, right: 8.0, top: 25.0, bottom: 20.0),
+                child: new Text("Test Profile",
+                    textAlign: TextAlign.center, style: new TextStyle())),
+          ],
+        ));
+  }
+
   Widget _buildList(
       BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot, int index) {
     if (_isNull(snapshot.data.documents[index]['name'])) {
@@ -161,11 +192,27 @@ class _ArtistProfilePageState extends State<ArtistProfilePage> {
     }
 
     print("$_uid");
+    print("\n\n --------------- \n\n");
+    print("$_name");
+    print("\n\n --------------- \n\n");
 
     return new Container(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(top: 25.0, bottom: 20.0),
+          ),
+          _profilePic(),
+          Padding(
+            padding: EdgeInsets.only(top: 10.0, bottom: 20.0),
+          ),
+          new Container(
+            height: 1.5,
+            color: Colors.grey,
+            padding: EdgeInsets.only(top: 10.0, right: 3.0, left: 3.0),
+            margin: EdgeInsets.only(right: 25.0, left: 25.0),
+          ),
           _checkNameFlag(),
           _checkFCFlag(),
           _checkPCFlag(),
@@ -181,6 +228,12 @@ class _ArtistProfilePageState extends State<ArtistProfilePage> {
   void initState() {
     super.initState();
 
+    Authentication.getArtistInfo().then((userInfo) {
+      setState(() {
+        _photoUrl = userInfo['photoUrl'];
+      });
+    });
+
     // Grab the saved uid of current user from memory
     loadUid().then((uid) {
       print('init: current uid: $uid');
@@ -194,8 +247,10 @@ class _ArtistProfilePageState extends State<ArtistProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: new Text('View Profile'),
-        backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
+        title: new Image.asset('images/logo.png'),
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        centerTitle: true,
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.edit),

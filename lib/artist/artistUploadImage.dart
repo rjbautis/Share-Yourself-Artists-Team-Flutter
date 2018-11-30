@@ -1,10 +1,9 @@
 import 'dart:io';
 
-import 'package:share_yourself_artists_team_flutter/artist/artistImageInfo.dart';
-import 'package:path/path.dart' as path;
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
+import 'package:path/path.dart' as path;
+import 'package:share_yourself_artists_team_flutter/artist/artistImageInfo.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 
 class ArtistUploadImage extends StatefulWidget {
@@ -24,15 +23,13 @@ class _ArtistUploadImageState extends State<ArtistUploadImage> {
   bool imagePicked = false;
 
   @override
-  void initState()
-  {
+  void initState() {
     super.initState();
 
     loadUid().then((uid) {
       _uID = uid;
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +57,30 @@ class _ArtistUploadImageState extends State<ArtistUploadImage> {
       });
     }
 
+    Widget _defaultDisplay() {
+      return new Container(
+          margin: const EdgeInsets.all(15.0),
+          padding: const EdgeInsets.all(3.0),
+          decoration:
+              new BoxDecoration(border: new Border.all(color: Colors.black)),
+          child: new Column(
+            children: <Widget>[
+              Padding(
+                  padding: EdgeInsets.only(
+                      left: 8.0, right: 8.0, top: 25.0, bottom: 20.0),
+                  child: new Text(
+                      "Uploads are stored on SYA's Google Servers and are not"
+                      "publicly exposed to anyone. Read our upload terms for more deatils.",
+                      textAlign: TextAlign.center,
+                      style: new TextStyle())),
+              Icon(
+                Icons.file_upload,
+                size: 100.0,
+              )
+            ],
+          ));
+    }
+
     Widget displaySelectedFile(File file) {
       return new ConstrainedBox(
         constraints: new BoxConstraints(
@@ -67,27 +88,28 @@ class _ArtistUploadImageState extends State<ArtistUploadImage> {
             minHeight: 300.0,
             maxWidth: 200.0,
             maxHeight: 300.0),
-        child: file == null
-            ? new Text('Sorry nothing selected!!')
-            : new Image.file(file),
+        child: file == null ? _defaultDisplay() : new Image.file(file),
       );
     }
 
     return new Scaffold(
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
-        title: new Text('Upload Art'),
-        backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
+        title: new Image.asset('images/logo.png'),
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        centerTitle: true,
       ),
       body: Container(
         padding: const EdgeInsets.all(20.0),
         child: ListView(
           children: <Widget>[
-            Container(
-              child: Image.asset('images/logo.png'),
-              padding: const EdgeInsets.all(20.0),
-            ),
             Padding(padding: const EdgeInsets.only(bottom: 25.0)),
+            Container(
+              padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
+              child: new Text("Upload a New Piece",
+                  style: new TextStyle(fontSize: 25.0)),
+            ),
             displaySelectedFile(_current),
             Container(
               padding: const EdgeInsets.only(top: 40.0),
@@ -118,15 +140,22 @@ class _ArtistUploadImageState extends State<ArtistUploadImage> {
               child: new MaterialButton(
                 //child: const Text('Upload to Database'),
                 child: const Text('Next'),
-                color: imagePicked ? Color.fromRGBO(255, 160, 0, 1.0) : Colors.grey,
+                color: imagePicked
+                    ? Color.fromRGBO(255, 160, 0, 1.0)
+                    : Colors.grey,
                 textColor: Colors.white,
                 elevation: 4.0,
                 onPressed: () async {
                   if (imagePicked == false) {
                     return null;
-                  }
-                  else {
-                    final finishedUploading = await Navigator.push(context, MaterialPageRoute(builder: (context) => ArtistImageInfo(image:_current, uid: _uID, fileName:_baseName)));
+                  } else {
+                    final finishedUploading = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => ArtistImageInfo(
+                                image: _current,
+                                uid: _uID,
+                                fileName: _baseName)));
                     if (finishedUploading == 'done') {
                       print('Finally finished uploading');
 
@@ -136,7 +165,7 @@ class _ArtistUploadImageState extends State<ArtistUploadImage> {
                       });
                     }
                   }
-                  },
+                },
                 minWidth: 200.0,
                 height: 50.0,
               ),
