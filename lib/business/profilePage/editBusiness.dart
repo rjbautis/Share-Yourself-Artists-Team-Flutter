@@ -111,6 +111,14 @@ class _EditBusinessState extends State<EditBusiness> {
     _additionalNotesController.addListener(onEditAdditionalNotesComplete);
 
     return new Column(children: <Widget>[
+      Container(
+        child: Text('Submit Feedback',
+            style: new TextStyle(
+              fontSize: 25.0,
+            )),
+        padding: const EdgeInsets.only(
+            left: 20.0, right: 20.0, top: 30.0, bottom: 0.0),
+      ),
       TextFormField(
         controller: _businessNameController,
         decoration: InputDecoration(labelText: 'Business Name'),
@@ -164,8 +172,10 @@ class _EditBusinessState extends State<EditBusiness> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: AppBar(
-          title: Text('Edit Profile'),
-          backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
+          title: new Image.asset('images/logo.png'),
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          centerTitle: true,
           iconTheme: IconThemeData(color: Colors.black),
           actions: <Widget>[
             IconButton(

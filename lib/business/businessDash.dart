@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 import 'package:share_yourself_artists_team_flutter/business/businessProvideFeedback.dart';
 import 'package:share_yourself_artists_team_flutter/user/drawer.dart';
@@ -185,14 +184,11 @@ class _BusinessDashState extends State<BusinessDash> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
+          title: new Image.asset('images/logo.png'),
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          centerTitle: true,
           iconTheme: IconThemeData(color: Colors.black),
-          backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
-          title: Text(
-            title,
-            style: TextStyle(
-              color: Colors.black,
-            ),
-          ),
           bottom: TabBar(
               indicatorColor: Colors.black,
               labelColor: Colors.black,
