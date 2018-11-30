@@ -16,7 +16,7 @@ class _LoginPageState extends State<LoginPage> {
   // Determines which flow to push after successful login
   void _navigateToRoute(String role) {
     if (role == 'business') {
-      Navigator.of(context).pushReplacementNamed('/artist');
+      Navigator.of(context).pushReplacementNamed('/business');
     }
     if (role == 'artist') {
       Navigator.of(context).pushReplacementNamed('/artist');
