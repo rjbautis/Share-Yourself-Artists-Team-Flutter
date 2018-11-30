@@ -308,7 +308,6 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
           title: new Text('View Business Profile'),
           backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
         ),
-        drawer: NavDrawer(),
         body: StreamBuilder(
           stream: Firestore.instance
               .collection('users')

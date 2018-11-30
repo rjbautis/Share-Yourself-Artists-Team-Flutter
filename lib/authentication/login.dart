@@ -58,8 +58,6 @@ class _LoginPageState extends State<LoginPage> {
     String _email;
     String _password;
 
-    _onPressed() {}
-
     bool _validate() {
       var loginForm = _form.currentState;
       if (loginForm.validate()) {
