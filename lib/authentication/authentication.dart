@@ -249,7 +249,7 @@ class Authentication {
   }
 
   // Retrieve the relevant user information
-  static Future<Map<String, Object>> getUserInfo() async {
+  static Future<Map<String, Object>> getArtistInfo() async {
     final FirebaseAuth _fireBaseAuth = FirebaseAuth.instance;
     FirebaseUser currentUser;
 

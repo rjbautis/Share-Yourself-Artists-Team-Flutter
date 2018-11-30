@@ -17,7 +17,7 @@ class _NavDrawerState extends State<NavDrawer> {
     super.initState();
 
     // Save the user's information to use in drawer
-    Authentication.getUserInfo().then((userInfo) {
+    Authentication.getArtistInfo().then((userInfo) {
       setState(() {
         _name = userInfo['displayName'];
         _email = userInfo['email'];
