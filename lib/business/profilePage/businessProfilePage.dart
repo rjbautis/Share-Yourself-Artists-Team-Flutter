@@ -350,6 +350,14 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
         backgroundColor: Colors.transparent,
         elevation: 0.0,
         centerTitle: true,
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.edit),
+            onPressed: () {
+              Navigator.of(context).pushReplacementNamed('/editBusiness');
+            },
+          ),
+        ],
       ),
       drawer: NavDrawer(),
       body: StreamBuilder(
