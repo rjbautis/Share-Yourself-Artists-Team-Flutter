@@ -4,8 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:share_yourself_artists_team_flutter/artist/artistSendArt.dart';
 import 'package:share_yourself_artists_team_flutter/artist/artistUploadImage.dart';
-import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
+import 'package:share_yourself_artists_team_flutter/user/drawer.dart';
 
 class ArtistDash extends StatefulWidget {
   ArtistDash();
@@ -160,38 +160,7 @@ class _ArtistDashState extends State<ArtistDash> {
             ),
           ],
         ),
-        drawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              UserAccountsDrawerHeader(
-                decoration: BoxDecoration(
-                  color: Color.fromRGBO(255, 160, 0, 1.0),
-                ),
-                accountName: new Text('Artist'),
-                accountEmail: new Text('gmail.com'),
-                currentAccountPicture: new CircleAvatar(
-                  backgroundColor: Colors.white,
-                  child: new Text('T'),
-                ),
-              ),
-              ListTile(
-                title: new Text('View Profile'),
-                onTap: () async {
-                  Navigator.of(context).pushNamed('/artistProfilePage');
-                },
-              ),
-              ListTile(
-                title: new Text('Log Out'),
-                onTap: () async {
-                  await Authentication.signOut();
-                  resetPreferences();
-                  Navigator.of(context).pushReplacementNamed('/');
-                },
-              ),
-            ],
-          ),
-        ),
+        drawer: NavDrawer(),
         body: StreamBuilder(
           stream: Firestore.instance
               .collection('art')
