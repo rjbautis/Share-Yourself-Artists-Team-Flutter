@@ -61,11 +61,23 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
   Widget _checkEmailFlag() {
     if (_emailFlag == 0) {
       return new Container(
-        child: Column(
-          //mainAxisSize: MainAxisSize.min,
+        child: Row(
+          //mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             new Padding(padding: const EdgeInsets.only(top: 40.0)),
-            new Text("Email: $_email"),
+            new Container(
+              child: new Text(
+                "Email:",
+                textAlign: TextAlign.left,
+              ),
+            ),
+            new Container(
+              child: new Text(
+                "$_email",
+                textAlign: TextAlign.left,
+              ),
+            )
           ],
         ),
       );
@@ -222,8 +234,6 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
 
   Widget _buildList(
       BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot, int index) {
-//    int _join = snapshot.data.documents[index]['joined_on'];
-
     if (_isNull(snapshot.data.documents[index]['business_name'])) {
       _nameFlag = 1;
     } else {
@@ -283,13 +293,6 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
     print("$_joinFlag");
 
     print("\n\n-------------\n\n");
-
-//    DateTime upload = DateTime.fromMillisecondsSinceEpoch(_join, isUtc: false);
-//    String dateString = upload.month.toString() +
-//        '-' +
-//        upload.day.toString() +
-//        '-' +
-//        upload.year.toString();
 
     return new Container(
       child: Column(
