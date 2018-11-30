@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 
 class ArtistProfilePage extends StatefulWidget {
@@ -137,13 +136,13 @@ class _ArtistProfilePageState extends State<ArtistProfilePage> {
       _name = snapshot.data.documents[index]['name'].toString();
     }
 
-    if (_isNull(snapshot.data.documents[index]['free_credits'])) {
+    if (snapshot.data.documents[index]['free_cerdits'] == null) {
       _fcFlag = 1;
     } else {
-      _fc = snapshot.data.documents[index]['free_credits'];
+      _fc = snapshot.data.documents[index]['free_cerdits'];
     }
 
-    if (_isNull(snapshot.data.documents[index]['credits'])) {
+    if (snapshot.data.documents[index]['credits'] == null) {
       _pcFlag = 1;
     } else {
       _pc = snapshot.data.documents[index]['credits'];
@@ -155,11 +154,13 @@ class _ArtistProfilePageState extends State<ArtistProfilePage> {
       _email = snapshot.data.documents[index]['email'].toString();
     }
 
-    if (_isNull(snapshot.data.documents[index]['upload_date'])) {
+    if (snapshot.data.documents[index]['upload_date'] == null) {
       _joinFlag = 1;
     } else {
       _join = snapshot.data.documents[index]['upload_date'];
     }
+
+    print("$_uid");
 
     return new Container(
       child: Column(
