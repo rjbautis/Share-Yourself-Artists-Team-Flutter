@@ -100,12 +100,6 @@ class _ArtistImageInfoState extends State<ArtistImageInfo>
     print('sucessfully stored in art collection');
   }
 
-//  @override
-//  void dispose() {
-//    super.dispose();
-//    _controller.dispose();
-//  }
-
   @override
   Widget build(BuildContext context) {
     bool _validate() {
@@ -221,17 +215,22 @@ class _ArtistImageInfoState extends State<ArtistImageInfo>
       key: _scaffoldState,
       resizeToAvoidBottomPadding: false,
       appBar: AppBar(
-        title: new Text('Enter Art Information'),
-        backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
+        title: new Image.asset('images/logo.png'),
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        centerTitle: true,
       ),
       body: Container(
         padding: const EdgeInsets.all(20.0),
         child: ListView(
           children: <Widget>[
             Container(
-              child: Image.asset('images/logo.png'),
+              child: Text('Art Info',
+                  style: new TextStyle(
+                    fontSize: 25.0,
+                  )),
               padding: const EdgeInsets.only(
-                  left: 20.0, right: 20.0, top: 20.0, bottom: 30.0),
+                  left: 0.0, right: 20.0, top: 20.0, bottom: 30.0),
             ),
             Form(
                 key: form,
