@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class BusinessProvideFeedback extends StatefulWidget {
@@ -51,7 +52,7 @@ class _BusinessProvideFeedbackState extends State<BusinessProvideFeedback> {
     });
   }
 
-  void _submitComment() {
+  Future _submitComment() async {
     if (comment.length < 50) {
       /// TODO  display error message
       return;
@@ -62,7 +63,7 @@ class _BusinessProvideFeedbackState extends State<BusinessProvideFeedback> {
       acceptVal = 'accepted';
 
     final DocumentReference postRef = widget.snapshot.data.documents[widget.index].reference;
-    Firestore.instance.runTransaction((Transaction tx) async {
+    await Firestore.instance.runTransaction((Transaction tx) async {
       DocumentSnapshot postSnapshot = widget.snapshot.data.documents[widget.index]; //await tx.get(postRef);
       if (postSnapshot.exists) {
         await tx.update(postRef, <String, dynamic>{'replied': true});
@@ -166,7 +167,10 @@ class _BusinessProvideFeedbackState extends State<BusinessProvideFeedback> {
                   textColor:
                       _submitEnabled ? Colors.deepOrangeAccent : Colors.grey,
                   child: new Text('Submit Response'),
-                  onPressed: _submitComment,
+                  onPressed: () async {
+                    await _submitComment();
+                    Navigator.of(context).pop();
+                  },
                   borderSide: new BorderSide(
                     color:
                         _submitEnabled ? Colors.deepOrangeAccent : Colors.grey,
