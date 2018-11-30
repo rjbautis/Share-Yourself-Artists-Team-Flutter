@@ -184,11 +184,8 @@ class _ArtistDashState extends State<ArtistDash> {
             );
           }
           if (snapshot.data.documents.length == 0) {
-            return new Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                new Text("No Art, Why dont you upload some!"),
-              ],
+            return new Center(
+              child: new Text("No Art, Why dont you upload some!"),
             );
           }
           return new Container(
