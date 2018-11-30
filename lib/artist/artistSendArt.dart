@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:share_yourself_artists_team_flutter/artist/selectBusiness.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 
 class ArtistSendArt extends StatefulWidget {
   var snapshot;
@@ -18,11 +20,18 @@ class _ArtistSendArtState extends State<ArtistSendArt> {
   bool _submitEnabled = false;
   String _bUID = 'n/a';
   String _busName = 'n/a';
+  String _busEmail = 'n/a';
 
   String artImage;
   String artTitle;
   String artDescription;
   String artUserID;
+  String artistName;
+  String artistEmail;
+  int uploadDate;
+
+  int credits;
+  int freeCredits;
 
   @override
   void initState() {
@@ -34,12 +43,84 @@ class _ArtistSendArtState extends State<ArtistSendArt> {
       artDescription = widget
           .snapshot.data.documents[widget.index]['description']
           .toString();
+      artistName = widget
+          .snapshot.data.documents[widget.index]['artist_name'].toString();
+      uploadDate = widget.snapshot.data.documents[widget.index]['upload_date'];
+
+      loadUid().then((uid) {
+        artUserID = uid;
+        _getArtistInfo();
+      });
     });
   }
 
-  void _submitArtwork() {
-    /// TODO Submit the art to a business
+  Future<void> _submitArtwork() async {
+    bool freeCerd = true;
+
+    /*if (freeCredits > 0)
+    {
+      freeCerd = true;
+      _decrementFree();
+    } else if (credits > 0)
+    {
+      freeCerd = false;
+      _decrementPaid();
+    } else
+    {
+      /// TODO Display Error Message
+      print('Not enough credits');
+      return null;
+    }*/
+
+    await Firestore.instance.collection('review_requests').document().setData(
+        {
+          'art':{
+            'art_title': artTitle,
+            'artist_id': artUserID,
+            'artist_name': artistName,
+            'description': artDescription,
+            'upload_date': uploadDate,
+            'url': artImage,
+          },
+
+          'artist_email': artistEmail,
+
+          'businessId': {
+            'business_email': _busEmail,
+            'business_name': _busName,
+            'userId': _bUID,
+          },
+
+          'read_byartist': false,
+          'refunded': 0,
+          'replied': false,
+          'submitted_with_free_cerdit': freeCerd,
+        });
+
     Navigator.pop(context);
+  }
+
+  Future _getArtistInfo() async {
+    DocumentSnapshot artist =
+    await Firestore.instance.collection('users').document(artUserID).get();
+    if (artist.exists) {
+      print("exists");
+      setState(() {
+        artistEmail = artist['email'];
+        credits = artist['credits'];
+        freeCredits = artist['free_credits'];
+      });
+    }
+  }
+
+  Future<void> _decrementFree() async {
+    /// TODO Decrement free_credit count
+
+  }
+
+  Future<void> _decrementPaid() async {
+    /// TODO Decrement credit count
+
   }
 
   Future _navBusiness() async {
@@ -52,6 +133,7 @@ class _ArtistSendArtState extends State<ArtistSendArt> {
       if (businessInfo != null) {
         _busName = businessInfo[0];
         _bUID = businessInfo[1];
+        _busEmail = businessInfo[2];
         _submitEnabled = true;
       }
     });
@@ -75,7 +157,6 @@ class _ArtistSendArtState extends State<ArtistSendArt> {
                 height: MediaQuery.of(context).size.width * .75,
                 child: new Image.network(
                   artImage,
-                  //'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/1024px-Cat03.jpg',
                   fit: BoxFit.fitWidth,
                 ),
               ),
@@ -86,7 +167,6 @@ class _ArtistSendArtState extends State<ArtistSendArt> {
                   artTitle + " - " + artDescription,
                   textAlign: TextAlign.left,
                   textScaleFactor: 1.5,
-                  //style: TextStyle(fontStyle: FontStyle.italic),
                 ),
               ),
               new Padding(padding: EdgeInsets.fromLTRB(5.0, 30.0, 0.0, 0.0)),

@@ -42,9 +42,9 @@ class _ArtistDashState extends State<ArtistDash> {
       context,
       MaterialPageRoute(
           builder: (context) => ArtistSendArt(
-                snapshot: snapshot,
-                index: index,
-              )),
+            snapshot: snapshot,
+            index: index,
+          )),
     );
   }
 
