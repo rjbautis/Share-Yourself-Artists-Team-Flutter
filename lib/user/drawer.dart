@@ -65,19 +65,6 @@ class _NavDrawerState extends State<NavDrawer> {
               }
             },
           ),
-          ListTile(
-            title: new Text('Edit Profile'),
-            onTap: () async {
-              String _role = await loadRole();
-              print('the role is $_role');
-              if (_role == 'artist') {
-                return;
-              } else if (_role == 'business'){
-                Navigator.of(context).pushNamed('/editBusiness');
-
-              }
-            },
-          ),
           Divider(),
           ListTile(
             title: new Text('About Us'),
