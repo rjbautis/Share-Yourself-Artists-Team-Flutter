@@ -42,9 +42,9 @@ class _ArtistDashState extends State<ArtistDash> {
       context,
       MaterialPageRoute(
           builder: (context) => ArtistSendArt(
-                snapshot: snapshot,
-                index: index,
-              )),
+            snapshot: snapshot,
+            index: index,
+          )),
     );
   }
 
@@ -133,8 +133,7 @@ class _ArtistDashState extends State<ArtistDash> {
     final title = 'Dashboard';
     _screenWidth = MediaQuery.of(context).size.width;
 
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(color: Colors.black),
           backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
@@ -177,6 +176,12 @@ class _ArtistDashState extends State<ArtistDash> {
                 ),
               ),
               ListTile(
+                title: new Text('View Profile'),
+                onTap: () async {
+                  Navigator.of(context).pushNamed('/artistProfilePage');
+                },
+              ),
+              ListTile(
                 title: new Text('Log Out'),
                 onTap: () async {
                   await Authentication.signOut();
@@ -204,7 +209,6 @@ class _ArtistDashState extends State<ArtistDash> {
             );
           },
         ),
-      ),
     );
   }
 }
