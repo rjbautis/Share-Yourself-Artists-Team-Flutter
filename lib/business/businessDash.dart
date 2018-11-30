@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 import 'package:share_yourself_artists_team_flutter/business/businessProvideFeedback.dart';
+import 'package:share_yourself_artists_team_flutter/user/drawer.dart';
+
 
 class BusinessDash extends StatefulWidget {
   @override
@@ -212,44 +214,7 @@ class _BusinessDashState extends State<BusinessDash> {
                 ),
               ]),
         ),
-        drawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              UserAccountsDrawerHeader(
-                decoration: BoxDecoration(
-                  color: Color.fromRGBO(255, 160, 0, 1.0),
-                ),
-                accountName: new Text('Business'),
-                accountEmail: new Text('gmail.com'),
-                currentAccountPicture: new CircleAvatar(
-                  backgroundColor: Colors.white,
-                  child: new Text('T'),
-                ),
-              ),
-              ListTile(
-                title: new Text('View Profile'),
-                onTap: () async {
-                  Navigator.of(context).pushNamed('/businessProfilePage');
-                },
-              ),
-              ListTile(
-                title: new Text('Edit Profile'),
-                onTap: () async {
-                  Navigator.of(context).pushNamed('/editBusiness');
-                },
-              ),
-              ListTile(
-                title: new Text('Log Out'),
-                onTap: () async {
-                  await Authentication.signOut();
-                  resetPreferences();
-                  Navigator.of(context).pushReplacementNamed('/');
-                },
-              ),
-            ],
-          ),
-        ),
+        drawer: NavDrawer(),
         body: TabBarView(children: [
           new StreamBuilder(
             stream: Firestore.instance
