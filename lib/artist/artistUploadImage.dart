@@ -75,32 +75,9 @@ class _ArtistUploadImageState extends State<ArtistUploadImage> {
 
     return new Scaffold(
       resizeToAvoidBottomPadding: false,
-      appBar: AppBar(title: new Text('Upload Art')),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            UserAccountsDrawerHeader(
-              decoration: BoxDecoration(
-                color: Color.fromRGBO(255, 160, 0, 1.0),
-              ),
-              accountName: new Text('Artist'),
-              accountEmail: new Text('gmail.com'),
-              currentAccountPicture: new CircleAvatar(
-                backgroundColor: Colors.white,
-                child: new Text('T'),
-              ),
-            ),
-            ListTile(
-              title: new Text('Log Out'),
-              onTap: () async {
-                await Authentication.signOut();
-                resetPreferences();
-                Navigator.of(context).pushReplacementNamed('/');
-              },
-            ),
-          ],
-        ),
+      appBar: AppBar(
+        title: new Text('Upload Art'),
+        backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
       ),
       body: Container(
         padding: const EdgeInsets.all(20.0),
