@@ -66,20 +66,27 @@ class _ArtistDashState extends State<ArtistDash> {
         upload.year.toString();
 
     if (!_cardView) {
-      return new Dismissible(
-        // Show a red background as the item is swiped away
-        background: Container(
-          color: Colors.green,
-        ),
-        key: Key(artTitle + Random().nextInt(1000000).toString()),
-        onDismissed: (direction) {
-          // send to business
-          _navigateSend(snapshot, index);
-        },
-        child: ListTile(
-          title: Text(artTitle),
-          subtitle: Text(artDescription),
-        ),
+      return new Column(
+        children: <Widget>[
+          Dismissible(
+            // Show a red background as the item is swiped away
+            background: Container(
+              color: Colors.green,
+            ),
+            key: Key(artTitle + Random().nextInt(1000000).toString()),
+            onDismissed: (direction) {
+              // send to business
+              _navigateSend(snapshot, index);
+            },
+            child: ListTile(
+              title: Text(artTitle),
+              subtitle: Text(artDescription),
+            ),
+          ),
+          new Divider(
+            height: 5.0,
+          ),
+        ],
       );
     } else {
       return new Card(
@@ -135,50 +142,64 @@ class _ArtistDashState extends State<ArtistDash> {
     _screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-        appBar: AppBar(
-          iconTheme: IconThemeData(color: Colors.black),
-          backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
-          title: Text(
-            title,
-            style: TextStyle(
-              color: Colors.black,
-            ),
+      appBar: AppBar(
+        iconTheme: IconThemeData(color: Colors.black),
+        backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
+        title: Text(
+          title,
+          style: TextStyle(
+            color: Colors.black,
           ),
-          actions: <Widget>[
-            IconButton(
-              icon: _cardView ? Icon(Icons.list) : Icon(Icons.image),
-              onPressed: () {
-                setState(() {
-                  _cardView = !_cardView;
-                });
-              },
-            ),
-            IconButton(
-              icon: Icon(Icons.file_upload),
-              onPressed: () {
-                _navigateUpload();
-              },
-            ),
-          ],
         ),
-        drawer: NavDrawer(),
-        body: StreamBuilder(
-          stream: Firestore.instance
-              .collection('art')
-              .where('artist_id', isEqualTo: '${_uid}')
-              .snapshots(),
-          builder:
-              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (!snapshot.hasData) return new Text('Loading...');
-            return new Container(
-              child: ListView.builder(
-                itemBuilder: (BuildContext ctxt, int index) =>
-                    _buildList(context, snapshot, index),
-                itemCount: snapshot.data.documents.length,
-              ),
+        actions: <Widget>[
+          IconButton(
+            icon: _cardView ? Icon(Icons.list) : Icon(Icons.image),
+            onPressed: () {
+              setState(() {
+                _cardView = !_cardView;
+              });
+            },
+          ),
+          IconButton(
+            icon: Icon(Icons.file_upload),
+            onPressed: () {
+              _navigateUpload();
+            },
+          ),
+        ],
+      ),
+      drawer: NavDrawer(),
+      body: StreamBuilder(
+        stream: Firestore.instance
+            .collection('art')
+            .where('artist_id', isEqualTo: '${_uid}')
+            .snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (!snapshot.hasData) {
+            return new Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                new Text("Loading..."),
+              ],
             );
-          },
-        ),
+          }
+          if (snapshot.data.documents.length == 0) {
+            return new Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                new Text("No Art, Why dont you upload some!"),
+              ],
+            );
+          }
+          return new Container(
+            child: ListView.builder(
+              itemBuilder: (BuildContext ctxt, int index) => _buildList(
+                  context, snapshot, index, snapshot.data.documents.length),
+              itemCount: snapshot.data.documents.length,
+            ),
+          );
+        },
+      ),
     );
   }
 }
