@@ -42,19 +42,20 @@ class _ArtistDashState extends State<ArtistDash> {
       context,
       MaterialPageRoute(
           builder: (context) => ArtistSendArt(
-            snapshot: snapshot,
-            index: index,
-          )),
+                snapshot: snapshot,
+                index: index,
+              )),
     );
   }
 
-  Widget _buildList(
-      BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot, int index) {
-    String artImage = snapshot.data.documents[index]['url'].toString();
-    String artTitle = snapshot.data.documents[index]['art_title'].toString();
+  Widget _buildList(BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot,
+      int index, int len) {
+    int newIndex = len - index - 1;
+    String artImage = snapshot.data.documents[newIndex]['url'].toString();
+    String artTitle = snapshot.data.documents[newIndex]['art_title'].toString();
     String artDescription =
-        snapshot.data.documents[index]['description'].toString();
-    int uploadDate = snapshot.data.documents[index]['upload_date'];
+        snapshot.data.documents[newIndex]['description'].toString();
+    int uploadDate = snapshot.data.documents[newIndex]['upload_date'];
 
     DateTime upload =
         DateTime.fromMillisecondsSinceEpoch(uploadDate, isUtc: false);
@@ -117,7 +118,7 @@ class _ArtistDashState extends State<ArtistDash> {
                   icon: Icon(Icons.send),
                   color: Color.fromRGBO(255, 160, 0, 1.0),
                   onPressed: () {
-                    _navigateSend(snapshot, index);
+                    _navigateSend(snapshot, newIndex);
                   },
                 ),
               ],

@@ -14,8 +14,6 @@ class ArtistSendArt extends StatefulWidget {
 }
 
 class _ArtistSendArtState extends State<ArtistSendArt> {
-  FocusNode _textFieldNode = new FocusNode();
-  TextEditingController _controller = new TextEditingController();
   String comment;
   bool _submitEnabled = false;
   String _bUID = 'n/a';
@@ -30,8 +28,10 @@ class _ArtistSendArtState extends State<ArtistSendArt> {
   String artistEmail;
   int uploadDate;
 
-  int credits;
-  int freeCredits;
+  int _freeCredits;
+  int _paidCredits;
+  bool freeSubmit;
+  bool paid = false;
 
   @override
   void initState() {
@@ -43,8 +43,8 @@ class _ArtistSendArtState extends State<ArtistSendArt> {
       artDescription = widget
           .snapshot.data.documents[widget.index]['description']
           .toString();
-      artistName = widget
-          .snapshot.data.documents[widget.index]['artist_name'].toString();
+      artistName = widget.snapshot.data.documents[widget.index]['artist_name']
+          .toString();
       uploadDate = widget.snapshot.data.documents[widget.index]['upload_date'];
 
       loadUid().then((uid) {
@@ -55,72 +55,97 @@ class _ArtistSendArtState extends State<ArtistSendArt> {
   }
 
   Future<void> _submitArtwork() async {
-    bool freeCerd = true;
+    _reduceCredits();
 
-    /*if (freeCredits > 0)
-    {
-      freeCerd = true;
-      _decrementFree();
-    } else if (credits > 0)
-    {
-      freeCerd = false;
-      _decrementPaid();
-    } else
-    {
-      /// TODO Display Error Message
-      print('Not enough credits');
-      return null;
-    }*/
+    if (!paid) {
+      /// TODO: Display an error snackbar
+      print('not submitted');
+      return;
+    }
 
-    await Firestore.instance.collection('review_requests').document().setData(
-        {
-          'art':{
-            'art_title': artTitle,
-            'artist_id': artUserID,
-            'artist_name': artistName,
-            'description': artDescription,
-            'upload_date': uploadDate,
-            'url': artImage,
-          },
-
-          'artist_email': artistEmail,
-
-          'businessId': {
-            'business_email': _busEmail,
-            'business_name': _busName,
-            'userId': _bUID,
-          },
-
-          'read_byartist': false,
-          'refunded': 0,
-          'replied': false,
-          'submitted_with_free_cerdit': freeCerd,
-        });
+    await Firestore.instance.collection('review_requests').document().setData({
+      'art': {
+        'art_title': artTitle,
+        'artist_id': artUserID,
+        'artist_name': artistName,
+        'description': artDescription,
+        'upload_date': uploadDate,
+        'url': artImage,
+      },
+      'artist_email': artistEmail,
+      'businessId': {
+        'business_email': _busEmail,
+        'business_name': _busName,
+        'userId': _bUID,
+      },
+      'read_byartist': false,
+      'refunded': 0,
+      'replied': false,
+      'submitted_with_free_cerdit': freeSubmit,
+    });
 
     Navigator.pop(context);
   }
 
   Future _getArtistInfo() async {
     DocumentSnapshot artist =
-    await Firestore.instance.collection('users').document(artUserID).get();
+        await Firestore.instance.collection('users').document(artUserID).get();
     if (artist.exists) {
       print("exists");
       setState(() {
         artistEmail = artist['email'];
-        credits = artist['credits'];
-        freeCredits = artist['free_credits'];
+        _paidCredits = artist['credits'];
+        _freeCredits = artist['free_credits'];
       });
     }
   }
 
-  Future<void> _decrementFree() async {
-    /// TODO Decrement free_credit count
+  Future _reduceCredits() async {
+    DocumentReference ref =
+        Firestore.instance.collection('users').document(artUserID);
 
-  }
+    int fc = _freeCredits;
+    int pc = _paidCredits;
 
-  Future<void> _decrementPaid() async {
-    /// TODO Decrement credit count
+    bool _paid = false;
+    bool _freeSubmit = false;
 
+    if (fc == null)
+      fc = 0;
+
+    if (pc == null)
+      pc = 0;
+
+    if (fc > 0) {
+      fc--;
+      await Firestore.instance
+          .collection('users')
+          .document(artUserID)
+          .updateData({'free_credits': fc});
+      _paid = true;
+      _freeSubmit = true;
+    } else {
+      print("\n\nERROR in freeCredits: can't deduct from 0 credits\n\n");
+    }
+
+    if (pc > 0 && !paid) {
+      pc--;
+      await Firestore.instance
+          .collection('users')
+          .document(artUserID)
+          .updateData({'credits': pc});
+      _paid = true;
+      _freeSubmit = false;
+    } else {
+      print("\n\nERROR in paidCredits: can't deduct from 0 credits\n\n");
+    }
+
+    setState(() {
+      _freeCredits = fc;
+      _paidCredits = pc;
+      paid = _paid;
+      freeSubmit = _freeSubmit;
+    });
   }
 
   Future _navBusiness() async {
