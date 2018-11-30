@@ -192,23 +192,23 @@ class _ArtistProfilePageState extends State<ArtistProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: new Text('View Profile'),
-        backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            UserAccountsDrawerHeader(
-              decoration: BoxDecoration(
-                color: Color.fromRGBO(255, 160, 0, 1.0),
-              ),
-              accountName: new Text('Artist'),
-              accountEmail: new Text('gmail.com'),
-              currentAccountPicture: new CircleAvatar(
-                backgroundColor: Colors.white,
-                child: new Text('T'),
+        appBar: AppBar(
+          title: new Text('My Account'),
+          backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
+        ),
+        body: StreamBuilder(
+          stream: Firestore.instance
+              .collection('users')
+              .where('userId', isEqualTo: '$_uid')
+              .snapshots(),
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (!snapshot.hasData) return new Text('Loading...');
+            return new Container(
+              child: ListView.builder(
+                itemBuilder: (BuildContext ctxt, int index) =>
+                    _buildList(context, snapshot, index),
+                itemCount: snapshot.data.documents.length,
               ),
             ),
             ListTile(
