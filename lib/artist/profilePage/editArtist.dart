@@ -11,21 +11,11 @@ class EditArtist extends StatefulWidget {
 
 class _EditArtistState extends State<EditArtist> {
   String _uid;
-  TextEditingController _businessNameController;
-  TextEditingController _publicationController;
-  TextEditingController _followerCountController;
-  TextEditingController _websiteController;
-  TextEditingController _aboutController;
-  TextEditingController _worthKnowingController;
-  TextEditingController _additionalNotesController;
+  TextEditingController _artistNameController;
+  TextEditingController _instagramController;
 
-  String _businessName;
-  String _publication;
-  String _followerCount;
-  String _website;
-  String _about;
-  String _worthKnowing;
-  String _additionalNotes;
+  String _artistName;
+  String _instagram;
 
   @override
   void initState() {
@@ -42,122 +32,54 @@ class _EditArtistState extends State<EditArtist> {
   }
 
   Future _getProfile() async {
-    DocumentSnapshot business =
+    DocumentSnapshot artist =
         await Firestore.instance.collection('users').document(_uid).get();
-    if (business.exists) {
+    if (artist.exists) {
       print("exists");
       setState(() {
-        _businessName = business['business_name'];
-        _publication = business['publication'];
-        _followerCount = business['follower_count'];
-        _website = business['website'];
-        _about = business['about'];
-        _worthKnowing = business['worth_knowing'];
-        _additionalNotes = business['additional_notes'];
+        _artistName = artist['name'];
+        _instagram = artist['instagram'];
       });
     }
   }
 
-  Future onEditBusinessNameComplete() async {
-    _businessName = _businessNameController.text;
+  Future onEditArtistNameComplete() async {
+    _artistName = _artistNameController.text;
   }
 
-  Future onEditPublicationComplete() async {
-    _publication = _publicationController.text;
-  }
-
-  Future onEditFollowerCountComplete() async {
-    _followerCount = _followerCountController.text;
-  }
-
-  Future onEditWebsiteComplete() async {
-    _website = _websiteController.text;
-  }
-
-  Future onEditAboutComplete() async {
-    _about = _aboutController.text;
-  }
-
-  Future onEditWorthKnowingComplete() async {
-    _worthKnowing = _worthKnowingController.text;
-  }
-
-  Future onEditAdditionalNotesComplete() async {
-    _additionalNotes = _additionalNotesController.text;
+  Future onEditInstagramComplete() async {
+    _instagram = _instagramController.text;
   }
 
   Widget _buildProfile(AsyncSnapshot<QuerySnapshot> snapshot) {
-    _businessNameController = new TextEditingController(
-        text: snapshot.data.documents[0]['business_name'].toString());
-    _publicationController = new TextEditingController(
-        text: snapshot.data.documents[0]['publication'].toString());
-    _followerCountController = new TextEditingController(
-        text: snapshot.data.documents[0]['follower_count'].toString());
-    _websiteController = new TextEditingController(
-        text: snapshot.data.documents[0]['website'].toString());
-    _aboutController = new TextEditingController(
-        text: snapshot.data.documents[0]['about'].toString());
-    _worthKnowingController = new TextEditingController(
-        text: snapshot.data.documents[0]['worth_knowing'].toString());
-    _additionalNotesController = new TextEditingController(
-        text: snapshot.data.documents[0]['additional_notes'].toString());
+    _artistNameController = new TextEditingController(
+        text: snapshot.data.documents[0]['name'].toString());
+    _instagramController = new TextEditingController(
+        text: snapshot.data.documents[0]['instagram'].toString());
 
-    _businessNameController.addListener(onEditBusinessNameComplete);
-    _publicationController.addListener(onEditPublicationComplete);
-    _followerCountController.addListener(onEditFollowerCountComplete);
-    _websiteController.addListener(onEditWebsiteComplete);
-    _aboutController.addListener(onEditAboutComplete);
-    _worthKnowingController.addListener(onEditWorthKnowingComplete);
-    _additionalNotesController.addListener(onEditAdditionalNotesComplete);
+    _artistNameController.addListener(onEditArtistNameComplete);
+    _instagramController.addListener(onEditInstagramComplete);
 
     return new Column(children: <Widget>[
       TextFormField(
-        controller: _businessNameController,
-        decoration: InputDecoration(labelText: 'Business Name'),
+        controller: _artistNameController,
+        decoration: InputDecoration(labelText: 'Artist Name'),
       ),
       TextFormField(
-        controller: _publicationController,
-        decoration: InputDecoration(labelText: 'Publication'),
-      ),
-      TextFormField(
-        controller: _followerCountController,
-        decoration: InputDecoration(labelText: 'Follower Count'),
-      ),
-      TextFormField(
-        controller: _websiteController,
-        decoration: InputDecoration(labelText: 'Website'),
-      ),
-      TextFormField(
-        controller: _aboutController,
-        maxLines: 8,
-        decoration: InputDecoration(labelText: 'About'),
-      ),
-      TextFormField(
-        controller: _worthKnowingController,
-        maxLines: 3,
-        decoration: InputDecoration(labelText: 'Worth Knowing'),
-      ),
-      TextFormField(
-        controller: _additionalNotesController,
-        maxLines: 3,
-        decoration: InputDecoration(labelText: 'Additional Notes'),
+        controller: _instagramController,
+        decoration: InputDecoration(labelText: 'Instagram'),
       ),
     ]);
   }
 
   Future _updateProfile() async {
     await Firestore.instance.collection('users').document(_uid).updateData({
-      'business_name': _businessName,
-      'publication': _publication,
-      'follower_count': _followerCount,
-      'website': _website,
-      'about': _about,
-      'worth_knowing': _worthKnowing,
-      'additional_notes': _additionalNotes
+      'name': _artistName,
+      'instagram': _instagram,
     });
 
-    print('sucessfully updated business profile');
-    print(_businessName);
+    print('sucessfully updated artist profile');
+    print(_artistName);
   }
 
   @override
