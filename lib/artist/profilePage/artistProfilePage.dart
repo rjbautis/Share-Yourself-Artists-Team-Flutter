@@ -39,7 +39,9 @@ class _ArtistProfilePageState extends State<ArtistProfilePage> {
         child: Column(
           //mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            new Padding(padding: const EdgeInsets.only(top: 40.0)),
+            new Padding(
+                padding:
+                    const EdgeInsets.only(top: 40.0, left: 40.0, right: 40.0)),
             new Text("Name: $_name"),
           ],
         ),
@@ -161,6 +163,9 @@ class _ArtistProfilePageState extends State<ArtistProfilePage> {
     }
 
     print("$_uid");
+    print("\n\n --------------- \n\n");
+    print("$_name");
+    print("\n\n --------------- \n\n");
 
     return new Container(
       child: Column(
