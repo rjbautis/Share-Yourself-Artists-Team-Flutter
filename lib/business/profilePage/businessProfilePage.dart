@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
+import 'package:share_yourself_artists_team_flutter/user/drawer.dart';
 
 class BusinessProfilePage extends StatefulWidget {
   @override
@@ -192,6 +193,33 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
     return false;
   }
 
+  Widget _profilePic() {
+//    (_photoUrl != '')
+////        ? new CircleAvatar(
+////            backgroundImage: new NetworkImage(_photoUrl),
+////          )
+////        : new CircleAvatar(
+////            backgroundColor: Colors.white,
+////            child: new Icon(Icons.person),
+////          );
+
+    return new Container(
+        margin: const EdgeInsets.all(15.0),
+        padding:
+            const EdgeInsets.only(top: 3.0, bottom: 3.0, right: 3.0, left: 3.0),
+        decoration:
+            new BoxDecoration(border: new Border.all(color: Colors.black)),
+        child: new Column(
+          children: <Widget>[
+            Padding(
+                padding: EdgeInsets.only(
+                    left: 8.0, right: 8.0, top: 25.0, bottom: 20.0),
+                child: new Text("Test Profile",
+                    textAlign: TextAlign.center, style: new TextStyle())),
+          ],
+        ));
+  }
+
   Widget _buildList(
       BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot, int index) {
 //    int _join = snapshot.data.documents[index]['joined_on'];
@@ -267,6 +295,19 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
       child: Column(
         //mainAxisSize: MainAxisSize.min,
         children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(top: 25.0, bottom: 20.0),
+          ),
+          _profilePic(),
+          Padding(
+            padding: EdgeInsets.only(top: 10.0, bottom: 20.0),
+          ),
+          new Container(
+            height: 1.5,
+            color: Colors.grey,
+            padding: EdgeInsets.only(top: 10.0, right: 3.0, left: 3.0),
+            margin: EdgeInsets.only(right: 25.0, left: 25.0),
+          ),
           _checkNameFlag(),
           _checkEmailFlag(),
           _checkPubFlag(),
@@ -302,9 +343,12 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: new Text('View Business Profile'),
-        backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
+        title: new Image.asset('images/logo.png'),
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        centerTitle: true,
       ),
+      drawer: NavDrawer(),
       body: StreamBuilder(
         stream: Firestore.instance
             .collection('users')

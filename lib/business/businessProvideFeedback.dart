@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/materialre.dart';
 
 class BusinessProvideFeedback extends StatefulWidget {
   var artInfo;
@@ -10,7 +11,8 @@ class BusinessProvideFeedback extends StatefulWidget {
   BusinessProvideFeedback({@required this.artInfo, this.snapshot, this.index});
 
   @override
-  _BusinessProvideFeedbackState createState() => new _BusinessProvideFeedbackState();
+  _BusinessProvideFeedbackState createState() =>
+      new _BusinessProvideFeedbackState();
 }
 
 class _BusinessProvideFeedbackState extends State<BusinessProvideFeedback> {
@@ -59,22 +61,25 @@ class _BusinessProvideFeedbackState extends State<BusinessProvideFeedback> {
     }
 
     String acceptVal = 'declined';
-    if (_accepted)
-      acceptVal = 'accepted';
+    if (_accepted) acceptVal = 'accepted';
 
-    final DocumentReference postRef = widget.snapshot.data.documents[widget.index].reference;
+    final DocumentReference postRef =
+        widget.snapshot.data.documents[widget.index].reference;
     await Firestore.instance.runTransaction((Transaction tx) async {
-      DocumentSnapshot postSnapshot = widget.snapshot.data.documents[widget.index]; //await tx.get(postRef);
+      DocumentSnapshot postSnapshot =
+          widget.snapshot.data.documents[widget.index]; //await tx.get(postRef);
       if (postSnapshot.exists) {
         await tx.update(postRef, <String, dynamic>{'replied': true});
-        await tx.update(postRef, <String, dynamic>{'submission_response.radios': acceptVal});
-        await tx.update(postRef, <String, dynamic>{'submission_response.response': comment});
+        await tx.update(postRef,
+            <String, dynamic>{'submission_response.radios': acceptVal});
+        await tx.update(postRef,
+            <String, dynamic>{'submission_response.response': comment});
       }
     });
   }
 
-
-  final commentBar = SnackBar(content: Text('Please write a longer response. (min. 50 characters)'));
+  final commentBar = SnackBar(
+      content: Text('Please write a longer response. (min. 50 characters)'));
 
   void onEditComplete() {
     comment = _controller.text;
@@ -89,12 +94,22 @@ class _BusinessProvideFeedbackState extends State<BusinessProvideFeedback> {
 
     return new Scaffold(
       appBar: AppBar(
-        title: Text('Submit Feedback'),
-        backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
+        title: new Image.asset('images/logo.png'),
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        centerTitle: true,
         iconTheme: IconThemeData(color: Colors.black),
       ),
       body: new Center(
         child: new ListView(children: <Widget>[
+          Container(
+            child: Text('Submit Feedback',
+                style: new TextStyle(
+                  fontSize: 25.0,
+                )),
+            padding: const EdgeInsets.only(
+                left: 20.0, right: 20.0, top: 30.0, bottom: 0.0),
+          ),
           new Padding(padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 30.0)),
           new Column(
             mainAxisAlignment: MainAxisAlignment.center,

@@ -66,17 +66,17 @@ class _ArtistUploadImageState extends State<ArtistUploadImage> {
           child: new Column(
             children: <Widget>[
               Padding(
-                  padding: EdgeInsets.only(left: 8.0, right: 8.0, top: 25.0),
+                  padding: EdgeInsets.only(
+                      left: 8.0, right: 8.0, top: 25.0, bottom: 20.0),
                   child: new Text(
                       "Uploads are stored on SYA's Google Servers and are not"
                       "publicly exposed to anyone. Read our upload terms for more deatils.",
                       textAlign: TextAlign.center,
                       style: new TextStyle())),
-              IconButton(
-                icon: Icon(Icons.file_upload),
-                iconSize: 100.0,
-                padding: EdgeInsets.only(top: 40.0),
-              ),
+              Icon(
+                Icons.file_upload,
+                size: 100.0,
+              )
             ],
           ));
     }
