@@ -46,7 +46,7 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
   final int SUBMIT = 0;
   final int INPROGRESS = 1;
   final int SUCCESS = 2;
-  
+
 
   Future<String> _handleUpload() async {
     print('${widget.uid} ${widget.fileName}');
@@ -101,11 +101,11 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
     print('sucessfully stored in art collection');
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _controller.dispose();
-  }
+//  @override
+//  void dispose() {
+//    super.dispose();
+//    _controller.dispose();
+//  }
 
   @override
   Widget build(BuildContext context) {
@@ -225,32 +225,9 @@ class _ArtistImageInfoState extends State<ArtistImageInfo> with TickerProviderSt
     return new Scaffold(
       key: _scaffoldState,
       resizeToAvoidBottomPadding: false,
-      appBar: AppBar(title: new Text('Enter Art Information')),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            UserAccountsDrawerHeader(
-              decoration: BoxDecoration(
-                color: Color.fromRGBO(255, 160, 0, 1.0),
-              ),
-              accountName: new Text('Artist'),
-              accountEmail: new Text('gmail.com'),
-              currentAccountPicture: new CircleAvatar(
-                backgroundColor: Colors.white,
-                child: new Text('T'),
-              ),
-            ),
-            ListTile(
-              title: new Text('Log Out'),
-              onTap: () async {
-                await Authentication.signOut();
-                resetPreferences();
-                Navigator.of(context).pushReplacementNamed('/');
-              },
-            ),
-          ],
-        ),
+      appBar: AppBar(
+        title: new Text('Enter Art Information'),
+        backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
       ),
       body: Container(
         padding: const EdgeInsets.all(20.0),

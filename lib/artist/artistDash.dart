@@ -4,8 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:share_yourself_artists_team_flutter/artist/artistSendArt.dart';
 import 'package:share_yourself_artists_team_flutter/artist/artistUploadImage.dart';
-import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
+import 'package:share_yourself_artists_team_flutter/user/drawer.dart';
 
 class ArtistDash extends StatefulWidget {
   ArtistDash();
@@ -42,19 +42,20 @@ class _ArtistDashState extends State<ArtistDash> {
       context,
       MaterialPageRoute(
           builder: (context) => ArtistSendArt(
-            snapshot: snapshot,
-            index: index,
-          )),
+                snapshot: snapshot,
+                index: index,
+              )),
     );
   }
 
-  Widget _buildList(
-      BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot, int index) {
-    String artImage = snapshot.data.documents[index]['url'].toString();
-    String artTitle = snapshot.data.documents[index]['art_title'].toString();
+  Widget _buildList(BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot,
+      int index, int len) {
+    int newIndex = len - index - 1;
+    String artImage = snapshot.data.documents[newIndex]['url'].toString();
+    String artTitle = snapshot.data.documents[newIndex]['art_title'].toString();
     String artDescription =
-        snapshot.data.documents[index]['description'].toString();
-    int uploadDate = snapshot.data.documents[index]['upload_date'];
+        snapshot.data.documents[newIndex]['description'].toString();
+    int uploadDate = snapshot.data.documents[newIndex]['upload_date'];
 
     DateTime upload =
         DateTime.fromMillisecondsSinceEpoch(uploadDate, isUtc: false);
@@ -117,7 +118,7 @@ class _ArtistDashState extends State<ArtistDash> {
                   icon: Icon(Icons.send),
                   color: Color.fromRGBO(255, 160, 0, 1.0),
                   onPressed: () {
-                    _navigateSend(snapshot, index);
+                    _navigateSend(snapshot, newIndex);
                   },
                 ),
               ],
@@ -160,38 +161,7 @@ class _ArtistDashState extends State<ArtistDash> {
             ),
           ],
         ),
-        drawer: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              UserAccountsDrawerHeader(
-                decoration: BoxDecoration(
-                  color: Color.fromRGBO(255, 160, 0, 1.0),
-                ),
-                accountName: new Text('Artist'),
-                accountEmail: new Text('gmail.com'),
-                currentAccountPicture: new CircleAvatar(
-                  backgroundColor: Colors.white,
-                  child: new Text('T'),
-                ),
-              ),
-              ListTile(
-                title: new Text('View Profile'),
-                onTap: () async {
-                  Navigator.of(context).pushNamed('/artistProfilePage');
-                },
-              ),
-              ListTile(
-                title: new Text('Log Out'),
-                onTap: () async {
-                  await Authentication.signOut();
-                  resetPreferences();
-                  Navigator.of(context).pushReplacementNamed('/');
-                },
-              ),
-            ],
-          ),
-        ),
+        drawer: NavDrawer(),
         body: StreamBuilder(
           stream: Firestore.instance
               .collection('art')

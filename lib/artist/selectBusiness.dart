@@ -31,16 +31,27 @@ class _BusinessSelectState extends State<BusinessSelect> {
       return null;
     }
 
-    return new ListTile(
-      title: Text(name),
-      subtitle: Text(theGood),
-      onTap: () {
-        List<String> selectedBus = new List(3);
-        selectedBus[0] = name;
-        selectedBus[1] = uid;
-        selectedBus[2] = email;
-        Navigator.of(context).pop(selectedBus);
-      },
+    var _children = <Widget>[
+      new ListTile(
+        title: Text(name),
+        subtitle: Text(theGood),
+        onTap: () {
+          List<String> selectedBus = new List(3);
+          selectedBus[0] = name;
+          selectedBus[1] = uid;
+          selectedBus[2] = email;
+          Navigator.of(context).pop(selectedBus);
+        },
+      ),
+      new Divider(
+        height: 5.0,
+      )
+    ];
+
+    // Return the ListTile with a Divider at the bottom
+    return new Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: _children,
     );
   }
 
@@ -71,41 +82,22 @@ class _BusinessSelectState extends State<BusinessSelect> {
         ),
       ),
       body: new Container(
-        width: _screenWidth,
-        height: _screenHeight,
-        child: new ListView(
-          children: <Widget>[
-            /*new Container(
-              width: _screenWidth * .80,
-              child: new TextFormField(
-                controller: _controller,
-                textInputAction: TextInputAction.done,
-                decoration: InputDecoration(
-                  hintText: '  Search...',
-                ),
+        child: new StreamBuilder(
+          stream: Firestore.instance
+              .collection("users")
+              .where("role", isEqualTo: "business")
+              .snapshots(),
+          builder: (BuildContext context,
+              AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (!snapshot.hasData) return new Text('Loading...');
+            return new Container(
+              child: ListView.builder(
+                itemBuilder: (BuildContext ctxt, int index) =>
+                    _buildList(context, snapshot, index),
+                itemCount: snapshot.data.documents.length,
               ),
-            ),*/
-            new Container(
-              height: _screenHeight, // - 123,
-              child: new StreamBuilder(
-                stream: Firestore.instance
-                    .collection("users")
-                    .where("role", isEqualTo: "business")
-                    .snapshots(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<QuerySnapshot> snapshot) {
-                  if (!snapshot.hasData) return new Text('Loading...');
-                  return new Container(
-                    child: ListView.builder(
-                      itemBuilder: (BuildContext ctxt, int index) =>
-                          _buildList(context, snapshot, index),
-                      itemCount: snapshot.data.documents.length,
-                    ),
-                  );
-                },
-              ),
-            ),
-          ],
+            );
+          },
         ),
       ),
     );

@@ -248,4 +248,33 @@ class Authentication {
     }
   }
 
+  // Retrieve the relevant user information
+  static Future<Map<String, Object>> getArtistInfo() async {
+    final FirebaseAuth _fireBaseAuth = FirebaseAuth.instance;
+    FirebaseUser currentUser;
+
+    print("Attempting to retrieve user's information");
+
+    Map<String, Object> userInfo = {
+      'displayName': '',
+      'email': '',
+      'photoUrl': ''
+    };
+
+    // Check that the user is already signed in
+    if (await alreadySignedIn()) {
+      currentUser = await _fireBaseAuth.currentUser();
+
+      if (currentUser.displayName != null) {
+        userInfo['displayName'] = currentUser.displayName;
+      }
+      if (currentUser.email != null) {
+        userInfo['email'] = currentUser.email;
+      }
+      if (currentUser.photoUrl != null) {
+        userInfo['photoUrl'] = currentUser.photoUrl;
+      }
+    }
+    return userInfo;
+  }
 }
