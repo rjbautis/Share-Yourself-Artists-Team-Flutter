@@ -6,6 +6,7 @@ import 'package:share_yourself_artists_team_flutter/artist/artistSendArt.dart';
 import 'package:share_yourself_artists_team_flutter/artist/artistUploadImage.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 import 'package:share_yourself_artists_team_flutter/user/drawer.dart';
+import 'package:share_yourself_artists_team_flutter/artist/artistViewReply.dart';
 
 class ArtistDash extends StatefulWidget {
   ArtistDash();
@@ -136,8 +137,15 @@ class _ArtistDashState extends State<ArtistDash> {
     }
   }
 
-  void _navReplyDescription() {
-
+  void _navReplyDescription(AsyncSnapshot<QuerySnapshot> snapshot, int index) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => ArtistViewReply(
+            snapshot: snapshot,
+            index: index,
+          )),
+    );
   }
 
   // Builds the card for the replied artwork tab
@@ -165,7 +173,7 @@ class _ArtistDashState extends State<ArtistDash> {
     if (artFree == null) artFree = false;
 
     return new GestureDetector(
-      onTap: () {_navReplyDescription();},
+      onTap: () {_navReplyDescription(snapshot, newIndex);},
       child: Card(
         child: Column(
           mainAxisSize: MainAxisSize.min,
