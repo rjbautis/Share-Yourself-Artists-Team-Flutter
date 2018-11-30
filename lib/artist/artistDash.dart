@@ -76,7 +76,7 @@ class _ArtistDashState extends State<ArtistDash> {
             key: Key(artTitle + Random().nextInt(1000000).toString()),
             onDismissed: (direction) {
               // send to business
-              _navigateSend(snapshot, index);
+              _navigateSend(snapshot, newIndex);
             },
             child: ListTile(
               title: Text(artTitle),
@@ -136,63 +136,209 @@ class _ArtistDashState extends State<ArtistDash> {
     }
   }
 
+  void _navReplyDescription() {
+
+  }
+
+  // Builds the card for the replied artwork tab
+  Widget _buildRepliedCard(BuildContext context,
+      AsyncSnapshot<QuerySnapshot> snapshot, int index, int length) {
+    int newIndex = length - index - 1;
+
+    String artImage =
+        snapshot.data.documents[newIndex]['art']['url'].toString();
+    String artTitle =
+        snapshot.data.documents[newIndex]['art']['art_title'].toString();
+    String artArtist =
+        snapshot.data.documents[newIndex]['art']['artist_name'].toString();
+    String accepted = snapshot
+        .data.documents[newIndex]['submission_response']['radios']
+        .toString()
+        .toLowerCase();
+    bool artFree =
+        snapshot.data.documents[newIndex]['submitted_with_free_cerdit'];
+
+    bool _accepted = false;
+
+    if (accepted.compareTo('accepted') == 0) _accepted = true;
+
+    if (artFree == null) artFree = false;
+
+    return new GestureDetector(
+      onTap: () {_navReplyDescription();},
+      child: Card(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(top: _screenWidth * .1),
+            ),
+            Image.network(
+              artImage,
+              width: MediaQuery.of(context).size.width * .75,
+            ),
+            ListTile(
+              title: Text(
+                artTitle,
+                textAlign: TextAlign.center,
+              ),
+              subtitle: Text(artArtist, textAlign: TextAlign.center),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Icon(
+                  Icons.attach_money,
+                  color: artFree ? Colors.grey : Colors.green,
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      vertical: 0.0, horizontal: _screenWidth * .3),
+                ),
+                Icon(
+                  _accepted ? Icons.check_circle : Icons.not_interested,
+                  color: _accepted ? Colors.green : Colors.red,
+                ),
+              ],
+            ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 10.0),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final title = 'Dashboard';
     _screenWidth = MediaQuery.of(context).size.width;
 
-    return Scaffold(
-      appBar: AppBar(
-        iconTheme: IconThemeData(color: Colors.black),
-        title: new Image.asset('images/logo.png'),
-        backgroundColor: Colors.transparent,
-        elevation: 0.0,
-        centerTitle: true,
-        actions: <Widget>[
-          IconButton(
-            icon: _cardView ? Icon(Icons.list) : Icon(Icons.image),
-            onPressed: () {
-              setState(() {
-                _cardView = !_cardView;
-              });
-            },
-          ),
-          IconButton(
-            icon: Icon(Icons.file_upload),
-            onPressed: () {
-              _navigateUpload();
-            },
-          ),
-        ],
-      ),
-      drawer: NavDrawer(),
-      body: StreamBuilder(
-        stream: Firestore.instance
-            .collection('art')
-            .where('artist_id', isEqualTo: '${_uid}')
-            .snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData) {
-            return new Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                new Text("Loading..."),
-              ],
-            );
-          }
-          if (snapshot.data.documents.length == 0) {
-            return new Center(
-              child: new Text("No Art, Why dont you upload some!"),
-            );
-          }
-          return new Container(
-            child: ListView.builder(
-              itemBuilder: (BuildContext ctxt, int index) => _buildList(
-                  context, snapshot, index, snapshot.data.documents.length),
-              itemCount: snapshot.data.documents.length,
+    return DefaultTabController(
+      length: 2,
+      child: Scaffold(
+        appBar: AppBar(
+          iconTheme: IconThemeData(color: Colors.black),
+          title: new Image.asset('images/logo.png'),
+          bottom: TabBar(
+              indicatorColor: Colors.black,
+              labelColor: Colors.black,
+              tabs: [
+                Tab(
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      new Text('My Art'),
+                      new Padding(
+                          padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0)),
+                      new Icon(Icons.inbox),
+                    ],
+                  ),
+                ),
+                Tab(
+                  child: new Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      new Text('Responses'),
+                      new Padding(
+                          padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0)),
+                      new Icon(Icons.arrow_back),
+                    ],
+                  ),
+                ),
+              ]),
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          centerTitle: true,
+          actions: <Widget>[
+            IconButton(
+              icon: _cardView ? Icon(Icons.list) : Icon(Icons.image),
+              onPressed: () {
+                setState(() {
+                  _cardView = !_cardView;
+                });
+              },
             ),
-          );
-        },
+            IconButton(
+              icon: Icon(Icons.file_upload),
+              onPressed: () {
+                _navigateUpload();
+              },
+            ),
+          ],
+        ),
+        drawer: NavDrawer(),
+        body: TabBarView(
+          children: <Widget>[
+            StreamBuilder(
+              stream: Firestore.instance
+                  .collection('art')
+                  .where('artist_id', isEqualTo: '${_uid}')
+                  .snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (!snapshot.hasData) {
+                  return new Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      new Text("Loading..."),
+                    ],
+                  );
+                }
+                if (snapshot.data.documents.length == 0) {
+                  return new Center(
+                    child: new Text("No Art, Why dont you upload some!"),
+                  );
+                }
+                return new Container(
+                  child: ListView.builder(
+                    itemBuilder: (BuildContext ctxt, int index) => _buildList(
+                        context,
+                        snapshot,
+                        index,
+                        snapshot.data.documents.length),
+                    itemCount: snapshot.data.documents.length,
+                  ),
+                );
+              },
+            ),
+            new StreamBuilder(
+              stream: Firestore.instance
+                  .collection('review_requests')
+                  .where('art.artist_id', isEqualTo: '${_uid}')
+                  .where('replied', isEqualTo: true)
+                  .snapshots(),
+              builder: (BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                if (!snapshot.hasData) {
+                  return new Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      new Text("Loading..."),
+                    ],
+                  );
+                }
+                if (snapshot.data.documents.length == 0) {
+                  return new Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      new Text("No Replied Arts"),
+                    ],
+                  );
+                }
+                return new Container(
+                  child: ListView.builder(
+                    itemBuilder: (BuildContext ctxt, int index) =>
+                        _buildRepliedCard(context, snapshot, index,
+                            snapshot.data.documents.length),
+                    itemCount: snapshot.data.documents.length,
+                  ),
+                );
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
