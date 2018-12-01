@@ -16,8 +16,10 @@ class BusinessProvideFeedback extends StatefulWidget {
 }
 
 class _BusinessProvideFeedbackState extends State<BusinessProvideFeedback> {
+  static GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey<ScaffoldState>();
   FocusNode _textFieldNode = new FocusNode();
   TextEditingController _controller = new TextEditingController();
+
   String comment;
   bool _submitEnabled = false;
   bool _accepted = false;
@@ -56,7 +58,11 @@ class _BusinessProvideFeedbackState extends State<BusinessProvideFeedback> {
 
   Future _submitComment() async {
     if (comment.length < 50) {
-      /// TODO  display error message
+      _scaffoldState.currentState.showSnackBar(SnackBar(
+        content: new Text('Comment too short. Min 50 characters.'),
+        duration: Duration(seconds: 4),
+        backgroundColor: Colors.red,
+      ));
       return;
     }
 
@@ -76,6 +82,8 @@ class _BusinessProvideFeedbackState extends State<BusinessProvideFeedback> {
             <String, dynamic>{'submission_response.response': comment});
       }
     });
+
+    Navigator.of(context).pop();
   }
 
   final commentBar = SnackBar(
@@ -84,7 +92,6 @@ class _BusinessProvideFeedbackState extends State<BusinessProvideFeedback> {
   void onEditComplete() {
     comment = _controller.text;
     comment.isEmpty ? _submitEnabled = false : _submitEnabled = true;
-    // bool hasFocus = _textFieldNode.hasFocus;
   }
 
   @override
@@ -93,6 +100,7 @@ class _BusinessProvideFeedbackState extends State<BusinessProvideFeedback> {
     _textFieldNode.addListener(onEditComplete);
 
     return new Scaffold(
+      key: _scaffoldState,
       appBar: AppBar(
         title: new Image.asset('images/logo.png'),
         backgroundColor: Colors.transparent,
@@ -184,7 +192,6 @@ class _BusinessProvideFeedbackState extends State<BusinessProvideFeedback> {
                   child: new Text('Submit Response'),
                   onPressed: () async {
                     await _submitComment();
-                    Navigator.of(context).pop();
                   },
                   borderSide: new BorderSide(
                     color:

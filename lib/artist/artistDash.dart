@@ -50,7 +50,13 @@ class _ArtistDashState extends State<ArtistDash> {
               )),
     );
 
-    bool _snackBar = sent;
+    bool _snackBar = false;
+
+    if(sent != null){
+      _snackBar = sent;
+    }
+
+
     if (_snackBar){
       _scaffoldState.currentState.showSnackBar(SnackBar(
         content: new Text('Sent!'),
