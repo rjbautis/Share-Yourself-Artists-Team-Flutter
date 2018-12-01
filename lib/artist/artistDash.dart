@@ -7,6 +7,7 @@ import 'package:share_yourself_artists_team_flutter/artist/artistUploadImage.dar
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 import 'package:share_yourself_artists_team_flutter/user/drawer.dart';
 import 'package:share_yourself_artists_team_flutter/artist/artistViewReply.dart';
+import 'package:share_yourself_artists_team_flutter/artist/artistViewArt.dart';
 
 class ArtistDash extends StatefulWidget {
   ArtistDash();
@@ -16,7 +17,8 @@ class ArtistDash extends StatefulWidget {
 }
 
 class _ArtistDashState extends State<ArtistDash> {
-  static GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey<ScaffoldState>();
+  static GlobalKey<ScaffoldState> _scaffoldState =
+      new GlobalKey<ScaffoldState>();
 
   double _screenWidth;
   bool _cardView = true;
@@ -52,18 +54,28 @@ class _ArtistDashState extends State<ArtistDash> {
 
     bool _snackBar = false;
 
-    if(sent != null){
+    if (sent != null) {
       _snackBar = sent;
     }
 
-
-    if (_snackBar){
+    if (_snackBar) {
       _scaffoldState.currentState.showSnackBar(SnackBar(
         content: new Text('Sent!'),
         duration: Duration(seconds: 4),
         backgroundColor: Colors.green,
       ));
     }
+  }
+
+  void _viewArt(AsyncSnapshot<QuerySnapshot> snapshot, int index) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => ArtistViewArt(
+                snapshot: snapshot,
+                index: index,
+              )),
+    );
   }
 
   Widget _buildList(BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot,
@@ -107,61 +119,67 @@ class _ArtistDashState extends State<ArtistDash> {
         ],
       );
     } else {
-      return new Card(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(top: _screenWidth * .1),
-            ),
-            Image.network(
-              artImage,
-              width: MediaQuery.of(context).size.width * .75,
-            ),
-            ListTile(
-              title: Text(
-                artTitle,
-                textAlign: TextAlign.center,
+      return new GestureDetector(
+        onTap: () {
+          _viewArt(snapshot, newIndex);
+        },
+        child: Card(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(top: _screenWidth * .1),
               ),
-              subtitle: Text(dateString, textAlign: TextAlign.center),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  artDescription,
+              Image.network(
+                artImage,
+                width: MediaQuery.of(context).size.width * .75,
+              ),
+              ListTile(
+                title: Text(
+                  artTitle,
+                  textAlign: TextAlign.center,
                 ),
-              ],
-            ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 4.0),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.send),
-                  color: Color.fromRGBO(255, 160, 0, 1.0),
-                  onPressed: () async {
-                    await _navigateSend(snapshot, newIndex);
-                  },
-                ),
-              ],
-            ),
-          ],
+                subtitle: Text(dateString, textAlign: TextAlign.center),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    artDescription,
+                  ),
+                ],
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 4.0),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  IconButton(
+                    icon: Icon(Icons.send),
+                    color: Color.fromRGBO(255, 160, 0, 1.0),
+                    onPressed: () async {
+                      await _navigateSend(snapshot, newIndex);
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       );
     }
   }
 
-  void _navReplyDescription(AsyncSnapshot<QuerySnapshot> snapshot, int index) async {
+  void _navReplyDescription(
+      AsyncSnapshot<QuerySnapshot> snapshot, int index) async {
     Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) => ArtistViewReply(
-            snapshot: snapshot,
-            index: index,
-          )),
+                snapshot: snapshot,
+                index: index,
+              )),
     );
   }
 
