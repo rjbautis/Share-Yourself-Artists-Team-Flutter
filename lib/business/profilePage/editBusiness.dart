@@ -10,6 +10,8 @@ class EditBusiness extends StatefulWidget {
 }
 
 class _EditBusinessState extends State<EditBusiness> {
+  static GlobalKey<ScaffoldState> _scaffoldState =
+      new GlobalKey<ScaffoldState>();
   String _uid;
   TextEditingController _businessNameController;
   TextEditingController _publicationController;
@@ -171,6 +173,7 @@ class _EditBusinessState extends State<EditBusiness> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      key: _scaffoldState,
       appBar: AppBar(
           title: new Image.asset('images/logo.png'),
           backgroundColor: Colors.transparent,
@@ -182,7 +185,11 @@ class _EditBusinessState extends State<EditBusiness> {
               icon: Icon(Icons.check),
               onPressed: () {
                 _updateProfile();
-                Navigator.pop(context);
+                _scaffoldState.currentState.showSnackBar(SnackBar(
+                  content: new Text('Profile updated'),
+                  duration: Duration(seconds: 4),
+                  backgroundColor: Colors.green,
+                ));
               },
             ),
           ]),
