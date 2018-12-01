@@ -228,7 +228,7 @@ class _ArtistProfilePageState extends State<ArtistProfilePage> {
   void initState() {
     super.initState();
 
-    Authentication.getArtistInfo().then((userInfo) {
+    Authentication.getUserInfo().then((userInfo) {
       setState(() {
         _photoUrl = userInfo['photoUrl'];
       });

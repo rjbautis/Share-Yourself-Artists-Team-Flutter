@@ -25,7 +25,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future _handleLogin(String uid) async {
     if (uid != '') {
-      String role = await Authentication.verifyUserDocument(uid);
+      String role = await Authentication.readUserDocument(uid);
       await savePreferences(role, uid);
       _navigateToRoute(role);
     } else {
@@ -77,9 +77,8 @@ class _LoginPageState extends State<LoginPage> {
                 icon: new Icon(FontAwesomeIcons.facebook,
                     color: Color.fromRGBO(59, 89, 152, 1.0)),
                 onPressed: () async {
-//                  String uid =
-//                  await Authentication.signInWithFacebookAndFireBase();
-//                  await _handleLogin(uid);
+                  String uid = await Authentication.signInWithFacebookAndFireBase();
+                  await _handleLogin(uid);
                 }),
             new IconButton(
                 iconSize: 50.0,

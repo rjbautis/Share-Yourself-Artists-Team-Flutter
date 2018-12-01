@@ -359,7 +359,6 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
           ),
         ],
       ),
-      drawer: NavDrawer(),
       body: StreamBuilder(
         stream: Firestore.instance
             .collection('users')
