@@ -14,6 +14,9 @@ class ArtistSendArt extends StatefulWidget {
 }
 
 class _ArtistSendArtState extends State<ArtistSendArt> {
+  static GlobalKey<ScaffoldState> _scaffoldState =
+      new GlobalKey<ScaffoldState>();
+
   String comment;
   bool _submitEnabled = false;
   String _bUID = 'n/a';
@@ -58,12 +61,15 @@ class _ArtistSendArtState extends State<ArtistSendArt> {
     await _reduceCredits();
 
     if (!paid) {
-      /// TODO: Display an error snackbar
-      print('not submitted');
+      _scaffoldState.currentState.showSnackBar(SnackBar(
+        content: new Text('Error, Not enough credits'),
+        duration: Duration(seconds: 4),
+        backgroundColor: Colors.red,
+      ));
       return;
     }
 
-    print (freeSubmit);
+    print(freeSubmit);
 
     await Firestore.instance.collection('review_requests').document().setData({
       'art': {
@@ -86,7 +92,8 @@ class _ArtistSendArtState extends State<ArtistSendArt> {
       'submitted_with_free_cerdit': freeSubmit,
     });
 
-    Navigator.pop(context);
+    paid = false;
+    Navigator.of(context).pop(true);
   }
 
   Future _getArtistInfo() async {
@@ -136,7 +143,7 @@ class _ArtistSendArtState extends State<ArtistSendArt> {
       return;
     } else {
       print("\n\nERROR in freeCredits: can't deduct from 0 credits\n"
-            "Trying Paid Credits\n\n");
+          "Trying Paid Credits\n\n");
     }
 
     if (pc > 0 && !paid) {
@@ -178,6 +185,7 @@ class _ArtistSendArtState extends State<ArtistSendArt> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      key: _scaffoldState,
       appBar: AppBar(
         title: new Image.asset('images/logo.png'),
         backgroundColor: Colors.transparent,
@@ -198,13 +206,14 @@ class _ArtistSendArtState extends State<ArtistSendArt> {
                   fit: BoxFit.fitWidth,
                 ),
               ),
-              new Container(
-                padding: EdgeInsets.fromLTRB(5.0, 0.0, 5.0, 5.0),
-                alignment: FractionalOffset(.15, .85),
-                child: new Text(
-                  artTitle + " - " + artDescription,
-                  textAlign: TextAlign.left,
-                  textScaleFactor: 1.5,
+              new ListTile(
+                title: Text(
+                  artTitle,
+                  textAlign: TextAlign.center,
+                ),
+                subtitle: Text(
+                  artDescription,
+                  textAlign: TextAlign.center,
                 ),
               ),
               new Padding(padding: EdgeInsets.fromLTRB(5.0, 30.0, 0.0, 0.0)),
@@ -237,8 +246,8 @@ class _ArtistSendArtState extends State<ArtistSendArt> {
                   textColor:
                       _submitEnabled ? Colors.deepOrangeAccent : Colors.grey,
                   child: new Text('Submit Artwork'),
-                  onPressed: () {
-                    _submitArtwork();
+                  onPressed: () async {
+                    await _submitArtwork();
                   },
                   borderSide: new BorderSide(
                     color:
@@ -248,12 +257,24 @@ class _ArtistSendArtState extends State<ArtistSendArt> {
               ),
               new Padding(padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 10.0)),
               new ListTile(
-                title: Text('Available Free Credits'),
-                subtitle: Text(_freeCredits.toString()),
+                title: Text(
+                  'Available Free Credits',
+                  textAlign: TextAlign.center,
+                ),
+                subtitle: Text(
+                  _freeCredits.toString(),
+                  textAlign: TextAlign.center,
+                ),
               ),
               new ListTile(
-                title: Text('Available Credits'),
-                subtitle: Text(_paidCredits.toString()),
+                title: Text(
+                  'Available Credits',
+                  textAlign: TextAlign.center,
+                ),
+                subtitle: Text(
+                  _paidCredits.toString(),
+                  textAlign: TextAlign.center,
+                ),
               ),
             ],
           ),
