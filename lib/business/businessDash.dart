@@ -38,14 +38,14 @@ class _BusinessDashState extends State<BusinessDash> {
     String artArtist =
         snapshot.data.documents[newIndex]['art']['artist_name'].toString();
     //bool artReplied = snapshot.data.documents[index]['replied'];
-    bool artPaid =
+    bool artFree =
         snapshot.data.documents[newIndex]['submitted_with_free_cerdit'];
     String artUserID =
         snapshot.data.documents[newIndex]['art']['artist_id'].toString();
 
     var art = snapshot.data.documents[newIndex];
 
-    if (artPaid == null) artPaid = false;
+    if (artFree == null) artFree = false;
 
     return new Card(
       child: Column(
@@ -70,7 +70,7 @@ class _BusinessDashState extends State<BusinessDash> {
             children: <Widget>[
               Icon(
                 Icons.attach_money,
-                color: artPaid ? Colors.green : Colors.grey,
+                color: artFree ? Colors.grey : Colors.green,
               ),
               Padding(
                 padding: EdgeInsets.symmetric(
@@ -108,15 +108,13 @@ class _BusinessDashState extends State<BusinessDash> {
         .data.documents[newIndex]['submission_response']['radios']
         .toString()
         .toLowerCase();
-    bool artPaid =
+    bool artFree =
         snapshot.data.documents[newIndex]['submitted_with_free_cerdit'];
-    String artUserID =
-        snapshot.data.documents[newIndex]['art']['artist_id'].toString();
     bool _accepted = false;
 
     if (accepted.compareTo('accepted') == 0) _accepted = true;
 
-    if (artPaid == null) artPaid = false;
+    if (artFree == null) artFree = false;
 
     return new Card(
       child: Column(
@@ -141,7 +139,7 @@ class _BusinessDashState extends State<BusinessDash> {
             children: <Widget>[
               Icon(
                 Icons.attach_money,
-                color: artPaid ? Colors.green : Colors.grey,
+                color: artFree ? Colors.grey : Colors.green,
               ),
               Padding(
                 padding: EdgeInsets.symmetric(

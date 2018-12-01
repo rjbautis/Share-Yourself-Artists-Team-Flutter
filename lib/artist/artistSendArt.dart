@@ -55,13 +55,15 @@ class _ArtistSendArtState extends State<ArtistSendArt> {
   }
 
   Future<void> _submitArtwork() async {
-    _reduceCredits();
+    await _reduceCredits();
 
     if (!paid) {
       /// TODO: Display an error snackbar
       print('not submitted');
       return;
     }
+
+    print (freeSubmit);
 
     await Firestore.instance.collection('review_requests').document().setData({
       'art': {
@@ -116,24 +118,35 @@ class _ArtistSendArtState extends State<ArtistSendArt> {
 
     if (fc > 0) {
       fc--;
+      _paid = true;
+      _freeSubmit = true;
       await Firestore.instance
           .collection('users')
           .document(artUserID)
           .updateData({'free_credits': fc});
-      _paid = true;
-      _freeSubmit = true;
+
+      setState(() {
+        _freeCredits = fc;
+        _paidCredits = pc;
+        paid = _paid;
+        freeSubmit = _freeSubmit;
+      });
+
+      print("submitted w/ free cred");
+      return;
     } else {
-      print("\n\nERROR in freeCredits: can't deduct from 0 credits\n\n");
+      print("\n\nERROR in freeCredits: can't deduct from 0 credits\n"
+            "Trying Paid Credits\n\n");
     }
 
     if (pc > 0 && !paid) {
       pc--;
+      _paid = true;
+      _freeSubmit = false;
       await Firestore.instance
           .collection('users')
           .document(artUserID)
           .updateData({'credits': pc});
-      _paid = true;
-      _freeSubmit = false;
     } else {
       print("\n\nERROR in paidCredits: can't deduct from 0 credits\n\n");
     }
