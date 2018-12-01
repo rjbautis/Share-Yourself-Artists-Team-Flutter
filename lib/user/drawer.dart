@@ -17,7 +17,7 @@ class _NavDrawerState extends State<NavDrawer> {
     super.initState();
 
     // Save the user's information to use in drawer
-    Authentication.getArtistInfo().then((userInfo) {
+    Authentication.getUserInfo().then((userInfo) {
       setState(() {
         _name = userInfo['displayName'];
         _email = userInfo['email'];
@@ -51,6 +51,13 @@ class _NavDrawerState extends State<NavDrawer> {
                   backgroundColor: Colors.white,
                   child: new Icon(Icons.person),
                 ),
+          ),
+          ListTile(
+            leading: Icon(Icons.home),
+            title: new Text('Home'),
+            onTap: () async {
+              Navigator.of(context).pop();
+            },
           ),
           ListTile(
             leading: Icon(Icons.settings),
