@@ -14,6 +14,8 @@ class ArtistSendArt extends StatefulWidget {
 }
 
 class _ArtistSendArtState extends State<ArtistSendArt> {
+  static GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey<ScaffoldState>();
+
   String comment;
   bool _submitEnabled = false;
   String _bUID = 'n/a';
@@ -58,8 +60,11 @@ class _ArtistSendArtState extends State<ArtistSendArt> {
     await _reduceCredits();
 
     if (!paid) {
-      /// TODO: Display an error snackbar
-      print('not submitted');
+      _scaffoldState.currentState.showSnackBar(SnackBar(
+        content: new Text('Error, Not enough credits'),
+        duration: Duration(seconds: 4),
+        backgroundColor: Colors.red,
+      ));
       return;
     }
 
@@ -86,7 +91,8 @@ class _ArtistSendArtState extends State<ArtistSendArt> {
       'submitted_with_free_cerdit': freeSubmit,
     });
 
-    Navigator.pop(context);
+    paid = false;
+    Navigator.of(context).pop(true);
   }
 
   Future _getArtistInfo() async {
@@ -178,6 +184,7 @@ class _ArtistSendArtState extends State<ArtistSendArt> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      key: _scaffoldState,
       appBar: AppBar(
         title: new Image.asset('images/logo.png'),
         backgroundColor: Colors.transparent,
@@ -237,8 +244,8 @@ class _ArtistSendArtState extends State<ArtistSendArt> {
                   textColor:
                       _submitEnabled ? Colors.deepOrangeAccent : Colors.grey,
                   child: new Text('Submit Artwork'),
-                  onPressed: () {
-                    _submitArtwork();
+                  onPressed: () async {
+                    await _submitArtwork();
                   },
                   borderSide: new BorderSide(
                     color:

@@ -16,6 +16,8 @@ class ArtistDash extends StatefulWidget {
 }
 
 class _ArtistDashState extends State<ArtistDash> {
+  static GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey<ScaffoldState>();
+
   double _screenWidth;
   bool _cardView = true;
   String _uid;
@@ -38,8 +40,8 @@ class _ArtistDashState extends State<ArtistDash> {
     );
   }
 
-  void _navigateSend(AsyncSnapshot<QuerySnapshot> snapshot, int index) {
-    Navigator.push(
+  void _navigateSend(AsyncSnapshot<QuerySnapshot> snapshot, int index) async {
+    final sent = await Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) => ArtistSendArt(
@@ -47,6 +49,15 @@ class _ArtistDashState extends State<ArtistDash> {
                 index: index,
               )),
     );
+
+    bool _snackBar = sent;
+    if (_snackBar){
+      _scaffoldState.currentState.showSnackBar(SnackBar(
+        content: new Text('Sent!'),
+        duration: Duration(seconds: 4),
+        backgroundColor: Colors.green,
+      ));
+    }
   }
 
   Widget _buildList(BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot,
@@ -75,9 +86,9 @@ class _ArtistDashState extends State<ArtistDash> {
               color: Colors.green,
             ),
             key: Key(artTitle + Random().nextInt(1000000).toString()),
-            onDismissed: (direction) {
+            onDismissed: (direction) async {
               // send to business
-              _navigateSend(snapshot, newIndex);
+              await _navigateSend(snapshot, newIndex);
             },
             child: ListTile(
               title: Text(artTitle),
@@ -125,8 +136,8 @@ class _ArtistDashState extends State<ArtistDash> {
                 IconButton(
                   icon: Icon(Icons.send),
                   color: Color.fromRGBO(255, 160, 0, 1.0),
-                  onPressed: () {
-                    _navigateSend(snapshot, newIndex);
+                  onPressed: () async {
+                    await _navigateSend(snapshot, newIndex);
                   },
                 ),
               ],
@@ -137,7 +148,7 @@ class _ArtistDashState extends State<ArtistDash> {
     }
   }
 
-  void _navReplyDescription(AsyncSnapshot<QuerySnapshot> snapshot, int index) {
+  void _navReplyDescription(AsyncSnapshot<QuerySnapshot> snapshot, int index) async {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -173,7 +184,9 @@ class _ArtistDashState extends State<ArtistDash> {
     if (artFree == null) artFree = false;
 
     return new GestureDetector(
-      onTap: () {_navReplyDescription(snapshot, newIndex);},
+      onTap: () async {
+        await _navReplyDescription(snapshot, newIndex);
+      },
       child: Card(
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -226,6 +239,7 @@ class _ArtistDashState extends State<ArtistDash> {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        key: _scaffoldState,
         appBar: AppBar(
           iconTheme: IconThemeData(color: Colors.black),
           title: new Image.asset('images/logo.png'),
