@@ -39,6 +39,7 @@ class Authentication {
     final FirebaseAuth _fireBaseAuth = FirebaseAuth.instance;
     final FacebookLogin _facebook = FacebookLogin();
 
+    // Attempt to login with FB app if installed, otherwise use website
     _facebook.loginBehavior = FacebookLoginBehavior.nativeWithFallback;
 
     final FacebookLoginResult result = await _facebook.logInWithReadPermissions(['email']);
@@ -48,6 +49,19 @@ class Authentication {
 
     final FirebaseUser currentUser = await _fireBaseAuth.currentUser();
     assert(user.uid == currentUser.uid);
+
+    // Check if there exists an entry for this user in Firestore
+    var data = {
+      'credits': 0,
+      'email': user.email,
+      'free_credits': 2,
+      'name': user.displayName,
+      'role': 'artist',
+      'upload_date': new DateTime.now().millisecondsSinceEpoch,
+      'userId': user.uid,
+    };
+
+    await createUserDocumentIfNull(user.uid, data);
 
     return user.uid;
   }
