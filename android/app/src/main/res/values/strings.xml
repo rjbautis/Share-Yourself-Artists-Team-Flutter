@@ -2,7 +2,9 @@
 <resources>
     <string name="app_name">Share Yourself Artists</string>
 
-    <string name="facebook_app_id">324702524973223</string>
+    <!-- Replace "000000000000" with your Facebook App ID here. -->
+    <string name="facebook_app_id">1954332731264828</string>
 
-    <string name="fb_login_protocol_scheme">fb324702524973223</string>
+    <!-- Replace "000000000000" with your Facebook App ID here. -->
+    <string name="fb_login_protocol_scheme">1954332731264828</string>
 </resources>

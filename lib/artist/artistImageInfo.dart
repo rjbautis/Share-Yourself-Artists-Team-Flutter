@@ -51,8 +51,7 @@ class _ArtistImageInfoState extends State<ArtistImageInfo>
   Future<String> _handleUpload() async {
     print('${widget.uid} ${widget.fileName}');
 
-    String downloadUrl = await Authentication.uploadFile(
-        widget.image, widget.uid, null, widget.fileName);
+    String downloadUrl = await Authentication.uploadFileToFireStore(widget.image, widget.uid, null, widget.fileName);
     bool check = downloadUrl != null ? true : false;
 
     // If there exists a downloadUrl, set the state to the checkmark
@@ -199,12 +198,12 @@ class _ArtistImageInfoState extends State<ArtistImageInfo>
           Navigator.of(context).popUntil(ModalRoute.withName('/artist'));
         });
       } else {
-        print('Submitting to not work');
-        _scaffoldState.currentState.showSnackBar(SnackBar(
-          content:
-              new Text('There was a problem with uploading, please try again.'),
-          duration: Duration(seconds: 4),
-        ));
+        print('Submitting did not work');
+//        _scaffoldState.currentState.showSnackBar(SnackBar(
+//          content: new Text(
+//              'There was a problem with uploading, please try again.'),
+//          duration: Duration(seconds: 4),
+//        ));
         setState(() {
           _progressState = SUBMIT;
         });
