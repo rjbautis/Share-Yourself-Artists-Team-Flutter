@@ -10,6 +10,7 @@ import 'package:share_yourself_artists_team_flutter/business/businessDash.dart';
 import 'package:share_yourself_artists_team_flutter/business/profilePage/businessProfilePage.dart';
 import 'package:share_yourself_artists_team_flutter/business/profilePage/editBusiness.dart';
 import 'package:share_yourself_artists_team_flutter/info/about.dart';
+import 'package:share_yourself_artists_team_flutter/info/support.dart';
 
 final routes = {
   '/artist': (BuildContext context) => new ArtistDash(),
@@ -23,5 +24,6 @@ final routes = {
   '/editBusiness': (BuildContext context) => new EditBusiness(),
   '/editArtist': (BuildContext context) => new EditArtist(),
   '/about': (BuildContext context) => new AboutPage(),
+  '/support': (BuildContext context) => new SupportPage(),
   '/': (BuildContext context) => new LoginPage()
 };
