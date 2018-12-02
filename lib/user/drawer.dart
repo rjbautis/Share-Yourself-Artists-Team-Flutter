@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
@@ -77,6 +79,12 @@ class _NavDrawerState extends State<NavDrawer> {
             title: new Text('About Us'),
             onTap: () {
               Navigator.of(context).pushNamed('/about');
+            },
+          ),
+          ListTile(
+            title: new Text('Support'),
+            onTap: () {
+              Navigator.of(context).pushNamed('/support');
             },
           ),
           ListTile(

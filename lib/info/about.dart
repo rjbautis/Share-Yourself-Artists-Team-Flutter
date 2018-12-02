@@ -127,27 +127,32 @@ class AboutPage extends StatelessWidget {
 
 
     return new Scaffold(
+      appBar: AppBar(
+        title: new Image.asset('images/logo.png'),
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        centerTitle: true,
+      ),
       body: Container(
         padding: const EdgeInsets.fromLTRB(25.0, 0.0, 25.0, 0.0),
         child: ListView(
           children: <Widget>[
             Column(
               children: <Widget>[
-                Container(
-                  child: Image.asset('images/logo.png'),
-                  padding: const EdgeInsets.all(20.0),
+                Padding (
+                  padding: EdgeInsets.all(20.0),
                 ),
                 Center(
                   child: new Text(
                     'About Us',
                     textAlign: TextAlign.center,
                     style: const TextStyle(
-                        fontSize: 25.0,
+                        fontSize: 40.0,
                         color: Color.fromRGBO(255, 160, 0, 1.0)),
                   ),
                 ),
                 Padding (
-                  padding: EdgeInsets.all(25.0),
+                  padding: EdgeInsets.all(20.0),
                 ),
                 aboutUs,
                 persons
