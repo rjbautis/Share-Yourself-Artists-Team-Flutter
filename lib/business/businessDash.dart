@@ -10,6 +10,7 @@ class BusinessDash extends StatefulWidget {
 }
 
 class _BusinessDashState extends State<BusinessDash> {
+  bool refresh = false;
   double _screenWidth;
   String _uid;
 
@@ -234,10 +235,20 @@ class _BusinessDashState extends State<BusinessDash> {
                 );
               }
               if (snapshot.data.documents.length == 0) {
-                return new Row(
+                return new Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    new Text("No New Requests"),
+                    Text("No New Requests"),
+                    IconButton(
+                      icon: Icon(Icons.refresh),
+                      onPressed: () {
+                        setState(() {
+                          refresh = !refresh;
+                        });
+                      },
+                      color: Colors.lightBlue,
+                    ),
                   ],
                 );
               }
@@ -268,10 +279,20 @@ class _BusinessDashState extends State<BusinessDash> {
                 );
               }
               if (snapshot.data.documents.length == 0) {
-                return new Row(
+                return new Column(
                   mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    new Text("No Replied Arts"),
+                    Text("No Replied Arts"),
+                    IconButton(
+                      icon: Icon(Icons.refresh),
+                      onPressed: () {
+                        setState(() {
+                          refresh = !refresh;
+                        });
+                      },
+                      color: Colors.lightBlue,
+                    ),
                   ],
                 );
               }
