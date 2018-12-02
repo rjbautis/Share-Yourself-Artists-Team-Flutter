@@ -128,6 +128,15 @@ class _LoginPageState extends State<LoginPage> {
               borderSide: BorderSide(color: Colors.black),
               color: Colors.white,
               onPressed: () async {
+                _scaffoldState.currentState.showSnackBar(
+                    new SnackBar(duration: new Duration(seconds: 4), content:
+                    new Row(
+                      children: <Widget>[
+                        new CircularProgressIndicator(),
+                        new Text("  Signing-In...")
+                      ],
+                    ),
+                    ));
                 if (_validate()) {
                   print("the email is $_email and password is $_password");
                   String uid = await Authentication.signInWithEmailAndPassword(

@@ -106,6 +106,15 @@ class _BusinessSignUpThirdPageState extends State<BusinessSignUpThirdPage> {
                 if (_validate()) {
 //                  print(widget.credentials);
 //                  print(widget.image.path);
+                  _scaffoldState.currentState.showSnackBar(
+                      new SnackBar(duration: new Duration(seconds: 4), content:
+                      new Row(
+                        children: <Widget>[
+                          new CircularProgressIndicator(),
+                          new Text("  Signing-Up...")
+                        ],
+                      ),
+                      ));
                   await _handleCreation(widget.credentials, widget.image);
                 }
               },

@@ -129,6 +129,15 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
               borderSide: BorderSide(color: Colors.black),
               color: Colors.white,
               onPressed: () async {
+                _scaffoldState.currentState.showSnackBar(
+                    new SnackBar(duration: new Duration(seconds: 4), content:
+                    new Row(
+                      children: <Widget>[
+                        new CircularProgressIndicator(),
+                        new Text("  Signing-Up...")
+                      ],
+                    ),
+                    ));
                 if (_validate()) {
                   await _handleCreation(credentials);
                 }
