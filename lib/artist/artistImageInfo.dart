@@ -51,7 +51,8 @@ class _ArtistImageInfoState extends State<ArtistImageInfo>
   Future<String> _handleUpload() async {
     print('${widget.uid} ${widget.fileName}');
 
-    String downloadUrl = await Authentication.uploadFileToFireStore(widget.image, widget.uid, null, widget.fileName);
+    String downloadUrl = await Authentication.uploadFileToFireStore(
+        widget.image, widget.uid, null, widget.fileName);
     bool check = downloadUrl != null ? true : false;
 
     // If there exists a downloadUrl, set the state to the checkmark
@@ -101,6 +102,7 @@ class _ArtistImageInfoState extends State<ArtistImageInfo>
 
   @override
   Widget build(BuildContext context) {
+
     bool _validate() {
       var loginForm = form.currentState;
 
@@ -112,7 +114,7 @@ class _ArtistImageInfoState extends State<ArtistImageInfo>
     }
 
     Widget getArtTitle = TextFormField(
-      decoration: new InputDecoration(labelText: "Artist Title"),
+      decoration: new InputDecoration(labelText: "Title"),
       keyboardType: TextInputType.text,
       maxLines: 1,
       validator: (input) {
@@ -212,7 +214,7 @@ class _ArtistImageInfoState extends State<ArtistImageInfo>
 
     return new Scaffold(
       key: _scaffoldState,
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomPadding: true,
       appBar: AppBar(
         title: new Image.asset('images/logo.png'),
         backgroundColor: Colors.transparent,

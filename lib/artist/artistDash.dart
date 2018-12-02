@@ -20,6 +20,7 @@ class _ArtistDashState extends State<ArtistDash> {
   static GlobalKey<ScaffoldState> _scaffoldState =
       new GlobalKey<ScaffoldState>();
 
+  bool refresh = false;
   double _screenWidth;
   bool _cardView = true;
   String _uid;
@@ -141,13 +142,9 @@ class _ArtistDashState extends State<ArtistDash> {
                 ),
                 subtitle: Text(dateString, textAlign: TextAlign.center),
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text(
-                    artDescription,
-                  ),
-                ],
+              Text(
+                artDescription,
+                textAlign: TextAlign.center,
               ),
               Padding(
                 padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 4.0),
@@ -333,8 +330,22 @@ class _ArtistDashState extends State<ArtistDash> {
                   );
                 }
                 if (snapshot.data.documents.length == 0) {
-                  return new Center(
-                    child: new Text("No Art, Why dont you upload some!"),
+                  return new Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Text("No Art, Why don't you upload some!"),
+                        IconButton(
+                          icon: Icon(Icons.refresh),
+                          onPressed: () {
+                            setState(() {
+                              refresh = !refresh;
+                            });
+                          },
+                          color: Colors.lightBlue,
+                        ),
+                      ],
+
                   );
                 }
                 return new Container(
@@ -366,11 +377,21 @@ class _ArtistDashState extends State<ArtistDash> {
                   );
                 }
                 if (snapshot.data.documents.length == 0) {
-                  return new Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      new Text("No Replied Arts"),
-                    ],
+                  return new Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Text("No Responses"),
+                        IconButton(
+                          icon: Icon(Icons.refresh),
+                          onPressed: () {
+                            setState(() {
+                              refresh = !refresh;
+                            });
+                          },
+                          color: Colors.lightBlue,
+                        ),
+                      ],
                   );
                 }
                 return new Container(
