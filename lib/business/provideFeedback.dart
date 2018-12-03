@@ -8,6 +8,10 @@ class BusinessProvideFeedback extends StatefulWidget {
   AsyncSnapshot<QuerySnapshot> snapshot;
   final index;
 
+  void getData() => _BusinessProvideFeedbackState().getData();
+  String getTitle() => _BusinessProvideFeedbackState().artTitle;
+  String getArtist() => _BusinessProvideFeedbackState().artArtist;
+
   BusinessProvideFeedback({@required this.artInfo, this.snapshot, this.index});
 
   @override
@@ -38,13 +42,17 @@ class _BusinessProvideFeedbackState extends State<BusinessProvideFeedback> {
     super.initState();
 
     setState(() {
-      artImage = widget.artInfo['art']['url'].toString();
-      artTitle = widget.artInfo['art']['art_title'].toString();
-      artArtist = widget.artInfo['art']['artist_name'].toString();
-      //bool artReplied = widget.artInfo['replied'];
-      artPaid = widget.artInfo['submitted_with_free_cerdit'];
-      artUserID = widget.artInfo['art']['artist_id'].toString();
+      getData();
     });
+  }
+
+  void getData (){
+    artImage = widget.artInfo['art']['url'].toString();
+    artTitle = widget.artInfo['art']['art_title'].toString();
+    artArtist = widget.artInfo['art']['artist_name'].toString();
+    //bool artReplied = widget.artInfo['replied'];
+    artPaid = widget.artInfo['submitted_with_free_cerdit'];
+    artUserID = widget.artInfo['art']['artist_id'].toString();
   }
 
   void _handleResponse(int response) {
