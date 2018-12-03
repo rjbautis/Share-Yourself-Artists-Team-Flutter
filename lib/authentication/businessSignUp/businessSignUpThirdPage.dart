@@ -104,6 +104,15 @@ class _BusinessSignUpThirdPageState extends State<BusinessSignUpThirdPage> {
               borderSide: BorderSide(color: Colors.black),
               color: Colors.white,
               onPressed: () async {
+                _scaffoldState.currentState.showSnackBar(
+                    new SnackBar(duration: new Duration(seconds: 4), content:
+                    new Row(
+                      children: <Widget>[
+                        new CircularProgressIndicator(),
+                        new Text("  Signing-Up...")
+                      ],
+                    ),
+                    ));
                 if (_validate()) {
 //                  print(widget.credentials);
 //                  print(widget.image.path);
