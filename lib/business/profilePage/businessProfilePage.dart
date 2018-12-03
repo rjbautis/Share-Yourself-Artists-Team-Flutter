@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 import 'package:share_yourself_artists_team_flutter/user/drawer.dart';
+import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
 
 class BusinessProfilePage extends StatefulWidget {
   @override
@@ -10,6 +11,7 @@ class BusinessProfilePage extends StatefulWidget {
 
 class _BusinessProfilePageState extends State<BusinessProfilePage> {
   String _uid;
+  String _photoUrl;
 
   String _name = "";
   String _email = "";
@@ -31,6 +33,25 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
   int _addFlag = 0;
   int _joinFlag = 0;
 
+  @override
+  void initState() {
+    super.initState();
+
+    Authentication.getUserInfo().then((userInfo) {
+      setState(() {
+        _photoUrl = userInfo['photoUrl'];
+      });
+    });
+
+    // Grab the saved uid of current user from memory
+    loadUid().then((uid) {
+      print('init: current uid: $uid');
+      setState(() {
+        _uid = uid;
+      });
+    });
+  }
+
   Widget _emptyContainer() {
     return new Container(
       child: Column(
@@ -45,11 +66,12 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
   Widget _checkNameFlag() {
     if (_nameFlag == 0) {
       return new Container(
-        child: Column(
-          //mainAxisSize: MainAxisSize.min,
+        padding: const EdgeInsets.only(top: 20.0, left: 30.0, right: 30.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            new Padding(padding: const EdgeInsets.only(top: 40.0)),
-            new Text("Name: $_name"),
+            new Text("Name:", textAlign: TextAlign.left, style: TextStyle(fontSize: 18.0)),
+            new Text("$_name", textAlign: TextAlign.right, style: TextStyle(fontSize: 18.0)),
           ],
         ),
       );
@@ -61,23 +83,12 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
   Widget _checkEmailFlag() {
     if (_emailFlag == 0) {
       return new Container(
+        padding: const EdgeInsets.only(top: 20.0, left: 30.0, right: 30.0),
         child: Row(
-          //mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            new Padding(padding: const EdgeInsets.only(top: 40.0)),
-            new Container(
-              child: new Text(
-                "Email:",
-                textAlign: TextAlign.left,
-              ),
-            ),
-            new Container(
-              child: new Text(
-                "$_email",
-                textAlign: TextAlign.left,
-              ),
-            )
+            new Text("Email:", textAlign: TextAlign.left, style: TextStyle(fontSize: 18.0)),
+            new Text("$_email", textAlign: TextAlign.right, style: TextStyle(fontSize: 18.0)),
           ],
         ),
       );
@@ -89,11 +100,12 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
   Widget _checkPubFlag() {
     if (_pubFlag == 0) {
       return new Container(
-        child: Column(
-          //mainAxisSize: MainAxisSize.min,
+        padding: const EdgeInsets.only(top: 20.0, left: 30.0, right: 30.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            new Padding(padding: const EdgeInsets.only(top: 40.0)),
-            new Text("Publication: $_publication"),
+            new Text("Publication:", textAlign: TextAlign.left, style: TextStyle(fontSize: 18.0)),
+            new Text("$_publication", textAlign: TextAlign.right, style: TextStyle(fontSize: 18.0)),
           ],
         ),
       );
@@ -105,11 +117,12 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
   Widget _checkFollowFlag() {
     if (_followFlag == 0) {
       return new Container(
-        child: Column(
-          //mainAxisSize: MainAxisSize.min,
+        padding: const EdgeInsets.only(top: 20.0, left: 30.0, right: 30.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            new Padding(padding: const EdgeInsets.only(top: 40.0)),
-            new Text("Follower Count:  $_followers"),
+            new Text("Follower Count:", textAlign: TextAlign.left, style: TextStyle(fontSize: 18.0)),
+            new Text("$_followers", textAlign: TextAlign.right, style: TextStyle(fontSize: 18.0)),
           ],
         ),
       );
@@ -121,11 +134,12 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
   Widget _checkWebFlag() {
     if (_webFlag == 0) {
       return new Container(
-        child: Column(
-          //mainAxisSize: MainAxisSize.min,
+        padding: const EdgeInsets.only(top: 20.0, left: 30.0, right: 30.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            new Padding(padding: const EdgeInsets.only(top: 40.0)),
-            new Text("Website: $_website"),
+            new Text("Website:", textAlign: TextAlign.left, style: TextStyle(fontSize: 18.0)),
+            new Text("$_website", textAlign: TextAlign.right, style: TextStyle(fontSize: 18.0)),
           ],
         ),
       );
@@ -137,11 +151,21 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
   Widget _checkAboutFlag() {
     if (_aboutFlag == 0) {
       return new Container(
-        child: Column(
-          //mainAxisSize: MainAxisSize.min,
+        padding: const EdgeInsets.only(top: 20.0, left: 30.0, right: 30.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            new Padding(padding: const EdgeInsets.only(top: 40.0)),
-            new Text("About: $_about"),
+            new Text("About:", textAlign: TextAlign.left, style: TextStyle(fontSize: 18.0)),
+            new Padding(padding: EdgeInsets.only(right:10.0)),
+            new Expanded(
+              child: Column(
+                children: <Widget>[
+                  new Text("$_about", textAlign: TextAlign.right, style: TextStyle(fontSize: 18.0,)),
+                ],
+              ),
+              flex: 3,
+            ),
           ],
         ),
       );
@@ -153,11 +177,21 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
   Widget _checkWKFlag() {
     if (_wkFlag == 0) {
       return new Container(
-        child: Column(
-          //mainAxisSize: MainAxisSize.min,
+        padding: const EdgeInsets.only(top: 20.0, left: 30.0, right: 30.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            new Padding(padding: const EdgeInsets.only(top: 40.0)),
-            new Text("Worth Knowing: $_wk"),
+            new Text("Worth Knowing:", textAlign: TextAlign.left, style: TextStyle(fontSize: 18.0)),
+            new Padding(padding: EdgeInsets.only(right:10.0)),
+            new Expanded(
+                child: Column(
+                  children: <Widget>[
+                    new Text("$_wk", textAlign: TextAlign.right, style: TextStyle(fontSize: 18.0)),
+                  ],
+              ),
+              flex: 3,
+            ),
           ],
         ),
       );
@@ -169,11 +203,33 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
   Widget _checkAddFlag() {
     if (_addFlag == 0) {
       return new Container(
-        child: Column(
-          //mainAxisSize: MainAxisSize.min,
+        padding: const EdgeInsets.only(top: 20.0, left: 30.0, right: 30.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            new Padding(padding: const EdgeInsets.only(top: 40.0)),
-            new Text("Additional Notes: $_addNotes"),
+            new Text("Additional Notes:", textAlign: TextAlign.left, style: TextStyle(fontSize: 18.0)),
+            new Padding(padding: EdgeInsets.only(right:10.0)),
+            new Expanded(
+              child: Column(
+                children: <Widget>[
+                  new Text("$_addNotes", textAlign: TextAlign.right, style: TextStyle(fontSize: 18.0,)),
+                ],
+              ),
+              flex: 3,
+            ),
+          ],
+        ),
+      );
+    }
+    if (_addFlag == 0) {
+      return new Container(
+        padding: const EdgeInsets.only(top: 20.0, left: 30.0, right: 30.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            new Text("Additional Notes:", textAlign: TextAlign.left, style: TextStyle(fontSize: 18.0)),
+            new Text("$_addNotes", textAlign: TextAlign.right, style: TextStyle(fontSize: 18.0)),
           ],
         ),
       );
@@ -185,11 +241,12 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
   Widget _checkJoinFlag() {
     if (_joinFlag == 0) {
       return new Container(
-        child: Column(
-          //mainAxisSize: MainAxisSize.min,
+        padding: const EdgeInsets.only(top: 20.0, left: 30.0, right: 30.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            new Padding(padding: const EdgeInsets.only(top: 40.0)),
-            new Text("Joined On: $_join"),
+            new Text("Joined On:", textAlign: TextAlign.left, style: TextStyle(fontSize: 18.0)),
+            new Text("$_join", textAlign: TextAlign.right),
           ],
         ),
       );
@@ -205,32 +262,36 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
     return false;
   }
 
-  Widget _profilePic() {
-//    (_photoUrl != '')
-////        ? new CircleAvatar(
-////            backgroundImage: new NetworkImage(_photoUrl),
-////          )
-////        : new CircleAvatar(
-////            backgroundColor: Colors.white,
-////            child: new Icon(Icons.person),
-////          );
-
-    return new Container(
-        margin: const EdgeInsets.all(15.0),
-        padding:
-            const EdgeInsets.only(top: 3.0, bottom: 3.0, right: 3.0, left: 3.0),
-        decoration:
-            new BoxDecoration(border: new Border.all(color: Colors.black)),
-        child: new Column(
-          children: <Widget>[
-            Padding(
-                padding: EdgeInsets.only(
-                    left: 8.0, right: 8.0, top: 25.0, bottom: 20.0),
-                child: new Text("Test Profile",
-                    textAlign: TextAlign.center, style: new TextStyle())),
-          ],
-        ));
-  }
+//  Widget _profilePic() {
+//    return new Container(
+//        width: 190.0,
+//        height: 190.0,
+//        decoration: new BoxDecoration(
+//            shape: BoxShape.circle,
+//            image: new DecorationImage(
+//                fit: BoxFit.fill,
+//                image:  (_photoUrl != '') ? new NetworkImage(_photoUrl) : new Icon(Icons.person)
+//
+//            )
+//        )
+//    );
+//
+////    return new Container(
+////        margin: const EdgeInsets.all(15.0),
+////        padding:
+////        const EdgeInsets.only(top: 3.0, bottom: 3.0, right: 3.0, left: 3.0),
+////        decoration:
+////        new BoxDecoration(border: new Border.all(color: Colors.black)),
+////        child: new Column(
+////          children: <Widget>[
+////            Padding(
+////                padding: EdgeInsets.only(
+////                    left: 8.0, right: 8.0, top: 25.0, bottom: 20.0),
+////                child: new Text("Test Profile",
+////                    textAlign: TextAlign.center, style: new TextStyle(fontSize: 20.0))),
+////          ],
+////        ));
+//  }
 
   Widget _buildList(
       BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot, int index) {
@@ -301,7 +362,7 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
           Padding(
             padding: EdgeInsets.only(top: 25.0, bottom: 20.0),
           ),
-          _profilePic(),
+          //_profilePic(),
           Padding(
             padding: EdgeInsets.only(top: 10.0, bottom: 20.0),
           ),
@@ -320,6 +381,9 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
           _checkWKFlag(),
           _checkAddFlag(),
           _checkJoinFlag(),
+          Padding(
+            padding: EdgeInsets.only(top: 20.0),
+          ),
 
 //          new Padding(padding: const EdgeInsets.only(top: 40.0)),
 //          new Text("Join Date: $dateString"),
@@ -328,19 +392,6 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
     );
   }
   //}
-
-  @override
-  void initState() {
-    super.initState();
-
-    // Grab the saved uid of current user from memory
-    loadUid().then((uid) {
-      print('init: current uid: $uid');
-      setState(() {
-        _uid = uid;
-      });
-    });
-  }
 
   @override
   Widget build(BuildContext context) {

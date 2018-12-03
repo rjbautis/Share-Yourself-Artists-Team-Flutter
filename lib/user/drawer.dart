@@ -40,10 +40,10 @@ class _NavDrawerState extends State<NavDrawer> {
               color: Color.fromRGBO(255, 160, 0, 1.0),
             ),
             accountName: (_name != '') ?
-                new Text(_name) :
-                new Text('User'),
+                new Text(_name, style: TextStyle(fontSize: 18.0)) :
+                new Text('User', style: TextStyle(fontSize: 17.0)),
             accountEmail: (_email != '') ?
-                new Text(_email) :
+                new Text(_email, style: TextStyle(fontSize: 15.0),) :
                 null,
             currentAccountPicture: (_photoUrl != '') ?
                 new CircleAvatar(
@@ -56,7 +56,7 @@ class _NavDrawerState extends State<NavDrawer> {
           ),
           ListTile(
             leading: Icon(Icons.home),
-            title: new Text('Home'),
+            title: new Text('Home', style: TextStyle(fontSize: 15.0),),
             onTap: () async {
               Navigator.of(context).pop();
             },

@@ -33,7 +33,8 @@ class _LoginPageState extends State<LoginPage> {
         content: new Text(
             'The password is invalid or the user does not have a password. '
                 'Or you may have not confirmed your email yet. If you need further '
-                'assistance, please send us an email.'),
+                'assistance, please send us an email.',
+          style: new TextStyle(color: Colors.white)),
         duration: Duration(seconds: 4),
       ));
     }
@@ -96,6 +97,7 @@ class _LoginPageState extends State<LoginPage> {
       decoration: new InputDecoration(labelText: "Email"),
       keyboardType: TextInputType.emailAddress,
       textCapitalization: TextCapitalization.none,
+      style: new TextStyle(color: Colors.black),
       validator: (input) {
         if (input.isEmpty) {
           return "Email address is required.";
@@ -114,6 +116,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
       keyboardType: TextInputType.text,
       obscureText: true,
+        style: new TextStyle(color: Colors.black),
       validator: (input) => input.isEmpty ? "Password is required." : null,
       onSaved: (input) => _password = input,
     );
@@ -128,6 +131,15 @@ class _LoginPageState extends State<LoginPage> {
               borderSide: BorderSide(color: Colors.black),
               color: Colors.white,
               onPressed: () async {
+                _scaffoldState.currentState.showSnackBar(
+                    new SnackBar(duration: new Duration(seconds: 4), content:
+                    new Row(
+                      children: <Widget>[
+                        new CircularProgressIndicator(),
+                        new Text("  Signing-In...", style: new TextStyle(color: Colors.white))
+                      ],
+                    ),
+                    ));
                 if (_validate()) {
                   print("the email is $_email and password is $_password");
                   String uid = await Authentication.signInWithEmailAndPassword(
@@ -180,7 +192,7 @@ class _LoginPageState extends State<LoginPage> {
 //              onTap: _onPressed,
 //            ),
             new InkWell(
-              child: new Text("Forgot Password"),
+              child: new Text("Forgot Password", style: new TextStyle(color: Colors.black)),
               onTap: () => Navigator.of(context).pushNamed('/forgotPassword'),
             )
           ],

@@ -63,6 +63,7 @@ class _BusinessDashState extends State<BusinessDash> {
             title: Text(
               artTitle,
               textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 18.0),
             ),
             subtitle: Text(artArtist, textAlign: TextAlign.center),
           ),
@@ -132,8 +133,9 @@ class _BusinessDashState extends State<BusinessDash> {
             title: Text(
               artTitle,
               textAlign: TextAlign.center,
+              style: TextStyle(fontSize: 18.00, letterSpacing: 0.5)
             ),
-            subtitle: Text(artArtist, textAlign: TextAlign.center),
+            subtitle: Text(artArtist, textAlign: TextAlign.center,),
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -196,7 +198,7 @@ class _BusinessDashState extends State<BusinessDash> {
                   child: new Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      new Text('New'),
+                      new Text('New', style: TextStyle(fontSize: 17.0)),
                       new Padding(
                           padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0)),
                       new Icon(Icons.inbox),
@@ -207,7 +209,7 @@ class _BusinessDashState extends State<BusinessDash> {
                   child: new Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      new Text('Replied'),
+                      new Text('Replied', style: TextStyle(fontSize: 17.0)),
                       new Padding(
                           padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0)),
                       new Icon(Icons.done_all),
@@ -230,7 +232,7 @@ class _BusinessDashState extends State<BusinessDash> {
                 return new Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    new Text("Loading..."),
+                    new Text("Loading...", style: TextStyle(fontSize: 17.0)),
                   ],
                 );
               }
@@ -274,7 +276,7 @@ class _BusinessDashState extends State<BusinessDash> {
                 return new Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    new Text("Loading..."),
+                    new Text("Loading...", style: TextStyle(fontSize: 17.0)),
                   ],
                 );
               }
