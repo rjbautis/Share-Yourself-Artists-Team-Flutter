@@ -11,11 +11,11 @@ void main() {
       await testBusiness.getData('yekGAvzU5fZKh49e6w0tJuRmFFg1');
       await testArtist.getData('928uyJ9NQzeVwoJucuOuHF9epAp2');
 
-      String businessName = testBusiness.getBusinessName();
-      String artistName = testArtist.getArtistName();
+      String businessEmail = testBusiness.getBusinessName();
+      String artistEmail = testArtist.getArtistName();
 
-      expect(businessName == null, false);
-      expect(artistName == null, false);
+      expect(businessEmail, "test@gmail.com");
+      expect(artistEmail, "yilang@ucsc.edu");
     }
 
     _getUser();
