@@ -33,7 +33,7 @@ class _BusinessSelectState extends State<BusinessSelect> {
 
     var _children = <Widget>[
       new ListTile(
-        title: Text(name),
+        title: Text(name, style: TextStyle(fontSize: 17.0, letterSpacing: 0.5)),
         subtitle: Text(theGood),
         onTap: () {
           List<String> selectedBus = new List(3);
@@ -44,7 +44,7 @@ class _BusinessSelectState extends State<BusinessSelect> {
         },
       ),
       new Divider(
-        height: 5.0,
+        height: 15.0,
       )
     ];
 
@@ -72,14 +72,11 @@ class _BusinessSelectState extends State<BusinessSelect> {
 
     return Scaffold(
       appBar: AppBar(
+        title: new Image.asset('images/logo.png'),
+        backgroundColor: Colors.transparent,
+        elevation: 0.0,
+        centerTitle: true,
         iconTheme: IconThemeData(color: Colors.black),
-        backgroundColor: Color.fromRGBO(255, 160, 0, 1.0),
-        title: Text(
-          title,
-          style: TextStyle(
-            color: Colors.black,
-          ),
-        ),
       ),
       body: new Container(
         child: new StreamBuilder(

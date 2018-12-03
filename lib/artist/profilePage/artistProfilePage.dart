@@ -38,13 +38,12 @@ class _ArtistProfilePageState extends State<ArtistProfilePage> {
   Widget _checkNameFlag() {
     if (_nameFlag == 0) {
       return new Container(
-        child: Column(
-          //mainAxisSize: MainAxisSize.min,
+        padding: const EdgeInsets.only(top: 20.0, left: 30.0, right: 30.0),
+        child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            new Padding(
-                padding:
-                    const EdgeInsets.only(top: 40.0, left: 40.0, right: 40.0)),
-            new Text("Name: $_name"),
+            new Text("Name:", textAlign: TextAlign.left),
+            new Text("$_name", textAlign: TextAlign.right),
           ],
         ),
       );
@@ -56,11 +55,12 @@ class _ArtistProfilePageState extends State<ArtistProfilePage> {
   Widget _checkFCFlag() {
     if (_fcFlag == 0) {
       return new Container(
-        child: Column(
-          //mainAxisSize: MainAxisSize.min,
+        padding: const EdgeInsets.only(top: 20.0, left: 30.0, right: 30.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            new Padding(padding: const EdgeInsets.only(top: 40.0)),
-            new Text("Free Credits: $_fc"),
+            new Text("Free Credits:", textAlign: TextAlign.left),
+            new Text("$_fc", textAlign: TextAlign.right),
           ],
         ),
       );
@@ -72,11 +72,12 @@ class _ArtistProfilePageState extends State<ArtistProfilePage> {
   Widget _checkPCFlag() {
     if (_pcFlag == 0) {
       return new Container(
-        child: Column(
-          //mainAxisSize: MainAxisSize.min,
+        padding: const EdgeInsets.only(top: 20.0, left: 30.0, right: 30.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            new Padding(padding: const EdgeInsets.only(top: 40.0)),
-            new Text("Paid Credits: $_pc"),
+            new Text("Paid Credits:", textAlign: TextAlign.left),
+            new Text("$_pc", textAlign: TextAlign.right),
           ],
         ),
       );
@@ -88,11 +89,12 @@ class _ArtistProfilePageState extends State<ArtistProfilePage> {
   Widget _checkEmailFlag() {
     if (_emailFlag == 0) {
       return new Container(
-        child: Column(
-          //mainAxisSize: MainAxisSize.min,
+        padding: const EdgeInsets.only(top: 20.0, left: 30.0, right: 30.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            new Padding(padding: const EdgeInsets.only(top: 40.0)),
-            new Text("Email: $_email"),
+            new Text("Email:", textAlign: TextAlign.left),
+            new Text("$_email", textAlign: TextAlign.right),
           ],
         ),
       );
@@ -104,19 +106,20 @@ class _ArtistProfilePageState extends State<ArtistProfilePage> {
   Widget _checkJoinFlag() {
     if (_joinFlag == 0) {
       DateTime upload =
-          DateTime.fromMillisecondsSinceEpoch(_join, isUtc: false);
-      String dateString = upload.month.toString() +
+      DateTime.fromMillisecondsSinceEpoch(_join, isUtc: false);
+      String _dateString = upload.month.toString() +
           '-' +
           upload.day.toString() +
           '-' +
           upload.year.toString();
 
       return new Container(
-        child: Column(
-          //mainAxisSize: MainAxisSize.min,
+        padding: const EdgeInsets.only(top: 20.0, left: 30.0, right: 30.0),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            new Padding(padding: const EdgeInsets.only(top: 40.0)),
-            new Text("Join Date: $dateString"),
+            new Text("Join Date:", textAlign: TextAlign.left),
+            new Text("$_dateString", textAlign: TextAlign.right),
           ],
         ),
       );

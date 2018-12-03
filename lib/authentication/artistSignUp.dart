@@ -120,7 +120,7 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
               color: Colors.black,
               onPressed: () => Navigator.of(context).pop(),
               child: new Text('Cancel',
-                  style: new TextStyle(color: Colors.white)),
+                  style: new TextStyle(color: Colors.white, )),
             ),
           ),
           ButtonTheme(
@@ -163,7 +163,7 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(5.0),
+                  padding: EdgeInsets.only(top:5.0, bottom: 20.0),
                 ),
                 Form(
                   key: _form,

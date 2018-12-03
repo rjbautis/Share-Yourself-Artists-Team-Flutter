@@ -131,12 +131,15 @@ class _BusinessProvideFeedbackState extends State<BusinessProvideFeedback> {
                 ),
               ),
               new Container(
-                  padding: EdgeInsets.fromLTRB(5.0, 0.0, 5.0, 5.0),
-                  alignment: FractionalOffset(.15, .85),
+                  padding: EdgeInsets.fromLTRB(5.0, 10.0, 5.0, 5.0),
+                  //alignment: FractionalOffset(.15, .85),
+                  alignment: Alignment(0.0, 0.0),
                   child: new Text(
                     artTitle + " by " + artArtist,
                     textAlign: TextAlign.left,
                     textScaleFactor: 1.5,
+                      style: TextStyle(
+                        fontSize: 18.0),
                     //style: TextStyle(fontStyle: FontStyle.italic),
                   )),
               new Container(

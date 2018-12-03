@@ -56,7 +56,6 @@ class _BusinessSignUpSecondPageState extends State<BusinessSignUpSecondPage> {
     Widget shortSummary = TextFormField(
       decoration: new InputDecoration(labelText: 'About - Short summary of your page'),
       keyboardType: TextInputType.multiline,
-
       validator: (input) => input.isEmpty ? 'Website is required.' : null,
       onSaved: (input) => widget.credentials['shortSummary'] = input,
     );
@@ -79,6 +78,7 @@ class _BusinessSignUpSecondPageState extends State<BusinessSignUpSecondPage> {
               onPressed: () => Navigator.popUntil(context, ModalRoute.withName('/')),
               child: new Text('Cancel',
                   style: new TextStyle(color: Colors.white)),
+
             ),
           ),
           Padding(
@@ -124,7 +124,7 @@ class _BusinessSignUpSecondPageState extends State<BusinessSignUpSecondPage> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(5.0),
+                  padding: EdgeInsets.only(top:5.0, bottom: 10.0),
                 ),
                 Form(
                   key: _form,

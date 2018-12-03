@@ -29,7 +29,8 @@ class _BusinessSignUpThirdPageState extends State<BusinessSignUpThirdPage> {
     } else {
       _scaffoldState.currentState.showSnackBar(SnackBar(
         content: new Text(
-            'The email address is already in use by another account.'),
+            'The email address is already in use by another account.',
+            style: new TextStyle(color: Colors.white)),
         duration: Duration(seconds: 4),
       ));
     }
@@ -131,7 +132,7 @@ class _BusinessSignUpThirdPageState extends State<BusinessSignUpThirdPage> {
                 ),
                 Center(
                   child: new Text(
-                    "Share your social media URL.",
+                    "Share your social media URL",
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                         fontSize: 25.0,
@@ -139,7 +140,7 @@ class _BusinessSignUpThirdPageState extends State<BusinessSignUpThirdPage> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(5.0),
+                  padding: EdgeInsets.only(top:5.0, bottom: 10.0),
                 ),
                 Form(
                   key: _form,

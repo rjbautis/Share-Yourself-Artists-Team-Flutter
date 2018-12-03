@@ -106,15 +106,15 @@ class _ArtistUploadImageState extends State<ArtistUploadImage> {
           children: <Widget>[
             Padding(padding: const EdgeInsets.only(bottom: 25.0)),
             Container(
-              padding: const EdgeInsets.only(top: 15.0, bottom: 15.0),
+              padding: const EdgeInsets.only(top: 0.0, bottom: 30.0),
               child: new Text("Upload a New Piece",
-                  style: new TextStyle(fontSize: 25.0)),
+                  style: new TextStyle(fontWeight: FontWeight.w600)),
             ),
             displaySelectedFile(_current),
             Container(
               padding: const EdgeInsets.only(top: 40.0),
               child: new MaterialButton(
-                child: const Text('Upload Image from Gallery'),
+                child: new Text('Upload Image from Gallery', style: new TextStyle(fontWeight: FontWeight.w600)),
                 color: Color.fromRGBO(255, 160, 0, 1.0),
                 textColor: Colors.white,
                 elevation: 4.0,
@@ -126,7 +126,7 @@ class _ArtistUploadImageState extends State<ArtistUploadImage> {
             Container(
               padding: const EdgeInsets.only(top: 40.0),
               child: new MaterialButton(
-                child: const Text('Upload Image from Camera'),
+                child: new Text('Upload Image from Camera', style: new TextStyle(fontWeight: FontWeight.w600)),
                 color: Color.fromRGBO(255, 160, 0, 1.0),
                 textColor: Colors.white,
                 elevation: 4.0,
@@ -139,7 +139,7 @@ class _ArtistUploadImageState extends State<ArtistUploadImage> {
               padding: const EdgeInsets.only(top: 40.0),
               child: new MaterialButton(
                 //child: const Text('Upload to Database'),
-                child: const Text('Next'),
+                child: new Text('Next', style: new TextStyle(fontWeight: FontWeight.w600)),
                 color: imagePicked
                     ? Color.fromRGBO(255, 160, 0, 1.0)
                     : Colors.grey,

@@ -210,6 +210,7 @@ class _ArtistSendArtState extends State<ArtistSendArt> {
                 title: Text(
                   artTitle,
                   textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 17.0),
                 ),
                 subtitle: Text(
                   artDescription,
@@ -223,7 +224,7 @@ class _ArtistSendArtState extends State<ArtistSendArt> {
                 child: new OutlineButton(
                   splashColor: Colors.deepOrangeAccent,
                   textColor: Colors.deepOrangeAccent,
-                  child: new Text('Select a Business'),
+                  child: new Text('Select a Business', style: new TextStyle(fontWeight: FontWeight.w600)),
                   onPressed: () async {
                     await _navBusiness();
                   },
@@ -234,7 +235,7 @@ class _ArtistSendArtState extends State<ArtistSendArt> {
               ),
               new Padding(padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0)),
               new Text(
-                'Sent to: ' + _busName,
+                'Sent to: ' + _busName
               ),
               new Padding(padding: EdgeInsets.fromLTRB(0.0, 30.0, 0.0, 0.0)),
               new Container(
@@ -245,7 +246,7 @@ class _ArtistSendArtState extends State<ArtistSendArt> {
                       _submitEnabled ? Colors.deepOrangeAccent : Colors.grey,
                   textColor:
                       _submitEnabled ? Colors.deepOrangeAccent : Colors.grey,
-                  child: new Text('Submit Artwork'),
+                  child: new Text('Submit Artwork', style: new TextStyle(fontWeight: FontWeight.w600)),
                   onPressed: () async {
                     await _submitArtwork();
                   },
