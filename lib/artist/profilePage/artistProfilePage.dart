@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:share_yourself_artists_team_flutter/artist/profilePage/editArtist.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 
@@ -40,7 +41,7 @@ class _ArtistProfilePageState extends State<ArtistProfilePage> {
       return new Container(
         padding: const EdgeInsets.only(top: 20.0, left: 30.0, right: 30.0),
         child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             new Text("Name:", textAlign: TextAlign.left),
             new Text("$_name", textAlign: TextAlign.right),
@@ -106,7 +107,7 @@ class _ArtistProfilePageState extends State<ArtistProfilePage> {
   Widget _checkJoinFlag() {
     if (_joinFlag == 0) {
       DateTime upload =
-      DateTime.fromMillisecondsSinceEpoch(_join, isUtc: false);
+          DateTime.fromMillisecondsSinceEpoch(_join, isUtc: false);
       String _dateString = upload.month.toString() +
           '-' +
           upload.day.toString() +
@@ -170,10 +171,10 @@ class _ArtistProfilePageState extends State<ArtistProfilePage> {
       _name = snapshot.data.documents[index]['name'].toString();
     }
 
-    if (snapshot.data.documents[index]['free_cerdits'] == null) {
+    if (snapshot.data.documents[index]['free_credits'] == null) {
       _fcFlag = 1;
     } else {
-      _fc = snapshot.data.documents[index]['free_cerdits'];
+      _fc = snapshot.data.documents[index]['free_credits'];
     }
 
     if (snapshot.data.documents[index]['credits'] == null) {
@@ -209,12 +210,6 @@ class _ArtistProfilePageState extends State<ArtistProfilePage> {
           //_profilePic(),
           Padding(
             padding: EdgeInsets.only(top: 10.0, bottom: 20.0),
-          ),
-          new Container(
-            height: 1.5,
-            color: Colors.grey,
-            padding: EdgeInsets.only(top: 10.0, right: 3.0, left: 3.0),
-            margin: EdgeInsets.only(right: 25.0, left: 25.0),
           ),
           _checkNameFlag(),
           _checkFCFlag(),
@@ -258,7 +253,10 @@ class _ArtistProfilePageState extends State<ArtistProfilePage> {
           IconButton(
             icon: Icon(Icons.edit),
             onPressed: () {
-              Navigator.of(context).pushReplacementNamed('/editArtist');
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => EditArtist()),
+              );
             },
           ),
         ],
