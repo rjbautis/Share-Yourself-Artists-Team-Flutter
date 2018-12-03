@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
-import 'package:share_yourself_artists_team_flutter/user/drawer.dart';
+import 'package:share_yourself_artists_team_flutter/business/profilePage/editBusiness.dart';
 
 class BusinessProfilePage extends StatefulWidget {
   @override
@@ -354,7 +354,10 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
           IconButton(
             icon: Icon(Icons.edit),
             onPressed: () {
-              Navigator.of(context).pushReplacementNamed('/editBusiness');
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => EditBusiness()),
+              );
             },
           ),
         ],

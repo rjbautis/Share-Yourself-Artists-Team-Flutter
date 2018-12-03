@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:share_yourself_artists_team_flutter/artist/profilePage/editArtist.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 
@@ -255,7 +256,10 @@ class _ArtistProfilePageState extends State<ArtistProfilePage> {
           IconButton(
             icon: Icon(Icons.edit),
             onPressed: () {
-              Navigator.of(context).pushReplacementNamed('/editArtist');
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => EditArtist()),
+              );
             },
           ),
         ],

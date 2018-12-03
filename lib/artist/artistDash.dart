@@ -4,10 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:share_yourself_artists_team_flutter/artist/artistSendArt.dart';
 import 'package:share_yourself_artists_team_flutter/artist/artistUploadImage.dart';
+import 'package:share_yourself_artists_team_flutter/artist/artistViewArt.dart';
+import 'package:share_yourself_artists_team_flutter/artist/artistViewReply.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 import 'package:share_yourself_artists_team_flutter/user/drawer.dart';
-import 'package:share_yourself_artists_team_flutter/artist/artistViewReply.dart';
-import 'package:share_yourself_artists_team_flutter/artist/artistViewArt.dart';
 
 class ArtistDash extends StatefulWidget {
   ArtistDash();
@@ -334,7 +334,7 @@ class _ArtistDashState extends State<ArtistDash> {
                 }
                 if (snapshot.data.documents.length == 0) {
                   return new Center(
-                    child: new Text("No Art, Why dont you upload some!"),
+                    child: new Text("No Art, Why don't you upload some!"),
                   );
                 }
                 return new Container(
