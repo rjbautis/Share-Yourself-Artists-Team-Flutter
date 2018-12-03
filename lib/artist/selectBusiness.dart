@@ -84,8 +84,8 @@ class _BusinessSelectState extends State<BusinessSelect> {
               .collection("users")
               .where("role", isEqualTo: "business")
               .snapshots(),
-          builder: (BuildContext context,
-              AsyncSnapshot<QuerySnapshot> snapshot) {
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (!snapshot.hasData) return new Text('Loading...');
             return new Container(
               child: ListView.builder(

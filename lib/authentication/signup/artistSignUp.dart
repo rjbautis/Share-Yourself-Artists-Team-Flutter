@@ -9,19 +9,20 @@ class ArtistSignUpPage extends StatefulWidget {
 
 class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
   static GlobalKey<FormState> _form = new GlobalKey<FormState>();
-  static GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey<ScaffoldState>();
+  static GlobalKey<ScaffoldState> _scaffoldState =
+      new GlobalKey<ScaffoldState>();
 
   Future _handleCreation(Map<String, String> credentials) async {
     String uid = await Authentication.createArtistAccount(credentials);
     if (uid != '') {
       await savePreferences('artist', uid);
       print('Created user is $uid');
-      Navigator.of(context).pushNamedAndRemoveUntil('/artist', (Route<dynamic> route) => false);
-
+      Navigator.of(context)
+          .pushNamedAndRemoveUntil('/artist', (Route<dynamic> route) => false);
     } else {
       _scaffoldState.currentState.showSnackBar(SnackBar(
-        content: new Text(
-            'The email address is already in use by another account.'),
+        content:
+            new Text('The email address is already in use by another account.'),
         duration: Duration(seconds: 4),
       ));
     }
@@ -31,7 +32,7 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
 
   @override
   Widget build(BuildContext context) {
-    var credentials =  {
+    var credentials = {
       'name': '',
       'email': '',
       'password': '',
@@ -120,7 +121,9 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
               color: Colors.black,
               onPressed: () => Navigator.of(context).pop(),
               child: new Text('Cancel',
-                  style: new TextStyle(color: Colors.white, )),
+                  style: new TextStyle(
+                    color: Colors.white,
+                  )),
             ),
           ),
           ButtonTheme(
@@ -129,21 +132,21 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
               borderSide: BorderSide(color: Colors.black),
               color: Colors.white,
               onPressed: () async {
-                _scaffoldState.currentState.showSnackBar(
-                    new SnackBar(duration: new Duration(seconds: 4), content:
-                    new Row(
+                if (_validate()) {
+                  _scaffoldState.currentState.showSnackBar(new SnackBar(
+                    duration: new Duration(seconds: 4),
+                    content: new Row(
                       children: <Widget>[
                         new CircularProgressIndicator(),
                         new Text("  Signing-Up...")
                       ],
                     ),
-                    ));
-                if (_validate()) {
+                  ));
                   await _handleCreation(credentials);
                 }
               },
-              child: new Text('Done',
-                  style: new TextStyle(color: Colors.black)),
+              child:
+                  new Text('Done', style: new TextStyle(color: Colors.black)),
             ),
           )
         ],
@@ -172,7 +175,7 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top:5.0, bottom: 20.0),
+                  padding: EdgeInsets.only(top: 5.0, bottom: 20.0),
                 ),
                 Form(
                   key: _form,

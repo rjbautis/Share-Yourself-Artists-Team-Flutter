@@ -16,7 +16,8 @@ class BusinessProvideFeedback extends StatefulWidget {
 }
 
 class _BusinessProvideFeedbackState extends State<BusinessProvideFeedback> {
-  static GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey<ScaffoldState>();
+  static GlobalKey<ScaffoldState> _scaffoldState =
+      new GlobalKey<ScaffoldState>();
   FocusNode _textFieldNode = new FocusNode();
   TextEditingController _controller = new TextEditingController();
 
@@ -138,8 +139,7 @@ class _BusinessProvideFeedbackState extends State<BusinessProvideFeedback> {
                     artTitle + " by " + artArtist,
                     textAlign: TextAlign.left,
                     textScaleFactor: 1.5,
-                      style: TextStyle(
-                        fontSize: 18.0),
+                    style: TextStyle(fontSize: 18.0),
                     //style: TextStyle(fontStyle: FontStyle.italic),
                   )),
               new Container(

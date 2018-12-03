@@ -2,12 +2,12 @@ import 'dart:math';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:share_yourself_artists_team_flutter/artist/artistSendArt.dart';
-import 'package:share_yourself_artists_team_flutter/artist/artistUploadImage.dart';
-import 'package:share_yourself_artists_team_flutter/artist/artistViewArt.dart';
-import 'package:share_yourself_artists_team_flutter/artist/artistViewReply.dart';
+import 'package:share_yourself_artists_team_flutter/artist/sendArt.dart';
+import 'package:share_yourself_artists_team_flutter/artist/uploadImage.dart';
+import 'package:share_yourself_artists_team_flutter/artist/viewArt.dart';
+import 'package:share_yourself_artists_team_flutter/artist/viewReply.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
-import 'package:share_yourself_artists_team_flutter/user/drawer.dart';
+import 'package:share_yourself_artists_team_flutter/utilities/drawer.dart';
 
 class ArtistDash extends StatefulWidget {
   ArtistDash();
@@ -121,9 +121,10 @@ class _ArtistDashState extends State<ArtistDash> {
       );
     } else {
       return new GestureDetector(
-        onTap: () { _viewArt(snapshot, newIndex); },
-        child:
-        Card(
+        onTap: () {
+          _viewArt(snapshot, newIndex);
+        },
+        child: Card(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
