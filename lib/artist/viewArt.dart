@@ -7,6 +7,10 @@ class ArtistViewArt extends StatefulWidget {
 
   ArtistViewArt({@required this.snapshot, this.index});
 
+  void getData() => _ArtistViewArtState().getData();
+  String getTitle() => _ArtistViewArtState().artTitle;
+  String getDesc() => _ArtistViewArtState().artDescription;
+
   @override
   _ArtistViewArtState createState() => new _ArtistViewArtState();
 }
@@ -20,13 +24,17 @@ class _ArtistViewArtState extends State<ArtistViewArt> {
   void initState() {
     super.initState();
     setState(() {
-      artImage = widget.snapshot.data.documents[widget.index]['url'].toString();
-      artTitle =
-          widget.snapshot.data.documents[widget.index]['art_title'].toString();
-      artDescription = widget
-          .snapshot.data.documents[widget.index]['description']
-          .toString();
+      getData();
     });
+  }
+
+  void getData() {
+    artImage = widget.snapshot.data.documents[widget.index]['url'].toString();
+    artTitle =
+        widget.snapshot.data.documents[widget.index]['art_title'].toString();
+    artDescription = widget
+        .snapshot.data.documents[widget.index]['description']
+        .toString();
   }
 
   @override
