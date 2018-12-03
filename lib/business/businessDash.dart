@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 import 'package:share_yourself_artists_team_flutter/business/provideFeedback.dart';
-import 'package:share_yourself_artists_team_flutter/user/drawer.dart';
+import 'package:share_yourself_artists_team_flutter/utilities/drawer.dart';
 
 class BusinessDash extends StatefulWidget {
   @override

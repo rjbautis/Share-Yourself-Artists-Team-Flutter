@@ -23,18 +23,25 @@ class _BusinessSignUpThirdPageState extends State<BusinessSignUpThirdPage> {
 
   Future _handleCreation(Map<String, String> credentials, File image) async {
     String uid = await Authentication.createBusinessAccount(credentials, image);
-    if (uid != '') {
-      await savePreferences('business', uid);
-      print('Created user is $uid');
-      Navigator.of(context).pushNamedAndRemoveUntil(
-          '/business', (Route<dynamic> route) => false);
-    } else {
+    if (uid == 'uploadStorageFailure') {
+      _scaffoldState.currentState.showSnackBar(SnackBar(
+        content: new Text(
+            'There was a problem with uploading your logo, please try again.',
+            style: new TextStyle(color: Colors.white)),
+        duration: Duration(seconds: 4),
+      ));
+    } else if (uid == '') {
       _scaffoldState.currentState.showSnackBar(SnackBar(
         content: new Text(
             'The email address is already in use by another account.',
             style: new TextStyle(color: Colors.white)),
         duration: Duration(seconds: 4),
       ));
+    } else {
+      await savePreferences('business', uid);
+      print('Created user is $uid');
+      Navigator.of(context).pushNamedAndRemoveUntil(
+          '/business', (Route<dynamic> route) => false);
     }
   }
 
@@ -101,16 +108,16 @@ class _BusinessSignUpThirdPageState extends State<BusinessSignUpThirdPage> {
               borderSide: BorderSide(color: Colors.black),
               color: Colors.white,
               onPressed: () async {
-                _scaffoldState.currentState.showSnackBar(new SnackBar(
-                  duration: new Duration(seconds: 4),
-                  content: new Row(
-                    children: <Widget>[
-                      new CircularProgressIndicator(),
-                      new Text("  Signing-Up...")
-                    ],
-                  ),
-                ));
                 if (_validate()) {
+                  _scaffoldState.currentState.showSnackBar(new SnackBar(
+                    duration: new Duration(seconds: 4),
+                    content: new Row(
+                      children: <Widget>[
+                        new CircularProgressIndicator(),
+                        new Text("  Signing-Up...")
+                      ],
+                    ),
+                  ));
 //                  print(widget.credentials);
 //                  print(widget.image.path);
                   await _handleCreation(widget.credentials, widget.image);

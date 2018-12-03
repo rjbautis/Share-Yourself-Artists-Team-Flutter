@@ -7,7 +7,7 @@ import 'package:share_yourself_artists_team_flutter/artist/uploadImage.dart';
 import 'package:share_yourself_artists_team_flutter/artist/viewArt.dart';
 import 'package:share_yourself_artists_team_flutter/artist/viewReply.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
-import 'package:share_yourself_artists_team_flutter/user/drawer.dart';
+import 'package:share_yourself_artists_team_flutter/utilities/drawer.dart';
 
 class ArtistDash extends StatefulWidget {
   ArtistDash();

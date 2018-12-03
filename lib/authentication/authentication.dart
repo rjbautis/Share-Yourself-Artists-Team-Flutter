@@ -185,6 +185,12 @@ class Authentication {
     String logoUrl =
         await uploadFileToFireStore(image, user.uid, 'logo', 'logo.png');
 
+    // If the logo failed to upload, return a string indication
+    bool check = logoUrl != null ? true : false;
+    if (!check) {
+      return 'uploadStorageFailure';
+    }
+
     var data = {
       'about': credentials['shortSummary'],
       'additional_notes': credentials['additionalNotes'],
