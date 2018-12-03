@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
-import 'package:share_yourself_artists_team_flutter/user/drawer.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
+import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
+import 'package:share_yourself_artists_team_flutter/business/profilePage/editBusiness.dart';
 
 class BusinessProfilePage extends StatefulWidget {
   @override
@@ -70,8 +70,10 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            new Text("Name:", textAlign: TextAlign.left, style: TextStyle(fontSize: 18.0)),
-            new Text("$_name", textAlign: TextAlign.right, style: TextStyle(fontSize: 18.0)),
+            new Text("Name:",
+                textAlign: TextAlign.left, style: TextStyle(fontSize: 18.0)),
+            new Text("$_name",
+                textAlign: TextAlign.right, style: TextStyle(fontSize: 18.0)),
           ],
         ),
       );
@@ -87,8 +89,10 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            new Text("Email:", textAlign: TextAlign.left, style: TextStyle(fontSize: 18.0)),
-            new Text("$_email", textAlign: TextAlign.right, style: TextStyle(fontSize: 18.0)),
+            new Text("Email:",
+                textAlign: TextAlign.left, style: TextStyle(fontSize: 18.0)),
+            new Text("$_email",
+                textAlign: TextAlign.right, style: TextStyle(fontSize: 18.0)),
           ],
         ),
       );
@@ -104,8 +108,10 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            new Text("Publication:", textAlign: TextAlign.left, style: TextStyle(fontSize: 18.0)),
-            new Text("$_publication", textAlign: TextAlign.right, style: TextStyle(fontSize: 18.0)),
+            new Text("Publication:",
+                textAlign: TextAlign.left, style: TextStyle(fontSize: 18.0)),
+            new Text("$_publication",
+                textAlign: TextAlign.right, style: TextStyle(fontSize: 18.0)),
           ],
         ),
       );
@@ -121,8 +127,10 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            new Text("Follower Count:", textAlign: TextAlign.left, style: TextStyle(fontSize: 18.0)),
-            new Text("$_followers", textAlign: TextAlign.right, style: TextStyle(fontSize: 18.0)),
+            new Text("Follower Count:",
+                textAlign: TextAlign.left, style: TextStyle(fontSize: 18.0)),
+            new Text("$_followers",
+                textAlign: TextAlign.right, style: TextStyle(fontSize: 18.0)),
           ],
         ),
       );
@@ -138,8 +146,10 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            new Text("Website:", textAlign: TextAlign.left, style: TextStyle(fontSize: 18.0)),
-            new Text("$_website", textAlign: TextAlign.right, style: TextStyle(fontSize: 18.0)),
+            new Text("Website:",
+                textAlign: TextAlign.left, style: TextStyle(fontSize: 18.0)),
+            new Text("$_website",
+                textAlign: TextAlign.right, style: TextStyle(fontSize: 18.0)),
           ],
         ),
       );
@@ -156,12 +166,17 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            new Text("About:", textAlign: TextAlign.left, style: TextStyle(fontSize: 18.0)),
-            new Padding(padding: EdgeInsets.only(right:10.0)),
+            new Text("About:",
+                textAlign: TextAlign.left, style: TextStyle(fontSize: 18.0)),
+            new Padding(padding: EdgeInsets.only(right: 10.0)),
             new Expanded(
               child: Column(
                 children: <Widget>[
-                  new Text("$_about", textAlign: TextAlign.right, style: TextStyle(fontSize: 18.0,)),
+                  new Text("$_about",
+                      textAlign: TextAlign.right,
+                      style: TextStyle(
+                        fontSize: 18.0,
+                      )),
                 ],
               ),
               flex: 3,
@@ -182,13 +197,16 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            new Text("Worth Knowing:", textAlign: TextAlign.left, style: TextStyle(fontSize: 18.0)),
-            new Padding(padding: EdgeInsets.only(right:10.0)),
+            new Text("Worth Knowing:",
+                textAlign: TextAlign.left, style: TextStyle(fontSize: 18.0)),
+            new Padding(padding: EdgeInsets.only(right: 10.0)),
             new Expanded(
-                child: Column(
-                  children: <Widget>[
-                    new Text("$_wk", textAlign: TextAlign.right, style: TextStyle(fontSize: 18.0)),
-                  ],
+              child: Column(
+                children: <Widget>[
+                  new Text("$_wk",
+                      textAlign: TextAlign.right,
+                      style: TextStyle(fontSize: 18.0)),
+                ],
               ),
               flex: 3,
             ),
@@ -208,12 +226,17 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            new Text("Additional Notes:", textAlign: TextAlign.left, style: TextStyle(fontSize: 18.0)),
-            new Padding(padding: EdgeInsets.only(right:10.0)),
+            new Text("Additional Notes:",
+                textAlign: TextAlign.left, style: TextStyle(fontSize: 18.0)),
+            new Padding(padding: EdgeInsets.only(right: 10.0)),
             new Expanded(
               child: Column(
                 children: <Widget>[
-                  new Text("$_addNotes", textAlign: TextAlign.right, style: TextStyle(fontSize: 18.0,)),
+                  new Text("$_addNotes",
+                      textAlign: TextAlign.right,
+                      style: TextStyle(
+                        fontSize: 18.0,
+                      )),
                 ],
               ),
               flex: 3,
@@ -228,8 +251,10 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            new Text("Additional Notes:", textAlign: TextAlign.left, style: TextStyle(fontSize: 18.0)),
-            new Text("$_addNotes", textAlign: TextAlign.right, style: TextStyle(fontSize: 18.0)),
+            new Text("Additional Notes:",
+                textAlign: TextAlign.left, style: TextStyle(fontSize: 18.0)),
+            new Text("$_addNotes",
+                textAlign: TextAlign.right, style: TextStyle(fontSize: 18.0)),
           ],
         ),
       );
@@ -245,7 +270,8 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            new Text("Joined On:", textAlign: TextAlign.left, style: TextStyle(fontSize: 18.0)),
+            new Text("Joined On:",
+                textAlign: TextAlign.left, style: TextStyle(fontSize: 18.0)),
             new Text("$_join", textAlign: TextAlign.right),
           ],
         ),
@@ -366,12 +392,6 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
           Padding(
             padding: EdgeInsets.only(top: 10.0, bottom: 20.0),
           ),
-          new Container(
-            height: 1.5,
-            color: Colors.grey,
-            padding: EdgeInsets.only(top: 10.0, right: 3.0, left: 3.0),
-            margin: EdgeInsets.only(right: 25.0, left: 25.0),
-          ),
           _checkNameFlag(),
           _checkEmailFlag(),
           _checkPubFlag(),
@@ -405,7 +425,10 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
           IconButton(
             icon: Icon(Icons.edit),
             onPressed: () {
-              Navigator.of(context).pushReplacementNamed('/editBusiness');
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => EditBusiness()),
+              );
             },
           ),
         ],

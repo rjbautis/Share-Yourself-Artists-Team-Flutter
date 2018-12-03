@@ -4,10 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:share_yourself_artists_team_flutter/artist/artistSendArt.dart';
 import 'package:share_yourself_artists_team_flutter/artist/artistUploadImage.dart';
+import 'package:share_yourself_artists_team_flutter/artist/artistViewArt.dart';
+import 'package:share_yourself_artists_team_flutter/artist/artistViewReply.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 import 'package:share_yourself_artists_team_flutter/user/drawer.dart';
-import 'package:share_yourself_artists_team_flutter/artist/artistViewReply.dart';
-import 'package:share_yourself_artists_team_flutter/artist/artistViewArt.dart';
 
 class ArtistDash extends StatefulWidget {
   ArtistDash();
@@ -123,8 +123,29 @@ class _ArtistDashState extends State<ArtistDash> {
       return new GestureDetector(
         onTap: () { _viewArt(snapshot, newIndex); },
         child: Card(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(top: _screenWidth * .1),
+            ),
+            Image.network(
+              artImage,
+              width: MediaQuery.of(context).size.width * .75,
+            ),
+            ListTile(
+              title: Text(
+                artTitle,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 18.0, letterSpacing: 0.5),
+              ),
+              subtitle: Text(
+                dateString,
+                textAlign: TextAlign.center,
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.only(top: _screenWidth * .1),
