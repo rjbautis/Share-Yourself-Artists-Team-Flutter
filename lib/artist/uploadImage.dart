@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
-import 'package:share_yourself_artists_team_flutter/artist/artistImageInfo.dart';
+import 'package:share_yourself_artists_team_flutter/artist/imageInfo.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 
 class ArtistUploadImage extends StatefulWidget {
@@ -114,7 +114,8 @@ class _ArtistUploadImageState extends State<ArtistUploadImage> {
             Container(
               padding: const EdgeInsets.only(top: 40.0),
               child: new MaterialButton(
-                child: new Text('Upload Image from Gallery', style: new TextStyle(fontWeight: FontWeight.w600)),
+                child: new Text('Upload Image from Gallery',
+                    style: new TextStyle(fontWeight: FontWeight.w600)),
                 color: Color.fromRGBO(255, 160, 0, 1.0),
                 textColor: Colors.white,
                 elevation: 4.0,
@@ -126,7 +127,8 @@ class _ArtistUploadImageState extends State<ArtistUploadImage> {
             Container(
               padding: const EdgeInsets.only(top: 40.0),
               child: new MaterialButton(
-                child: new Text('Upload Image from Camera', style: new TextStyle(fontWeight: FontWeight.w600)),
+                child: new Text('Upload Image from Camera',
+                    style: new TextStyle(fontWeight: FontWeight.w600)),
                 color: Color.fromRGBO(255, 160, 0, 1.0),
                 textColor: Colors.white,
                 elevation: 4.0,
@@ -139,7 +141,8 @@ class _ArtistUploadImageState extends State<ArtistUploadImage> {
               padding: const EdgeInsets.only(top: 40.0),
               child: new MaterialButton(
                 //child: const Text('Upload to Database'),
-                child: new Text('Next', style: new TextStyle(fontWeight: FontWeight.w600)),
+                child: new Text('Next',
+                    style: new TextStyle(fontWeight: FontWeight.w600)),
                 color: imagePicked
                     ? Color.fromRGBO(255, 160, 0, 1.0)
                     : Colors.grey,
