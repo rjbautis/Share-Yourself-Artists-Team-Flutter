@@ -392,12 +392,6 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
           Padding(
             padding: EdgeInsets.only(top: 10.0, bottom: 20.0),
           ),
-          new Container(
-            height: 1.5,
-            color: Colors.grey,
-            padding: EdgeInsets.only(top: 10.0, right: 3.0, left: 3.0),
-            margin: EdgeInsets.only(right: 25.0, left: 25.0),
-          ),
           _checkNameFlag(),
           _checkEmailFlag(),
           _checkPubFlag(),
