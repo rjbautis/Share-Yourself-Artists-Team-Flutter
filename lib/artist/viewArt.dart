@@ -1,5 +1,5 @@
-import 'package:pinch_zoom_image/pinch_zoom_image.dart';
 import 'package:flutter/material.dart';
+import 'package:pinch_zoom_image/pinch_zoom_image.dart';
 
 class ArtistViewArt extends StatefulWidget {
   var snapshot;

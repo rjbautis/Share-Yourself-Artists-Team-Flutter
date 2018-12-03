@@ -3,13 +3,11 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class Authentication {
-
   /* ------------------------- Sign In/Out Functions --------------------------- */
 
   /// Returns boolean value if the user had previously signed in
@@ -42,7 +40,8 @@ class Authentication {
     // Attempt to login with FB app if installed, otherwise use website
     _facebook.loginBehavior = FacebookLoginBehavior.nativeWithFallback;
 
-    final FacebookLoginResult result = await _facebook.logInWithReadPermissions(['email']);
+    final FacebookLoginResult result =
+        await _facebook.logInWithReadPermissions(['email']);
 
     final FirebaseUser user = await _fireBaseAuth.signInWithFacebook(
         accessToken: result.accessToken.token);
@@ -71,7 +70,8 @@ class Authentication {
     final GoogleSignIn _googleSignIn = GoogleSignIn();
 
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
 
     final FirebaseUser user = await _fireBaseAuth.signInWithGoogle(
         idToken: googleAuth.idToken, accessToken: googleAuth.idToken);
@@ -103,7 +103,7 @@ class Authentication {
       user = await _fireBaseAuth.signInWithEmailAndPassword(
           email: email, password: password);
 
-      print ("Going to print user");
+      print("Going to print user");
       print(user);
 
       return user.uid;
@@ -133,13 +133,14 @@ class Authentication {
 
   /* ------------------------- Account Creation Functions --------------------------- */
 
-  static Future<String> createArtistAccount(Map<String, String> credentials) async {
+  static Future<String> createArtistAccount(
+      Map<String, String> credentials) async {
     final FirebaseAuth _fireBaseAuth = FirebaseAuth.instance;
     FirebaseUser user;
 
     try {
-      user = await _fireBaseAuth
-          .createUserWithEmailAndPassword(email: credentials['email'], password: credentials['password']);
+      user = await _fireBaseAuth.createUserWithEmailAndPassword(
+          email: credentials['email'], password: credentials['password']);
     } catch (e) {
       print('Error when creating user: ${e.toString()}');
       return '';
@@ -164,13 +165,14 @@ class Authentication {
     return user.uid;
   }
 
-  static Future<String> createBusinessAccount(Map<String, String> credentials, File image) async {
+  static Future<String> createBusinessAccount(
+      Map<String, String> credentials, File image) async {
     final FirebaseAuth _fireBaseAuth = FirebaseAuth.instance;
     FirebaseUser user;
 
     try {
-      user = await _fireBaseAuth
-          .createUserWithEmailAndPassword(email: credentials['email'], password: credentials['password']);
+      user = await _fireBaseAuth.createUserWithEmailAndPassword(
+          email: credentials['email'], password: credentials['password']);
     } catch (e) {
       print('Error when creating user: ${e.toString()}');
       return '';
@@ -180,7 +182,8 @@ class Authentication {
     assert(await user.getIdToken() != null);
 
     // Upload logo to storage
-    String logoUrl = await uploadFileToFireStore(image, user.uid, 'logo', 'logo.png');
+    String logoUrl =
+        await uploadFileToFireStore(image, user.uid, 'logo', 'logo.png');
 
     var data = {
       'about': credentials['shortSummary'],
@@ -224,20 +227,27 @@ class Authentication {
 
       // Grab fields for currentUser from the uid
       final DocumentReference reference =
-      Firestore.instance.collection('users').document(currentUser.uid);
+          Firestore.instance.collection('users').document(currentUser.uid);
       DocumentSnapshot snapshot = await reference.get();
 
       if (snapshot.exists) {
         // If the user is an artist
         if (snapshot.data['role'] == 'artist') {
-          userInfo['displayName'] = snapshot.data['name'] != null ? snapshot.data['name'] : '';
-          userInfo['email'] = currentUser.email != null ? currentUser.email : '';
-          userInfo['photoUrl'] = currentUser.photoUrl != null ? currentUser.photoUrl : '';
-        // If the user is a business
+          userInfo['displayName'] =
+              snapshot.data['name'] != null ? snapshot.data['name'] : '';
+          userInfo['email'] =
+              currentUser.email != null ? currentUser.email : '';
+          userInfo['photoUrl'] =
+              currentUser.photoUrl != null ? currentUser.photoUrl : '';
+          // If the user is a business
         } else if (snapshot.data['role'] == 'business') {
-          userInfo['displayName'] = snapshot.data['business_name'] != null ? snapshot.data['business_name'] : '';
-          userInfo['email'] = currentUser.email != null ? currentUser.email : '';
-          userInfo['photoUrl'] = snapshot.data['url'] != null ? snapshot.data['url'] : '';
+          userInfo['displayName'] = snapshot.data['business_name'] != null
+              ? snapshot.data['business_name']
+              : '';
+          userInfo['email'] =
+              currentUser.email != null ? currentUser.email : '';
+          userInfo['photoUrl'] =
+              snapshot.data['url'] != null ? snapshot.data['url'] : '';
         }
       }
     }
@@ -254,7 +264,7 @@ class Authentication {
     print('the uid is $uid');
 
     final DocumentReference reference =
-    Firestore.instance.collection('users').document(uid);
+        Firestore.instance.collection('users').document(uid);
     DocumentSnapshot snapshot = await reference.get();
 
     if (snapshot.exists) {
@@ -265,15 +275,18 @@ class Authentication {
     return '';
   }
 
-  static Future createUserDocumentIfNull(String uid, Map<String, Object> data) async {
+  static Future createUserDocumentIfNull(
+      String uid, Map<String, Object> data) async {
     String role = await readUserDocument(uid);
 
     // If the user entry does not exist in the users collection, create that user
     if (role == '') {
       final filteredCredentials = _filterData(data);
       try {
-        await Firestore.instance.collection('users').document(uid).setData(
-            filteredCredentials);
+        await Firestore.instance
+            .collection('users')
+            .document(uid)
+            .setData(filteredCredentials);
       } catch (e) {
         print("There was an error trying in Authentication.createUserDocument");
       }
@@ -282,16 +295,17 @@ class Authentication {
         "User document already exists, do no need to create a new entry in Firestore");
   }
 
-
   /// Uploads File to Firestore
-  static Future<String> uploadFileToFireStore(File image, String name, String dir, String pathLocation) async {
+  static Future<String> uploadFileToFireStore(
+      File image, String name, String dir, String pathLocation) async {
     String path;
     if (dir != null) {
       path = '$name/$dir/$pathLocation';
     } else {
       path = '$name/$pathLocation';
     }
-    StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child(path);
+    StorageReference firebaseStorageRef =
+        FirebaseStorage.instance.ref().child(path);
     StorageUploadTask task = firebaseStorageRef.putFile(image);
 
     StorageTaskSnapshot storageTaskSnapshot = await task.onComplete;
@@ -318,10 +332,7 @@ class Authentication {
   // Filter out all keys with empty string (i.e. optional)
   static Map<String, Object> _filterData(Map<String, Object> data) {
     return new Map.fromIterable(
-        data.keys.where(
-                (key) => data[key].toString() != ''),
-        value: (key) => data[key]
-    );
+        data.keys.where((key) => data[key].toString() != ''),
+        value: (key) => data[key]);
   }
-
 }

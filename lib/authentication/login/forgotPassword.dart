@@ -10,7 +10,8 @@ class ForgotPasswordPage extends StatefulWidget {
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   static GlobalKey<FormState> _form = new GlobalKey<FormState>();
-  static GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey<ScaffoldState>();
+  static GlobalKey<ScaffoldState> _scaffoldState =
+      new GlobalKey<ScaffoldState>();
 
   String _email;
 
@@ -20,16 +21,15 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       Navigator.of(context).pop();
     } catch (e) {
       _scaffoldState.currentState.showSnackBar(SnackBar(
-        content: new Text('There is no user record corresponding to this email account.'),
+        content: new Text(
+            'There is no user record corresponding to this email account.'),
         duration: Duration(seconds: 4),
       ));
     }
-
   }
 
   @override
   Widget build(BuildContext context) {
-
     bool _validate() {
       var loginForm = _form.currentState;
       if (loginForm.validate()) {
@@ -65,8 +65,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             child: new MaterialButton(
               color: Colors.black,
               onPressed: () => Navigator.of(context).pop(),
-              child: new Text('Cancel',
-                  style: new TextStyle(color: Colors.white)),
+              child:
+                  new Text('Cancel', style: new TextStyle(color: Colors.white)),
             ),
           ),
           ButtonTheme(
@@ -79,8 +79,8 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                   _handleReset();
                 }
               },
-              child: new Text('Reset',
-                  style: new TextStyle(color: Colors.black)),
+              child:
+                  new Text('Reset', style: new TextStyle(color: Colors.black)),
             ),
           ),
         ],
@@ -117,9 +117,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 ),
                 Form(
                   key: _form,
-                  child: Center(
-                      child: email
-                  ),
+                  child: Center(child: email),
                 ),
                 resetButton
               ],

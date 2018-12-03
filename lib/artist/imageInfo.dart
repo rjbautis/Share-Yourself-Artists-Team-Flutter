@@ -51,7 +51,8 @@ class _ArtistImageInfoState extends State<ArtistImageInfo>
   Future<String> _handleUpload() async {
     print('${widget.uid} ${widget.fileName}');
 
-    String downloadUrl = await Authentication.uploadFileToFireStore(widget.image, widget.uid, null, widget.fileName);
+    String downloadUrl = await Authentication.uploadFileToFireStore(
+        widget.image, widget.uid, null, widget.fileName);
     bool check = downloadUrl != null ? true : false;
 
     // If there exists a downloadUrl, set the state to the checkmark

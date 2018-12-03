@@ -12,20 +12,22 @@ class BusinessSignUpThirdPage extends StatefulWidget {
   BusinessSignUpThirdPage({this.image, this.credentials});
 
   @override
-  _BusinessSignUpThirdPageState createState() => _BusinessSignUpThirdPageState();
+  _BusinessSignUpThirdPageState createState() =>
+      _BusinessSignUpThirdPageState();
 }
 
 class _BusinessSignUpThirdPageState extends State<BusinessSignUpThirdPage> {
   static GlobalKey<FormState> _form = new GlobalKey<FormState>();
-  static GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey<ScaffoldState>();
+  static GlobalKey<ScaffoldState> _scaffoldState =
+      new GlobalKey<ScaffoldState>();
 
   Future _handleCreation(Map<String, String> credentials, File image) async {
     String uid = await Authentication.createBusinessAccount(credentials, image);
     if (uid != '') {
       await savePreferences('business', uid);
       print('Created user is $uid');
-      Navigator.of(context).pushNamedAndRemoveUntil('/business', (Route<dynamic> route) => false);
-
+      Navigator.of(context).pushNamedAndRemoveUntil(
+          '/business', (Route<dynamic> route) => false);
     } else {
       _scaffoldState.currentState.showSnackBar(SnackBar(
         content: new Text(
@@ -35,7 +37,6 @@ class _BusinessSignUpThirdPageState extends State<BusinessSignUpThirdPage> {
       ));
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -53,20 +54,16 @@ class _BusinessSignUpThirdPageState extends State<BusinessSignUpThirdPage> {
       decoration: new InputDecoration(
           contentPadding: EdgeInsets.all(10.0),
           labelText: 'Facebook',
-          prefixIcon: new Icon(FontAwesomeIcons.facebook)
-      ),
+          prefixIcon: new Icon(FontAwesomeIcons.facebook)),
       keyboardType: TextInputType.url,
       onSaved: (input) => widget.credentials['facebook'] = input,
     );
-
-
 
     Widget instagramUrl = TextFormField(
       decoration: new InputDecoration(
           contentPadding: EdgeInsets.all(10.0),
           labelText: 'Instagram',
-          prefixIcon: new Icon(FontAwesomeIcons.instagram)
-      ),
+          prefixIcon: new Icon(FontAwesomeIcons.instagram)),
       keyboardType: TextInputType.url,
       onSaved: (input) => widget.credentials['instagram'] = input,
     );
@@ -75,8 +72,7 @@ class _BusinessSignUpThirdPageState extends State<BusinessSignUpThirdPage> {
       decoration: new InputDecoration(
           contentPadding: EdgeInsets.all(10.0),
           labelText: 'Tumblr',
-          prefixIcon: new Icon(FontAwesomeIcons.tumblr)
-      ),
+          prefixIcon: new Icon(FontAwesomeIcons.tumblr)),
       keyboardType: TextInputType.url,
       onSaved: (input) => widget.credentials['tumblr'] = input,
     );
@@ -90,9 +86,10 @@ class _BusinessSignUpThirdPageState extends State<BusinessSignUpThirdPage> {
             minWidth: 150.0,
             child: new MaterialButton(
               color: Colors.black,
-              onPressed: () => Navigator.popUntil(context, ModalRoute.withName('/')),
-              child: new Text('Cancel',
-                  style: new TextStyle(color: Colors.white)),
+              onPressed: () =>
+                  Navigator.popUntil(context, ModalRoute.withName('/')),
+              child:
+                  new Text('Cancel', style: new TextStyle(color: Colors.white)),
             ),
           ),
           Padding(
@@ -104,23 +101,23 @@ class _BusinessSignUpThirdPageState extends State<BusinessSignUpThirdPage> {
               borderSide: BorderSide(color: Colors.black),
               color: Colors.white,
               onPressed: () async {
-                _scaffoldState.currentState.showSnackBar(
-                    new SnackBar(duration: new Duration(seconds: 4), content:
-                    new Row(
-                      children: <Widget>[
-                        new CircularProgressIndicator(),
-                        new Text("  Signing-Up...")
-                      ],
-                    ),
-                    ));
+                _scaffoldState.currentState.showSnackBar(new SnackBar(
+                  duration: new Duration(seconds: 4),
+                  content: new Row(
+                    children: <Widget>[
+                      new CircularProgressIndicator(),
+                      new Text("  Signing-Up...")
+                    ],
+                  ),
+                ));
                 if (_validate()) {
 //                  print(widget.credentials);
 //                  print(widget.image.path);
                   await _handleCreation(widget.credentials, widget.image);
                 }
               },
-              child: new Text('Done',
-                  style: new TextStyle(color: Colors.black)),
+              child:
+                  new Text('Done', style: new TextStyle(color: Colors.black)),
             ),
           ),
         ],
@@ -149,16 +146,12 @@ class _BusinessSignUpThirdPageState extends State<BusinessSignUpThirdPage> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top:5.0, bottom: 10.0),
+                  padding: EdgeInsets.only(top: 5.0, bottom: 10.0),
                 ),
                 Form(
                   key: _form,
                   child: Column(
-                    children: <Widget>[
-                      facebookUrl,
-                      instagramUrl,
-                      tumblrUrl
-                    ],
+                    children: <Widget>[facebookUrl, instagramUrl, tumblrUrl],
                   ),
                 ),
                 signUpButton

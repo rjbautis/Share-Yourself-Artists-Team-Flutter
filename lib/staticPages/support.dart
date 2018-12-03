@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 class SupportPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-
     List<String> question = [
       "1. What the heck even is this website?",
       "2. Can I submit more than one piece?",
@@ -80,7 +79,7 @@ class SupportPage extends StatelessWidget {
     ];
 
     var _children = <Widget>[
-      Padding (
+      Padding(
         padding: EdgeInsets.all(20.0),
       ),
       Center(
@@ -88,31 +87,28 @@ class SupportPage extends StatelessWidget {
           'Support/FAQs',
           textAlign: TextAlign.center,
           style: const TextStyle(
-              fontSize: 40.0,
-              color: Color.fromRGBO(255, 160, 0, 1.0)),
+              fontSize: 40.0, color: Color.fromRGBO(255, 160, 0, 1.0)),
         ),
       ),
-      Padding (
+      Padding(
         padding: EdgeInsets.all(20.0),
       ),
     ];
 
     // Add questions to the rest of the children
     for (var i = 0; i < question.length; i++) {
-      _children.add(
-        Column (
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            ListTile(
-              title: Text(question[i]),
-              subtitle: Text(answer[i]),
-            ),
-            Divider (
-              height: 5.0,
-            )
-          ],
-        )
-      );
+      _children.add(Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: <Widget>[
+          ListTile(
+            title: Text(question[i]),
+            subtitle: Text(answer[i]),
+          ),
+          Divider(
+            height: 5.0,
+          )
+        ],
+      ));
     }
 
     return new Scaffold(
@@ -126,9 +122,7 @@ class SupportPage extends StatelessWidget {
 //        padding: const EdgeInsets.fromLTRB(25.0, 0.0, 25.0, 0.0),
         child: ListView(
           children: <Widget>[
-            Column(
-              children: _children
-            ),
+            Column(children: _children),
           ],
         ),
       ),

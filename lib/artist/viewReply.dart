@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class ArtistViewReply extends StatefulWidget {
@@ -89,13 +88,16 @@ class _ArtistViewReplyState extends State<ArtistViewReply> {
               new Padding(padding: EdgeInsets.fromLTRB(5.0, 15.0, 0.0, 0.0)),
               new ListTile(
                 title: accepted
-                    ? Text('Accepted by ' + busName, style: TextStyle(fontSize: 18.0, letterSpacing: 0.5))
-                    : Text('Declined by ' + busName, style: TextStyle(fontSize: 18.0, letterSpacing: 0.5)),
+                    ? Text('Accepted by ' + busName,
+                        style: TextStyle(fontSize: 18.0, letterSpacing: 0.5))
+                    : Text('Declined by ' + busName,
+                        style: TextStyle(fontSize: 18.0, letterSpacing: 0.5)),
                 subtitle: Text(busEmail),
               ),
               new Padding(padding: EdgeInsets.fromLTRB(5.0, 15.0, 0.0, 0.0)),
               new ListTile(
-                title: Text('Response:', style: TextStyle(fontSize: 18.0, letterSpacing: 0.5)),
+                title: Text('Response:',
+                    style: TextStyle(fontSize: 18.0, letterSpacing: 0.5)),
                 subtitle: Text(response),
               ),
             ],

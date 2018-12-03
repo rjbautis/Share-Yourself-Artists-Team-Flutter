@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
-
-import 'authentication.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -11,7 +10,8 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   static GlobalKey<FormState> _form = new GlobalKey<FormState>();
-  static GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey<ScaffoldState>();
+  static GlobalKey<ScaffoldState> _scaffoldState =
+      new GlobalKey<ScaffoldState>();
 
   // Determines which flow to push after successful login
   void _navigateToRoute(String role) {
@@ -32,9 +32,9 @@ class _LoginPageState extends State<LoginPage> {
       _scaffoldState.currentState.showSnackBar(SnackBar(
         content: new Text(
             'The password is invalid or the user does not have a password. '
-                'Or you may have not confirmed your email yet. If you need further '
-                'assistance, please send us an email.',
-          style: new TextStyle(color: Colors.white)),
+            'Or you may have not confirmed your email yet. If you need further '
+            'assistance, please send us an email.',
+            style: new TextStyle(color: Colors.white)),
         duration: Duration(seconds: 4),
       ));
     }
@@ -78,7 +78,8 @@ class _LoginPageState extends State<LoginPage> {
                 icon: new Icon(FontAwesomeIcons.facebook,
                     color: Color.fromRGBO(59, 89, 152, 1.0)),
                 onPressed: () async {
-                  String uid = await Authentication.signInWithFacebookAndFireBase();
+                  String uid =
+                      await Authentication.signInWithFacebookAndFireBase();
                   await _handleLogin(uid);
                 }),
             new IconButton(
@@ -87,7 +88,7 @@ class _LoginPageState extends State<LoginPage> {
                     color: Color.fromRGBO(72, 133, 237, 1.0)),
                 onPressed: () async {
                   String uid =
-                  await Authentication.signInWithGoogleAndFireBase();
+                      await Authentication.signInWithGoogleAndFireBase();
                   await _handleLogin(uid);
                 })
           ],
@@ -116,7 +117,7 @@ class _LoginPageState extends State<LoginPage> {
       ),
       keyboardType: TextInputType.text,
       obscureText: true,
-        style: new TextStyle(color: Colors.black),
+      style: new TextStyle(color: Colors.black),
       validator: (input) => input.isEmpty ? "Password is required." : null,
       onSaved: (input) => _password = input,
     );
@@ -131,15 +132,16 @@ class _LoginPageState extends State<LoginPage> {
               borderSide: BorderSide(color: Colors.black),
               color: Colors.white,
               onPressed: () async {
-                _scaffoldState.currentState.showSnackBar(
-                    new SnackBar(duration: new Duration(seconds: 4), content:
-                    new Row(
-                      children: <Widget>[
-                        new CircularProgressIndicator(),
-                        new Text("  Signing-In...", style: new TextStyle(color: Colors.white))
-                      ],
-                    ),
-                    ));
+                _scaffoldState.currentState.showSnackBar(new SnackBar(
+                  duration: new Duration(seconds: 4),
+                  content: new Row(
+                    children: <Widget>[
+                      new CircularProgressIndicator(),
+                      new Text("  Signing-In...",
+                          style: new TextStyle(color: Colors.white))
+                    ],
+                  ),
+                ));
                 if (_validate()) {
                   print("the email is $_email and password is $_password");
                   String uid = await Authentication.signInWithEmailAndPassword(
@@ -192,7 +194,8 @@ class _LoginPageState extends State<LoginPage> {
 //              onTap: _onPressed,
 //            ),
             new InkWell(
-              child: new Text("Forgot Password", style: new TextStyle(color: Colors.black)),
+              child: new Text("Forgot Password",
+                  style: new TextStyle(color: Colors.black)),
               onTap: () => Navigator.of(context).pushNamed('/forgotPassword'),
             )
           ],

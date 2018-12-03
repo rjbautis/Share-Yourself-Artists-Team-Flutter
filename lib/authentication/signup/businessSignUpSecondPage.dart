@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:share_yourself_artists_team_flutter/authentication/businessSignUp/businessSignUpThirdPage.dart';
+import 'package:share_yourself_artists_team_flutter/authentication/signup/businessSignUpThirdPage.dart';
 
 class BusinessSignUpSecondPage extends StatefulWidget {
   final File image;
@@ -10,13 +10,14 @@ class BusinessSignUpSecondPage extends StatefulWidget {
   BusinessSignUpSecondPage({this.image, this.credentials});
 
   @override
-  _BusinessSignUpSecondPageState createState() => _BusinessSignUpSecondPageState();
+  _BusinessSignUpSecondPageState createState() =>
+      _BusinessSignUpSecondPageState();
 }
 
 class _BusinessSignUpSecondPageState extends State<BusinessSignUpSecondPage> {
   static GlobalKey<FormState> _form = new GlobalKey<FormState>();
-  static GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey<ScaffoldState>();
-
+  static GlobalKey<ScaffoldState> _scaffoldState =
+      new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +35,8 @@ class _BusinessSignUpSecondPageState extends State<BusinessSignUpSecondPage> {
       decoration: new InputDecoration(labelText: 'Name of Publication'),
       keyboardType: TextInputType.text,
       maxLines: 1,
-      validator: (input) => input.isEmpty ? 'Name of publication is required.' : null,
+      validator: (input) =>
+          input.isEmpty ? 'Name of publication is required.' : null,
       onSaved: (input) => widget.credentials['publicationName'] = input,
     );
 
@@ -42,7 +44,8 @@ class _BusinessSignUpSecondPageState extends State<BusinessSignUpSecondPage> {
       decoration: new InputDecoration(labelText: 'Follower Count'),
       keyboardType: TextInputType.numberWithOptions(decimal: false),
       textCapitalization: TextCapitalization.none,
-      validator: (input) => input.isEmpty ? 'Follower count is required.' : null,
+      validator: (input) =>
+          input.isEmpty ? 'Follower count is required.' : null,
       onSaved: (input) => widget.credentials['followerCount'] = input,
     );
 
@@ -54,7 +57,8 @@ class _BusinessSignUpSecondPageState extends State<BusinessSignUpSecondPage> {
     );
 
     Widget shortSummary = TextFormField(
-      decoration: new InputDecoration(labelText: 'About - Short summary of your page'),
+      decoration:
+          new InputDecoration(labelText: 'About - Short summary of your page'),
       keyboardType: TextInputType.multiline,
       validator: (input) => input.isEmpty ? 'Website is required.' : null,
       onSaved: (input) => widget.credentials['shortSummary'] = input,
@@ -75,10 +79,10 @@ class _BusinessSignUpSecondPageState extends State<BusinessSignUpSecondPage> {
             minWidth: 150.0,
             child: new MaterialButton(
               color: Colors.black,
-              onPressed: () => Navigator.popUntil(context, ModalRoute.withName('/')),
-              child: new Text('Cancel',
-                  style: new TextStyle(color: Colors.white)),
-
+              onPressed: () =>
+                  Navigator.popUntil(context, ModalRoute.withName('/')),
+              child:
+                  new Text('Cancel', style: new TextStyle(color: Colors.white)),
             ),
           ),
           Padding(
@@ -91,11 +95,16 @@ class _BusinessSignUpSecondPageState extends State<BusinessSignUpSecondPage> {
               color: Colors.white,
               onPressed: () {
                 if (_validate()) {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => BusinessSignUpThirdPage(image: widget.image, credentials: widget.credentials)));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => BusinessSignUpThirdPage(
+                              image: widget.image,
+                              credentials: widget.credentials)));
                 }
               },
-              child: new Text('Next',
-                  style: new TextStyle(color: Colors.black)),
+              child:
+                  new Text('Next', style: new TextStyle(color: Colors.black)),
             ),
           ),
         ],
@@ -124,7 +133,7 @@ class _BusinessSignUpSecondPageState extends State<BusinessSignUpSecondPage> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.only(top:5.0, bottom: 10.0),
+                  padding: EdgeInsets.only(top: 5.0, bottom: 10.0),
                 ),
                 Form(
                   key: _form,

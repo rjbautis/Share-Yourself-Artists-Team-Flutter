@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/authentication.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
@@ -26,7 +24,6 @@ class _NavDrawerState extends State<NavDrawer> {
         _photoUrl = userInfo['photoUrl'];
       });
     });
-
   }
 
   @override
@@ -39,24 +36,30 @@ class _NavDrawerState extends State<NavDrawer> {
             decoration: BoxDecoration(
               color: Color.fromRGBO(255, 160, 0, 1.0),
             ),
-            accountName: (_name != '') ?
-                new Text(_name, style: TextStyle(fontSize: 18.0)) :
-                new Text('User', style: TextStyle(fontSize: 17.0)),
-            accountEmail: (_email != '') ?
-                new Text(_email, style: TextStyle(fontSize: 15.0),) :
-                null,
-            currentAccountPicture: (_photoUrl != '') ?
-                new CircleAvatar(
-                  backgroundImage: new NetworkImage(_photoUrl),
-                ) :
-                new CircleAvatar(
-                  backgroundColor: Colors.white,
-                  child: new Icon(Icons.person),
-                ),
+            accountName: (_name != '')
+                ? new Text(_name, style: TextStyle(fontSize: 18.0))
+                : new Text('User', style: TextStyle(fontSize: 17.0)),
+            accountEmail: (_email != '')
+                ? new Text(
+                    _email,
+                    style: TextStyle(fontSize: 15.0),
+                  )
+                : null,
+            currentAccountPicture: (_photoUrl != '')
+                ? new CircleAvatar(
+                    backgroundImage: new NetworkImage(_photoUrl),
+                  )
+                : new CircleAvatar(
+                    backgroundColor: Colors.white,
+                    child: new Icon(Icons.person),
+                  ),
           ),
           ListTile(
             leading: Icon(Icons.home),
-            title: new Text('Home', style: TextStyle(fontSize: 15.0),),
+            title: new Text(
+              'Home',
+              style: TextStyle(fontSize: 15.0),
+            ),
             onTap: () async {
               Navigator.of(context).pop();
             },

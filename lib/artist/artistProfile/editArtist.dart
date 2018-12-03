@@ -63,9 +63,8 @@ class _EditArtistState extends State<EditArtist> {
     _instagramController.addListener(onEditInstagramComplete);
 
     return new Container(
-      padding: const EdgeInsets.all(20.0),
-      child: Column(
-        children: <Widget>[
+        padding: const EdgeInsets.all(20.0),
+        child: Column(children: <Widget>[
           Container(
             child: Text('Edit Profile',
                 style: new TextStyle(
@@ -75,14 +74,12 @@ class _EditArtistState extends State<EditArtist> {
                 left: 20.0, right: 20.0, top: 10.0, bottom: 20.0),
           ),
           TextFormField(
-            controller: _artistNameController,
-            decoration: InputDecoration(labelText: 'Artist Name')
-          ),
+              controller: _artistNameController,
+              decoration: InputDecoration(labelText: 'Artist Name')),
           TextFormField(
-            controller: _instagramController,
-            decoration: InputDecoration(labelText: 'Instagram')
-          ),
-    ]));
+              controller: _instagramController,
+              decoration: InputDecoration(labelText: 'Instagram')),
+        ]));
   }
 
   Future _updateProfile() async {
