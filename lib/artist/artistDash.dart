@@ -120,53 +120,53 @@ class _ArtistDashState extends State<ArtistDash> {
         ],
       );
     } else {
-      return new Card(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(top: _screenWidth * .1),
-            ),
-            Image.network(
-              artImage,
-              width: MediaQuery.of(context).size.width * .75,
-            ),
-            ListTile(
-              title: Text(
-                artTitle,
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 18.0, letterSpacing: 0.5),
+      return new GestureDetector(
+        onTap: () { _viewArt(snapshot, newIndex); },
+        child:
+        Card(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Padding(
+                padding: EdgeInsets.only(top: _screenWidth * .1),
               ),
-              subtitle: Text(
-                dateString,
-                textAlign: TextAlign.center,
+              Image.network(
+                artImage,
+                width: MediaQuery.of(context).size.width * .75,
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  artDescription,
-                  style: TextStyle(fontSize: 15.0),
+              ListTile(
+                title: Text(
+                  artTitle,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 18.0, letterSpacing: 0.5),
                 ),
-              ],
-            ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 4.0),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.send),
-                  color: Color.fromRGBO(255, 160, 0, 1.0),
-                  onPressed: () async {
-                    await _navigateSend(snapshot, newIndex);
-                  },
+                subtitle: Text(
+                  dateString,
+                  textAlign: TextAlign.center,
                 ),
-              ],
-            ),
-          ],
+              ),
+              Text(
+                artDescription,
+                textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 15.0),
+              ),
+              Padding(
+                padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 4.0),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: <Widget>[
+                  IconButton(
+                    icon: Icon(Icons.send),
+                    color: Color.fromRGBO(255, 160, 0, 1.0),
+                    onPressed: () async {
+                      await _navigateSend(snapshot, newIndex);
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       );
     }
