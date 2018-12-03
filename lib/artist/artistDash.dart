@@ -17,7 +17,8 @@ class ArtistDash extends StatefulWidget {
 }
 
 class _ArtistDashState extends State<ArtistDash> {
-  static GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey<ScaffoldState>();
+  static GlobalKey<ScaffoldState> _scaffoldState =
+      new GlobalKey<ScaffoldState>();
 
   bool refresh = false;
   double _screenWidth;
@@ -119,57 +120,59 @@ class _ArtistDashState extends State<ArtistDash> {
         ],
       );
     } else {
-      return new Card(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Padding(
-              padding: EdgeInsets.only(top: _screenWidth * .1),
-            ),
-            Image.network(
-              artImage,
-              width: MediaQuery.of(context).size.width * .75,
-            ),
-            ListTile(
-              title: Text(
-                artTitle,
-                textAlign: TextAlign.center,
-                style: TextStyle(fontSize: 18.0, letterSpacing: 0.5),
-              ),
-              subtitle: Text(dateString, textAlign: TextAlign.center,
-                ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+      return new GestureDetector(
+        onTap: () { _viewArt(snapshot, newIndex); },
+        child: Card(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
               children: <Widget>[
+                Padding(
+                  padding: EdgeInsets.only(top: _screenWidth * .1),
+                ),
+                Image.network(
+                  artImage,
+                  width: MediaQuery.of(context).size.width * .75,
+                ),
+                ListTile(
+                  title: Text(
+                    artTitle,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 18.0, letterSpacing: 0.5),
+                  ),
+                  subtitle: Text(
+                    dateString,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
                 Text(
                   artDescription,
                   style: TextStyle(fontSize: 15.0),
+                  textAlign: TextAlign.center,
+                ),
+                Padding(
+                  padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 4.0),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    IconButton(
+                      icon: Icon(Icons.send),
+                      color: Color.fromRGBO(255, 160, 0, 1.0),
+                      onPressed: () async {
+                        await _navigateSend(snapshot, newIndex);
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),
-            Padding(
-              padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 4.0),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                IconButton(
-                  icon: Icon(Icons.send),
-                  color: Color.fromRGBO(255, 160, 0, 1.0),
-                  onPressed: () async {
-                    await _navigateSend(snapshot, newIndex);
-                  },
-                ),
-              ],
-            ),
-          ],
-        ),
+          ),
       );
     }
   }
 
-  void _navReplyDescription(AsyncSnapshot<QuerySnapshot> snapshot, int index) async {
+  void _navReplyDescription(
+      AsyncSnapshot<QuerySnapshot> snapshot, int index) async {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -220,11 +223,9 @@ class _ArtistDashState extends State<ArtistDash> {
               width: MediaQuery.of(context).size.width * .75,
             ),
             ListTile(
-              title: Text(
-                artTitle,
-                textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 18.0, letterSpacing: 0.5)
-              ),
+              title: Text(artTitle,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 18.0, letterSpacing: 0.5)),
               subtitle: Text(artArtist, textAlign: TextAlign.center),
             ),
             Row(
@@ -251,6 +252,11 @@ class _ArtistDashState extends State<ArtistDash> {
         ),
       ),
     );
+  }
+
+  bool toggleView() {
+    _cardView = !_cardView;
+    return _cardView;
   }
 
   @override
@@ -300,7 +306,7 @@ class _ArtistDashState extends State<ArtistDash> {
               icon: _cardView ? Icon(Icons.list) : Icon(Icons.image),
               onPressed: () {
                 setState(() {
-                  _cardView = !_cardView;
+                  toggleView();
                 });
               },
             ),
@@ -332,21 +338,20 @@ class _ArtistDashState extends State<ArtistDash> {
                 }
                 if (snapshot.data.documents.length == 0) {
                   return new Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Text("No Art, Why don't you upload some!"),
-                        IconButton(
-                          icon: Icon(Icons.refresh),
-                          onPressed: () {
-                            setState(() {
-                              refresh = !refresh;
-                            });
-                          },
-                          color: Colors.lightBlue,
-                        ),
-                      ],
-
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Text("No Art, Why don't you upload some!"),
+                      IconButton(
+                        icon: Icon(Icons.refresh),
+                        onPressed: () {
+                          setState(() {
+                            refresh = !refresh;
+                          });
+                        },
+                        color: Colors.lightBlue,
+                      ),
+                    ],
                   );
                 }
                 return new Container(
@@ -379,20 +384,20 @@ class _ArtistDashState extends State<ArtistDash> {
                 }
                 if (snapshot.data.documents.length == 0) {
                   return new Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Text("No Responses"),
-                        IconButton(
-                          icon: Icon(Icons.refresh),
-                          onPressed: () {
-                            setState(() {
-                              refresh = !refresh;
-                            });
-                          },
-                          color: Colors.lightBlue,
-                        ),
-                      ],
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Text("No Responses"),
+                      IconButton(
+                        icon: Icon(Icons.refresh),
+                        onPressed: () {
+                          setState(() {
+                            refresh = !refresh;
+                          });
+                        },
+                        color: Colors.lightBlue,
+                      ),
+                    ],
                   );
                 }
                 return new Container(

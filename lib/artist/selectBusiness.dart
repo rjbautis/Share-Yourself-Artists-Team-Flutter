@@ -12,7 +12,6 @@ class _BusinessSelectState extends State<BusinessSelect> {
   TextEditingController _controller = new TextEditingController();
   double _screenWidth;
   double _screenHeight;
-  bool _cardView = false;
   String _searchTerm = "";
 
   @override
