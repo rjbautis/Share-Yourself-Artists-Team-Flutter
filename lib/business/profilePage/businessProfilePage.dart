@@ -262,36 +262,36 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
     return false;
   }
 
-  Widget _profilePic() {
-    return new Container(
-        width: 190.0,
-        height: 190.0,
-        decoration: new BoxDecoration(
-            shape: BoxShape.circle,
-            image: new DecorationImage(
-                fit: BoxFit.fill,
-                image:  (_photoUrl != '') ? new NetworkImage(_photoUrl) : new Icon(Icons.person)
-
-            )
-        )
-    );
-
+//  Widget _profilePic() {
 //    return new Container(
-//        margin: const EdgeInsets.all(15.0),
-//        padding:
-//        const EdgeInsets.only(top: 3.0, bottom: 3.0, right: 3.0, left: 3.0),
-//        decoration:
-//        new BoxDecoration(border: new Border.all(color: Colors.black)),
-//        child: new Column(
-//          children: <Widget>[
-//            Padding(
-//                padding: EdgeInsets.only(
-//                    left: 8.0, right: 8.0, top: 25.0, bottom: 20.0),
-//                child: new Text("Test Profile",
-//                    textAlign: TextAlign.center, style: new TextStyle(fontSize: 20.0))),
-//          ],
-//        ));
-  }
+//        width: 190.0,
+//        height: 190.0,
+//        decoration: new BoxDecoration(
+//            shape: BoxShape.circle,
+//            image: new DecorationImage(
+//                fit: BoxFit.fill,
+//                image:  (_photoUrl != '') ? new NetworkImage(_photoUrl) : new Icon(Icons.person)
+//
+//            )
+//        )
+//    );
+//
+////    return new Container(
+////        margin: const EdgeInsets.all(15.0),
+////        padding:
+////        const EdgeInsets.only(top: 3.0, bottom: 3.0, right: 3.0, left: 3.0),
+////        decoration:
+////        new BoxDecoration(border: new Border.all(color: Colors.black)),
+////        child: new Column(
+////          children: <Widget>[
+////            Padding(
+////                padding: EdgeInsets.only(
+////                    left: 8.0, right: 8.0, top: 25.0, bottom: 20.0),
+////                child: new Text("Test Profile",
+////                    textAlign: TextAlign.center, style: new TextStyle(fontSize: 20.0))),
+////          ],
+////        ));
+//  }
 
   Widget _buildList(
       BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot, int index) {
@@ -362,7 +362,7 @@ class _BusinessProfilePageState extends State<BusinessProfilePage> {
           Padding(
             padding: EdgeInsets.only(top: 25.0, bottom: 20.0),
           ),
-          _profilePic(),
+          //_profilePic(),
           Padding(
             padding: EdgeInsets.only(top: 10.0, bottom: 20.0),
           ),
