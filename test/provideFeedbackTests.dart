@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:share_yourself_artists_team_flutter/business/provideFeedback.dart';
 
 void main() {
+
   test('getData() matches the expected values', () {
 
     Future _fetchArt() async {
@@ -22,11 +23,14 @@ void main() {
       String title = testPage.getTitle();
       String artist = testPage.getArtist();
 
-      //expect(title, "test");
+      expect(title != null, true);
+      expect(artist != null, true);
+
       expect(title, "unit");
       expect(artist, "test");
     }
 
     _fetchArt();
   });
+
 }
