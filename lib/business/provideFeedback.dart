@@ -8,7 +8,7 @@ class BusinessProvideFeedback extends StatefulWidget {
   AsyncSnapshot<QuerySnapshot> snapshot;
   final index;
 
-  void getData() => _BusinessProvideFeedbackState().getData();
+  void getData() => _BusinessProvideFeedbackState()._getData();
   String getTitle() => _BusinessProvideFeedbackState().artTitle;
   String getArtist() => _BusinessProvideFeedbackState().artArtist;
 
@@ -42,11 +42,11 @@ class _BusinessProvideFeedbackState extends State<BusinessProvideFeedback> {
     super.initState();
 
     setState(() {
-      getData();
+      _getData();
     });
   }
 
-  void getData (){
+  void _getData (){
     artImage = widget.artInfo['art']['url'].toString();
     artTitle = widget.artInfo['art']['art_title'].toString();
     artArtist = widget.artInfo['art']['artist_name'].toString();
