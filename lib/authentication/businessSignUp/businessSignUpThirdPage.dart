@@ -29,7 +29,8 @@ class _BusinessSignUpThirdPageState extends State<BusinessSignUpThirdPage> {
     } else {
       _scaffoldState.currentState.showSnackBar(SnackBar(
         content: new Text(
-            'The email address is already in use by another account.'),
+            'The email address is already in use by another account.',
+            style: new TextStyle(color: Colors.white)),
         duration: Duration(seconds: 4),
       ));
     }
@@ -103,6 +104,15 @@ class _BusinessSignUpThirdPageState extends State<BusinessSignUpThirdPage> {
               borderSide: BorderSide(color: Colors.black),
               color: Colors.white,
               onPressed: () async {
+                _scaffoldState.currentState.showSnackBar(
+                    new SnackBar(duration: new Duration(seconds: 4), content:
+                    new Row(
+                      children: <Widget>[
+                        new CircularProgressIndicator(),
+                        new Text("  Signing-Up...")
+                      ],
+                    ),
+                    ));
                 if (_validate()) {
 //                  print(widget.credentials);
 //                  print(widget.image.path);
@@ -131,7 +141,7 @@ class _BusinessSignUpThirdPageState extends State<BusinessSignUpThirdPage> {
                 ),
                 Center(
                   child: new Text(
-                    "Share your social media URL.",
+                    "Share your social media URL",
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                         fontSize: 25.0,
@@ -139,7 +149,7 @@ class _BusinessSignUpThirdPageState extends State<BusinessSignUpThirdPage> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(5.0),
+                  padding: EdgeInsets.only(top:5.0, bottom: 10.0),
                 ),
                 Form(
                   key: _form,

@@ -112,47 +112,51 @@ class _EditBusinessState extends State<EditBusiness> {
     _worthKnowingController.addListener(onEditWorthKnowingComplete);
     _additionalNotesController.addListener(onEditAdditionalNotesComplete);
 
-    return new Column(children: <Widget>[
-      Container(
-        child: Text('Submit Feedback',
-            style: new TextStyle(
-              fontSize: 25.0,
-            )),
-        padding: const EdgeInsets.only(
-            left: 20.0, right: 20.0, top: 30.0, bottom: 0.0),
-      ),
-      TextFormField(
-        controller: _businessNameController,
-        decoration: InputDecoration(labelText: 'Business Name'),
-      ),
-      TextFormField(
-        controller: _publicationController,
-        decoration: InputDecoration(labelText: 'Publication'),
-      ),
-      TextFormField(
-        controller: _followerCountController,
-        decoration: InputDecoration(labelText: 'Follower Count'),
-      ),
-      TextFormField(
-        controller: _websiteController,
-        decoration: InputDecoration(labelText: 'Website'),
-      ),
-      TextFormField(
-        controller: _aboutController,
-        maxLines: 8,
-        decoration: InputDecoration(labelText: 'About'),
-      ),
-      TextFormField(
-        controller: _worthKnowingController,
-        maxLines: 3,
-        decoration: InputDecoration(labelText: 'Worth Knowing'),
-      ),
-      TextFormField(
-        controller: _additionalNotesController,
-        maxLines: 3,
-        decoration: InputDecoration(labelText: 'Additional Notes'),
-      ),
-    ]);
+    return new Container(
+        padding: const EdgeInsets.all(20.0),
+      child: Column(
+        children: <Widget>[
+        Container(
+          child: Text('Edit Profile',
+              style: new TextStyle(
+                fontSize: 25.0,
+                  fontWeight: FontWeight.w600
+              )),
+          padding: const EdgeInsets.only(
+              left: 20.0, right: 20.0, top: 10.0, bottom: 20.0),
+        ),
+        TextFormField(
+          controller: _businessNameController,
+          decoration: InputDecoration(labelText: 'Business Name'),
+        ),
+        TextFormField(
+          controller: _publicationController,
+          decoration: InputDecoration(labelText: 'Publication'),
+        ),
+        TextFormField(
+          controller: _followerCountController,
+          decoration: InputDecoration(labelText: 'Follower Count'),
+        ),
+        TextFormField(
+          controller: _websiteController,
+          decoration: InputDecoration(labelText: 'Website'),
+        ),
+        TextFormField(
+          controller: _aboutController,
+          maxLines: 8,
+          decoration: InputDecoration(labelText: 'About'),
+        ),
+        TextFormField(
+          controller: _worthKnowingController,
+          maxLines: 3,
+          decoration: InputDecoration(labelText: 'Worth Knowing'),
+        ),
+        TextFormField(
+          controller: _additionalNotesController,
+          maxLines: 3,
+          decoration: InputDecoration(labelText: 'Additional Notes'),
+        ),
+      ]));
   }
 
   Future _updateProfile() async {
@@ -186,7 +190,7 @@ class _EditBusinessState extends State<EditBusiness> {
               onPressed: () {
                 _updateProfile();
                 _scaffoldState.currentState.showSnackBar(SnackBar(
-                  content: new Text('Profile updated'),
+                  content: new Text('Profile updated', style: new TextStyle(color: Colors.black)),
                   duration: Duration(seconds: 4),
                   backgroundColor: Colors.green,
                 ));
@@ -199,7 +203,7 @@ class _EditBusinessState extends State<EditBusiness> {
             .where('userId', isEqualTo: '${_uid}')
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData) return new Text('Loading...');
+          if (!snapshot.hasData) return new Text('Loading...', style: new TextStyle(color: Colors.black, fontWeight: FontWeight.w600));
           return new Container(
             child: ListView.builder(
               itemBuilder: (BuildContext ctxt, int index) =>

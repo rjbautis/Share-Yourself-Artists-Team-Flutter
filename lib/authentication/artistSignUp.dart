@@ -120,7 +120,7 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
               color: Colors.black,
               onPressed: () => Navigator.of(context).pop(),
               child: new Text('Cancel',
-                  style: new TextStyle(color: Colors.white)),
+                  style: new TextStyle(color: Colors.white, )),
             ),
           ),
           ButtonTheme(
@@ -129,6 +129,15 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
               borderSide: BorderSide(color: Colors.black),
               color: Colors.white,
               onPressed: () async {
+                _scaffoldState.currentState.showSnackBar(
+                    new SnackBar(duration: new Duration(seconds: 4), content:
+                    new Row(
+                      children: <Widget>[
+                        new CircularProgressIndicator(),
+                        new Text("  Signing-Up...")
+                      ],
+                    ),
+                    ));
                 if (_validate()) {
                   await _handleCreation(credentials);
                 }
@@ -163,7 +172,7 @@ class _ArtistSignUpPageState extends State<ArtistSignUpPage> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(5.0),
+                  padding: EdgeInsets.only(top:5.0, bottom: 20.0),
                 ),
                 Form(
                   key: _form,

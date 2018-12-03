@@ -57,7 +57,7 @@ class AboutPage extends StatelessWidget {
             ),
           ),
           Padding (
-            padding: EdgeInsets.all(10.0),
+            padding: EdgeInsets.only(top:10.0),
           ),
           Text(
             '(Founder/Chief Executive Officer)',
@@ -66,7 +66,7 @@ class AboutPage extends StatelessWidget {
             )
           ),
           Padding (
-            padding: EdgeInsets.all(5.0),
+            padding: EdgeInsets.only(bottom: 20.0),
           ),
           Text(
             "Nick's business and marketing expertise derive from both his "
@@ -93,11 +93,10 @@ class AboutPage extends StatelessWidget {
             style: TextStyle(
               fontSize: 28.0,
               fontWeight: FontWeight.bold,
-
             ),
           ),
           Padding (
-            padding: EdgeInsets.all(10.0),
+            padding: EdgeInsets.only(top:10.0),
           ),
           Text(
               '(Software Engineer)',
@@ -106,7 +105,7 @@ class AboutPage extends StatelessWidget {
               )
           ),
           Padding (
-            padding: EdgeInsets.all(5.0),
+            padding: EdgeInsets.only(bottom: 20.0),
           ),
           Text(
             "Scott handles much of our development work and other stuff. As our "

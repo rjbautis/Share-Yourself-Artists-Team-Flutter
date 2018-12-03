@@ -17,8 +17,7 @@ class ArtistDash extends StatefulWidget {
 }
 
 class _ArtistDashState extends State<ArtistDash> {
-  static GlobalKey<ScaffoldState> _scaffoldState =
-      new GlobalKey<ScaffoldState>();
+  static GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey<ScaffoldState>();
 
   bool refresh = false;
   double _screenWidth;
@@ -115,61 +114,62 @@ class _ArtistDashState extends State<ArtistDash> {
             ),
           ),
           new Divider(
-            height: 5.0,
+            height: 15.0,
           ),
         ],
       );
     } else {
-      return new GestureDetector(
-        onTap: () {
-          _viewArt(snapshot, newIndex);
-        },
-        child: Card(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Padding(
-                padding: EdgeInsets.only(top: _screenWidth * .1),
-              ),
-              Image.network(
-                artImage,
-                width: MediaQuery.of(context).size.width * .75,
-              ),
-              ListTile(
-                title: Text(
-                  artTitle,
-                  textAlign: TextAlign.center,
-                ),
-                subtitle: Text(dateString, textAlign: TextAlign.center),
-              ),
-              Text(
-                artDescription,
+      return new Card(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Padding(
+              padding: EdgeInsets.only(top: _screenWidth * .1),
+            ),
+            Image.network(
+              artImage,
+              width: MediaQuery.of(context).size.width * .75,
+            ),
+            ListTile(
+              title: Text(
+                artTitle,
                 textAlign: TextAlign.center,
+                style: TextStyle(fontSize: 18.0, letterSpacing: 0.5),
               ),
-              Padding(
-                padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 4.0),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.send),
-                    color: Color.fromRGBO(255, 160, 0, 1.0),
-                    onPressed: () async {
-                      await _navigateSend(snapshot, newIndex);
-                    },
-                  ),
-                ],
-              ),
-            ],
-          ),
+              subtitle: Text(dateString, textAlign: TextAlign.center,
+                ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  artDescription,
+                  style: TextStyle(fontSize: 15.0),
+                ),
+              ],
+            ),
+            Padding(
+              padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 4.0),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(Icons.send),
+                  color: Color.fromRGBO(255, 160, 0, 1.0),
+                  onPressed: () async {
+                    await _navigateSend(snapshot, newIndex);
+                  },
+                ),
+              ],
+            ),
+          ],
         ),
       );
     }
   }
 
-  void _navReplyDescription(
-      AsyncSnapshot<QuerySnapshot> snapshot, int index) async {
+  void _navReplyDescription(AsyncSnapshot<QuerySnapshot> snapshot, int index) async {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -223,6 +223,7 @@ class _ArtistDashState extends State<ArtistDash> {
               title: Text(
                 artTitle,
                 textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 18.0, letterSpacing: 0.5)
               ),
               subtitle: Text(artArtist, textAlign: TextAlign.center),
             ),
@@ -272,7 +273,7 @@ class _ArtistDashState extends State<ArtistDash> {
                   child: new Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      new Text('My Art'),
+                      new Text('My Art', style: TextStyle(fontSize: 17.0)),
                       new Padding(
                           padding: EdgeInsets.fromLTRB(10.0, 0.0, 0.0, 0.0)),
                       new Icon(Icons.inbox),
@@ -372,7 +373,7 @@ class _ArtistDashState extends State<ArtistDash> {
                   return new Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      new Text("Loading..."),
+                      new Text("Loading...", style: TextStyle(fontSize: 17.0)),
                     ],
                   );
                 }

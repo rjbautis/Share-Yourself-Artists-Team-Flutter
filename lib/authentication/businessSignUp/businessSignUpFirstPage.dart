@@ -56,6 +56,7 @@ class _BusinessSignUpFirstPageState extends State<BusinessSignUpFirstPage> {
       decoration: new InputDecoration(labelText: 'Business Name'),
       keyboardType: TextInputType.text,
       maxLines: 1,
+      style: new TextStyle(color: Colors.black),
       validator: (input) => input.isEmpty ? 'Name is required.' : null,
       onSaved: (input) => credentials['name'] = input,
     );
@@ -64,6 +65,7 @@ class _BusinessSignUpFirstPageState extends State<BusinessSignUpFirstPage> {
       decoration: new InputDecoration(labelText: 'Email'),
       keyboardType: TextInputType.emailAddress,
       textCapitalization: TextCapitalization.none,
+      style: new TextStyle(color: Colors.black),
       validator: (input) {
         if (input.isEmpty) {
           return 'Email address is required.';
@@ -81,6 +83,7 @@ class _BusinessSignUpFirstPageState extends State<BusinessSignUpFirstPage> {
       decoration: new InputDecoration(labelText: 'Password'),
       keyboardType: TextInputType.text,
       obscureText: true,
+      style: new TextStyle(color: Colors.black),
       validator: (input) {
         if (input.isEmpty) {
           return 'Password is required.';
@@ -97,6 +100,7 @@ class _BusinessSignUpFirstPageState extends State<BusinessSignUpFirstPage> {
       decoration: new InputDecoration(labelText: 'Confirm Password'),
       keyboardType: TextInputType.text,
       obscureText: true,
+      style: new TextStyle(color: Colors.black),
       validator: (password) {
         print('password is ${password}');
 //        print(_confirmPassword);
@@ -143,9 +147,9 @@ class _BusinessSignUpFirstPageState extends State<BusinessSignUpFirstPage> {
     );
 
     Widget uploadLogoButton = Container(
-      padding: const EdgeInsets.only(top: 40.0),
+      padding: const EdgeInsets.only(top: 40.0, bottom: 25.0),
       child: new MaterialButton(
-        child: const Text('Upload Logo from Gallery'),
+        child: new Text('Upload Logo from Gallery'),
         color: Color.fromRGBO(255, 160, 0, 1.0),
         textColor: Colors.white,
         elevation: 4.0,
@@ -190,7 +194,7 @@ class _BusinessSignUpFirstPageState extends State<BusinessSignUpFirstPage> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsets.all(5.0),
+                  padding: EdgeInsets.only(top:5.0, bottom: 10.0),
                 ),
                 Form (
                   key: _form,
