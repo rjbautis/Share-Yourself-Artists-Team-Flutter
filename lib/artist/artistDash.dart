@@ -4,10 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:share_yourself_artists_team_flutter/artist/artistSendArt.dart';
 import 'package:share_yourself_artists_team_flutter/artist/artistUploadImage.dart';
+import 'package:share_yourself_artists_team_flutter/artist/artistViewArt.dart';
+import 'package:share_yourself_artists_team_flutter/artist/artistViewReply.dart';
 import 'package:share_yourself_artists_team_flutter/authentication/inMemory.dart';
 import 'package:share_yourself_artists_team_flutter/user/drawer.dart';
-import 'package:share_yourself_artists_team_flutter/artist/artistViewReply.dart';
-import 'package:share_yourself_artists_team_flutter/artist/artistViewArt.dart';
 
 class ArtistDash extends StatefulWidget {
   ArtistDash();
@@ -17,7 +17,8 @@ class ArtistDash extends StatefulWidget {
 }
 
 class _ArtistDashState extends State<ArtistDash> {
-  static GlobalKey<ScaffoldState> _scaffoldState = new GlobalKey<ScaffoldState>();
+  static GlobalKey<ScaffoldState> _scaffoldState =
+      new GlobalKey<ScaffoldState>();
 
   bool refresh = false;
   double _screenWidth;
@@ -136,8 +137,10 @@ class _ArtistDashState extends State<ArtistDash> {
                 textAlign: TextAlign.center,
                 style: TextStyle(fontSize: 18.0, letterSpacing: 0.5),
               ),
-              subtitle: Text(dateString, textAlign: TextAlign.center,
-                ),
+              subtitle: Text(
+                dateString,
+                textAlign: TextAlign.center,
+              ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -169,7 +172,8 @@ class _ArtistDashState extends State<ArtistDash> {
     }
   }
 
-  void _navReplyDescription(AsyncSnapshot<QuerySnapshot> snapshot, int index) async {
+  void _navReplyDescription(
+      AsyncSnapshot<QuerySnapshot> snapshot, int index) async {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -220,11 +224,9 @@ class _ArtistDashState extends State<ArtistDash> {
               width: MediaQuery.of(context).size.width * .75,
             ),
             ListTile(
-              title: Text(
-                artTitle,
-                textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 18.0, letterSpacing: 0.5)
-              ),
+              title: Text(artTitle,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 18.0, letterSpacing: 0.5)),
               subtitle: Text(artArtist, textAlign: TextAlign.center),
             ),
             Row(
@@ -332,21 +334,20 @@ class _ArtistDashState extends State<ArtistDash> {
                 }
                 if (snapshot.data.documents.length == 0) {
                   return new Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Text("No Art, Why don't you upload some!"),
-                        IconButton(
-                          icon: Icon(Icons.refresh),
-                          onPressed: () {
-                            setState(() {
-                              refresh = !refresh;
-                            });
-                          },
-                          color: Colors.lightBlue,
-                        ),
-                      ],
-
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Text("No Art, Why don't you upload some!"),
+                      IconButton(
+                        icon: Icon(Icons.refresh),
+                        onPressed: () {
+                          setState(() {
+                            refresh = !refresh;
+                          });
+                        },
+                        color: Colors.lightBlue,
+                      ),
+                    ],
                   );
                 }
                 return new Container(
@@ -379,20 +380,20 @@ class _ArtistDashState extends State<ArtistDash> {
                 }
                 if (snapshot.data.documents.length == 0) {
                   return new Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Text("No Responses"),
-                        IconButton(
-                          icon: Icon(Icons.refresh),
-                          onPressed: () {
-                            setState(() {
-                              refresh = !refresh;
-                            });
-                          },
-                          color: Colors.lightBlue,
-                        ),
-                      ],
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Text("No Responses"),
+                      IconButton(
+                        icon: Icon(Icons.refresh),
+                        onPressed: () {
+                          setState(() {
+                            refresh = !refresh;
+                          });
+                        },
+                        color: Colors.lightBlue,
+                      ),
+                    ],
                   );
                 }
                 return new Container(
