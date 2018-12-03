@@ -117,10 +117,12 @@ class Authentication {
   static Future<void> signOut() async {
     final FirebaseAuth _fireBaseAuth = FirebaseAuth.instance;
     final GoogleSignIn _googleSignIn = GoogleSignIn();
+    final FacebookLogin _facebookLogin = FacebookLogin();
 
     print("Attempting to sign out user.");
     await _googleSignIn.signOut();
     await _fireBaseAuth.signOut();
+    await _facebookLogin.logOut();
     print('Successfully signed out');
   }
 
