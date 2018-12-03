@@ -7,6 +7,9 @@ class EditArtist extends StatefulWidget {
 
   @override
   _EditArtistState createState() => new _EditArtistState();
+
+  Future getData(String uid) async => await _EditArtistState()._getData(uid);
+  String getArtistName() => _EditArtistState()._artistName;
 }
 
 class _EditArtistState extends State<EditArtist> {
@@ -28,21 +31,16 @@ class _EditArtistState extends State<EditArtist> {
       print('init: current uid: ${uid}');
       setState(() {
         _uid = uid;
+        _getData(_uid);
       });
-      _getProfile();
     });
   }
 
-  Future _getProfile() async {
+  Future _getData(String uid) async {
     DocumentSnapshot artist =
-        await Firestore.instance.collection('users').document(_uid).get();
-    if (artist.exists) {
-      print("exists");
-      setState(() {
-        _artistName = artist['name'];
-        _instagram = artist['instagram'];
-      });
-    }
+        await Firestore.instance.collection('users').document(uid).get();
+    _artistName = artist['name'];
+    _instagram = artist['instagram'];
   }
 
   Future onEditArtistNameComplete() async {

@@ -7,6 +7,9 @@ class EditBusiness extends StatefulWidget {
 
   @override
   _EditBusinessState createState() => new _EditBusinessState();
+
+  Future getData(String uid) async => await _EditBusinessState()._getData(uid);
+  String getBusinessName() => _EditBusinessState()._businessName;
 }
 
 class _EditBusinessState extends State<EditBusiness> {
@@ -38,26 +41,22 @@ class _EditBusinessState extends State<EditBusiness> {
       print('init: current uid: ${uid}');
       setState(() {
         _uid = uid;
+        _getData(_uid);
       });
-      _getProfile();
     });
   }
 
-  Future _getProfile() async {
+  Future _getData(String uid) async {
     DocumentSnapshot business =
-        await Firestore.instance.collection('users').document(_uid).get();
-    if (business.exists) {
-      print("exists");
-      setState(() {
-        _businessName = business['business_name'];
-        _publication = business['publication'];
-        _followerCount = business['follower_count'];
-        _website = business['website'];
-        _about = business['about'];
-        _worthKnowing = business['worth_knowing'];
-        _additionalNotes = business['additional_notes'];
-      });
-    }
+        await Firestore.instance.collection('users').document(uid).get();
+
+    _businessName = business['business_name'];
+    _publication = business['publication'];
+    _followerCount = business['follower_count'];
+    _website = business['website'];
+    _about = business['about'];
+    _worthKnowing = business['worth_knowing'];
+    _additionalNotes = business['additional_notes'];
   }
 
   Future onEditBusinessNameComplete() async {
@@ -114,49 +113,46 @@ class _EditBusinessState extends State<EditBusiness> {
 
     return new Container(
         padding: const EdgeInsets.all(20.0),
-      child: Column(
-        children: <Widget>[
-        Container(
-          child: Text('Edit Profile',
-              style: new TextStyle(
-                fontSize: 25.0,
-                  fontWeight: FontWeight.w600
-              )),
-          padding: const EdgeInsets.only(
-              left: 20.0, right: 20.0, top: 10.0, bottom: 20.0),
-        ),
-        TextFormField(
-          controller: _businessNameController,
-          decoration: InputDecoration(labelText: 'Business Name'),
-        ),
-        TextFormField(
-          controller: _publicationController,
-          decoration: InputDecoration(labelText: 'Publication'),
-        ),
-        TextFormField(
-          controller: _followerCountController,
-          decoration: InputDecoration(labelText: 'Follower Count'),
-        ),
-        TextFormField(
-          controller: _websiteController,
-          decoration: InputDecoration(labelText: 'Website'),
-        ),
-        TextFormField(
-          controller: _aboutController,
-          maxLines: 8,
-          decoration: InputDecoration(labelText: 'About'),
-        ),
-        TextFormField(
-          controller: _worthKnowingController,
-          maxLines: 3,
-          decoration: InputDecoration(labelText: 'Worth Knowing'),
-        ),
-        TextFormField(
-          controller: _additionalNotesController,
-          maxLines: 3,
-          decoration: InputDecoration(labelText: 'Additional Notes'),
-        ),
-      ]));
+        child: Column(children: <Widget>[
+          Container(
+            child: Text('Edit Profile',
+                style:
+                    new TextStyle(fontSize: 25.0, fontWeight: FontWeight.w600)),
+            padding: const EdgeInsets.only(
+                left: 20.0, right: 20.0, top: 10.0, bottom: 20.0),
+          ),
+          TextFormField(
+            controller: _businessNameController,
+            decoration: InputDecoration(labelText: 'Business Name'),
+          ),
+          TextFormField(
+            controller: _publicationController,
+            decoration: InputDecoration(labelText: 'Publication'),
+          ),
+          TextFormField(
+            controller: _followerCountController,
+            decoration: InputDecoration(labelText: 'Follower Count'),
+          ),
+          TextFormField(
+            controller: _websiteController,
+            decoration: InputDecoration(labelText: 'Website'),
+          ),
+          TextFormField(
+            controller: _aboutController,
+            maxLines: 8,
+            decoration: InputDecoration(labelText: 'About'),
+          ),
+          TextFormField(
+            controller: _worthKnowingController,
+            maxLines: 3,
+            decoration: InputDecoration(labelText: 'Worth Knowing'),
+          ),
+          TextFormField(
+            controller: _additionalNotesController,
+            maxLines: 3,
+            decoration: InputDecoration(labelText: 'Additional Notes'),
+          ),
+        ]));
   }
 
   Future _updateProfile() async {
@@ -190,7 +186,8 @@ class _EditBusinessState extends State<EditBusiness> {
               onPressed: () {
                 _updateProfile();
                 _scaffoldState.currentState.showSnackBar(SnackBar(
-                  content: new Text('Profile updated', style: new TextStyle(color: Colors.black)),
+                  content: new Text('Profile updated',
+                      style: new TextStyle(color: Colors.black)),
                   duration: Duration(seconds: 4),
                   backgroundColor: Colors.green,
                 ));
@@ -203,7 +200,10 @@ class _EditBusinessState extends State<EditBusiness> {
             .where('userId', isEqualTo: '${_uid}')
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (!snapshot.hasData) return new Text('Loading...', style: new TextStyle(color: Colors.black, fontWeight: FontWeight.w600));
+          if (!snapshot.hasData)
+            return new Text('Loading...',
+                style: new TextStyle(
+                    color: Colors.black, fontWeight: FontWeight.w600));
           return new Container(
             child: ListView.builder(
               itemBuilder: (BuildContext ctxt, int index) =>
