@@ -136,7 +136,6 @@ class _LoginPageState extends State<LoginPage> {
               color: Colors.white,
               onPressed: () async {
                 if (_validate()) {
-                  print('hi');
                   _scaffoldState.currentState.showSnackBar(new SnackBar(
                     duration: new Duration(seconds: 4),
                     content: new Row(
