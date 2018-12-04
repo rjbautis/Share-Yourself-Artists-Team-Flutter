@@ -72,6 +72,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           ButtonTheme(
             minWidth: 150.0,
             child: new OutlineButton(
+              key: Key('resetPassword'),
               borderSide: BorderSide(color: Colors.black),
               color: Colors.white,
               onPressed: () async {
