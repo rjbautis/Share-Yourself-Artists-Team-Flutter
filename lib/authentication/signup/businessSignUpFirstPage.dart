@@ -28,7 +28,6 @@ class _BusinessSignUpFirstPageState extends State<BusinessSignUpFirstPage> {
     print("You selected gallery image : " + galleryFile.path);
     setState(() {
       _current = galleryFile;
-//        _baseName = path.basename(_current.path);
       imagePicked = true;
     });
   }
@@ -102,12 +101,10 @@ class _BusinessSignUpFirstPageState extends State<BusinessSignUpFirstPage> {
       style: new TextStyle(color: Colors.black),
       validator: (password) {
         print('password is ${password}');
-//        print(_confirmPassword);
         if (password != _confirmPassword.text) {
           return 'Passwords do not match.';
         }
       },
-//      onSaved: (input) => _password = input,
     );
 
     Widget signUpButton = Container(

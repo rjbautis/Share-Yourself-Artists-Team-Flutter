@@ -189,10 +189,6 @@ class _LoginPageState extends State<LoginPage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-//            new InkWell(
-//              child: new Text("Forgot Email"),
-//              onTap: _onPressed,
-//            ),
             new InkWell(
               child: new Text("Forgot Password",
                   style: new TextStyle(color: Colors.black)),

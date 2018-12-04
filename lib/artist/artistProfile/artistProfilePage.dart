@@ -136,33 +136,6 @@ class _ArtistProfilePageState extends State<ArtistProfilePage> {
     return false;
   }
 
-//  Widget _profilePic() {
-////    (_photoUrl != '')
-//////        ? new CircleAvatar(
-//////            backgroundImage: new NetworkImage(_photoUrl),
-//////          )
-//////        : new CircleAvatar(
-//////            backgroundColor: Colors.white,
-//////            child: new Icon(Icons.person),
-//////          );
-//
-//    return new Container(
-//        margin: const EdgeInsets.all(15.0),
-//        padding:
-//            const EdgeInsets.only(top: 3.0, bottom: 3.0, right: 3.0, left: 3.0),
-//        decoration:
-//            new BoxDecoration(border: new Border.all(color: Colors.black)),
-//        child: new Column(
-//          children: <Widget>[
-//            Padding(
-//                padding: EdgeInsets.only(
-//                    left: 8.0, right: 8.0, top: 25.0, bottom: 20.0),
-//                child: new Text("Test Profile",
-//                    textAlign: TextAlign.center, style: new TextStyle())),
-//          ],
-//        ));
-//  }
-
   Widget _buildList(
       BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot, int index) {
     if (_isNull(snapshot.data.documents[index]['name'])) {

@@ -119,7 +119,6 @@ class SupportPage extends StatelessWidget {
         centerTitle: true,
       ),
       body: Container(
-//        padding: const EdgeInsets.fromLTRB(25.0, 0.0, 25.0, 0.0),
         child: ListView(
           children: <Widget>[
             Column(children: _children),

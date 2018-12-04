@@ -200,11 +200,6 @@ class _ArtistImageInfoState extends State<ArtistImageInfo>
         });
       } else {
         print('Submitting did not work');
-//        _scaffoldState.currentState.showSnackBar(SnackBar(
-//          content: new Text(
-//              'There was a problem with uploading, please try again.'),
-//          duration: Duration(seconds: 4),
-//        ));
         setState(() {
           _progressState = SUBMIT;
         });

@@ -118,8 +118,6 @@ class _BusinessSignUpThirdPageState extends State<BusinessSignUpThirdPage> {
                       ],
                     ),
                   ));
-//                  print(widget.credentials);
-//                  print(widget.image.path);
                   await _handleCreation(widget.credentials, widget.image);
                 }
               },
