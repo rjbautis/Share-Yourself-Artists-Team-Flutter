@@ -95,6 +95,7 @@ class _LoginPageState extends State<LoginPage> {
         ));
 
     Widget email = TextFormField(
+      key: Key('email'),
       decoration: new InputDecoration(labelText: "Email"),
       keyboardType: TextInputType.emailAddress,
       textCapitalization: TextCapitalization.none,
@@ -112,6 +113,7 @@ class _LoginPageState extends State<LoginPage> {
     );
 
     Widget password = TextFormField(
+      key: Key('password'),
       decoration: new InputDecoration(
         labelText: "Password",
       ),
@@ -129,10 +131,12 @@ class _LoginPageState extends State<LoginPage> {
           ButtonTheme(
             minWidth: 150.0,
             child: new OutlineButton(
+              key: Key('login'),
               borderSide: BorderSide(color: Colors.black),
               color: Colors.white,
               onPressed: () async {
                 if (_validate()) {
+                  print('hi');
                   _scaffoldState.currentState.showSnackBar(new SnackBar(
                     duration: new Duration(seconds: 4),
                     content: new Row(
@@ -194,6 +198,7 @@ class _LoginPageState extends State<LoginPage> {
 //              onTap: _onPressed,
 //            ),
             new InkWell(
+              key: Key('forgot'),
               child: new Text("Forgot Password",
                   style: new TextStyle(color: Colors.black)),
               onTap: () => Navigator.of(context).pushNamed('/forgotPassword'),
