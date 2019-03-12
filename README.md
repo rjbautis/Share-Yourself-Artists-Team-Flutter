@@ -3,7 +3,7 @@
 The cross-platform mobile application for Share Yourself Artists, powered by Flutter.
 Created by Share Yourself Artists Team Flutter, CMPS 115 Fall 2018.
 
-![](/Users/RyanB/ProgrammingProjects/share_yourself_artists_team_flutter/images/logo.png)
+![](images/logo.png)
 
 ### Prerequisites
 
@@ -59,5 +59,5 @@ CMPS 115 Fall 2018 - TA: Dylan
 
 [Full Demo Video](https://www.youtube.com/watch?v=LgeyI5OQRD0)
 
-![](/Users/RyanB/ProgrammingProjects/share_yourself_artists_team_flutter/images/img1.jpg)
+![](images/img1.jpg)
 
